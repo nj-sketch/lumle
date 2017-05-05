@@ -16,7 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Lumle.Module.AdminConfig\Lumle.Module.AdminConfig.csproj" />
     <ProjectReference Include="..\Lumle.Module.Authorization\Lumle.Module.Authorization.csproj" />
   </ItemGroup>
 

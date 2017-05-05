@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using ImageSharp;
 using ImageSharp.PixelFormats;
-using Lumle.Infrastructure.Constants.Log;
+using Lumle.Infrastructure.Constants.LumleLog;
 using Microsoft.AspNetCore.Hosting;
 using NLog;
 

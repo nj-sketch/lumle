@@ -85,8 +85,8 @@ namespace Lumle.Web
        
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, BaseContext context)
         {
-            // loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            // loggerFactory.AddDebug();
+            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            loggerFactory.AddDebug();
 
             app.UseIdentity();
 

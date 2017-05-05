@@ -1,5 +1,5 @@
 ﻿using Lumle.Data.Data.Abstracts;
-using Lumle.Infrastructure.Constants.Log;
+using Lumle.Infrastructure.Constants.LumleLog;
 using Lumle.Module.Blog.Entities;
 using NLog;
 using System;

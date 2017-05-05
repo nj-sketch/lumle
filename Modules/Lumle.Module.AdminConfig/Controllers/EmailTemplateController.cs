@@ -9,7 +9,7 @@ using Lumle.Core.Localizer;
 using Lumle.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Lumle.Infrastructure.Constants.AuthorizeRules;
-using Lumle.Infrastructure.Constants.Log;
+using Lumle.Infrastructure.Constants.LumleLog;
 using Lumle.Module.AdminConfig.Entities;
 using Microsoft.AspNetCore.Identity;
 using NLog;

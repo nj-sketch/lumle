@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Authorization;
 using Lumle.Data.Models;
 using Lumle.Module.Audit.Enums;
 using Lumle.Module.Audit.Services;
-using Lumle.Infrastructure.Constants.Log;
+using Lumle.Infrastructure.Constants.LumleLog;
 using Lumle.Infrastructure.Utilities;
 using Lumle.Module.Audit.Models;
 using NLog;
@@ -67,7 +67,7 @@ namespace Lumle.Module.Authorization.Controllers
                 RoleName = r.Name,
                 Id = r.Id,
                 Description = r.Description,
-                NumberOfUsers = r.Users.Count,
+               NumberOfUsers = r.Users.Count,
                 Priority = r.Priority
             }).ToList();
 
