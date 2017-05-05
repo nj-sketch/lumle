@@ -1,0 +1,117 @@
+﻿@using Lumle.Module.Core.ViewModels.AccountViewModels
+@model RegisterVM
+@{
+    ViewData["Title"] = Localizer[LabelConstants.SignUp];
+}
+
+<div id="fullpage">
+    <div class="section bg-gradient-9" id="section0">
+        <div class="slide">
+            <div class="center-vertical">
+                <div class="center-content">
+                    <div class="container">
+                        <div class="col-md-4 center-margin">
+                            <form asp-controller="Account" asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" data-parsley-validate novalidate>
+
+                                <div class="content-box wow bounceInDown modal-content" style="border-style: none;">
+                                    <h3 class="content-box-header content-box-header-alt bg-default">
+                                        <span class="icon-separator">
+                                            <i class="glyph-icon icon-cog"></i>
+                                        </span>
+                                        <span class="header-wrapper">
+                                            @Localizer[LabelConstants.UserSignUp]
+                                        </span>
+                                    </h3>
+                                    <div class="login_error">
+                                        @Html.Partial("_MessagePanel")
+                                    </div>
+                                    <div class="content-box-wrapper">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <input type="text" asp-for="Username" required class="form-control" placeholder=@Localizer[LabelConstants.UserName]>
+                                                <span class="input-group-addon bg-blue">
+                                                    <i class="glyph-icon icon-user"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <input type="email" asp-for="Email" required class="form-control" placeholder=@Localizer[LabelConstants.EnterYourEmail]>
+                                                <span class="input-group-addon bg-blue">
+                                                    <i class="glyph-icon icon-envelope-o"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <input type="text" asp-for="FirstName" required class="form-control" placeholder=@Localizer[LabelConstants.FirstName]>
+                                                <span class="input-group-addon bg-blue">
+                                                    <i class="glyph-icon icon-user"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <input type="text" asp-for="LastName" required class="form-control" placeholder=@Localizer[LabelConstants.LastName]>
+                                                <span class="input-group-addon bg-blue">
+                                                    <i class="glyph-icon icon-user"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <input type="password" asp-for="Password" required class="form-control" placeholder="Password">
+                                                <span class="input-group-addon bg-blue">
+                                                    <i class="glyph-icon icon-unlock-alt"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <input type="password" asp-for="ConfirmPassword" required class="form-control" placeholder="Confirm Password">
+                                                <span class="input-group-addon bg-blue">
+                                                    <i class="glyph-icon icon-unlock-alt"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <button type="submit" class="btn btn-success btn-block">@Localizer[LabelConstants.SignUp]</button>
+                                                <label id="loadingImg" style="display:none;" disabled class="btn btn-success btn-block"><img  style="width: 30px;" src="~/assets/images/spinner/loader-dark.gif" alt="loading image"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript" src="~/assets/widgets/parsley/parsley.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('form').on('submit', function () {
+                var form = $(this);
+                form.parsley().validate();
+                var isValidForm = form.parsley().isValid();
+                if (isValidForm) {
+                    form.find('button[type=submit]').hide();
+                    $("#loadingImg").show();
+                    form.get(0).submit();
+                }
+                return false;
+            });
+        });
+    </script>
+}

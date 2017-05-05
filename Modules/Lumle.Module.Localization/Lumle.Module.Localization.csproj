@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.6</TargetFramework>
+    <AssemblyName>Lumle.Module.Localization</AssemblyName>
+    <PackageId>Lumle.Module.Localization</PackageId>
+    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
+    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+  </PropertyGroup>
+  
+    <ItemGroup>
+    <PackageReference Include="NLog.Extensions.Logging" Version="1.0.0-rtm-beta1" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.3.0" />
+  </ItemGroup>
+  
+    <ItemGroup>
+      <ProjectReference Include="..\..\Infrastructures\Lumle.Data\Lumle.Data.csproj" />
+      <ProjectReference Include="..\Lumle.Module.Audit\Lumle.Module.Audit.csproj" />
+    </ItemGroup>
+  
+</Project>

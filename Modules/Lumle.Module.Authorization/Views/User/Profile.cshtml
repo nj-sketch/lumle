@@ -1,0 +1,90 @@
+﻿@model ProfileVM
+
+@{
+    ViewData["Title"] =Localizer[LabelConstants.Profile];
+}
+
+<div id="page-title">
+    <h2>@Localizer[LabelConstants.Profile]</h2>
+</div>
+
+<div class="breadcrumb-section clearfix">
+    <ol class="breadcrumb">
+        <li><a href="~/dashboard">@Localizer[LabelConstants.Dashboard]</a></li>
+        <li class="active">@Localizer[LabelConstants.Profile]</li>
+    </ol>
+</div>
+@Html.Partial("_MessagePanel")
+<div class="panel">
+    <div class="panel-body">
+        <h3 class="font-gray display-inline">@Localizer[LabelConstants.PersonalInformation] </h3>
+        <a asp-action="EditProfile" asp-route-id="@Model.Id" class="btn btn-info pull-right btn-sm">
+            <i class="glyph-icon icon-pencil"></i> @Localizer[LabelConstants.Edit]
+        </a><hr />
+        <div class="row">
+            <div class="col-md-2">
+                <label class="font-gray control-label">@Localizer[LabelConstants.UserName]</label>
+            </div>
+            <div class="col-md-10">
+                <label  class="control-label font-gray-dark">@Model.UserName</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <label class="font-gray control-label">@Localizer[LabelConstants.Email]</label>
+            </div>
+            <div class="col-md-10">
+                <label class="control-label font-gray-dark">@Model.Email</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <label class="font-gray control-label">@Localizer[LabelConstants.FirstName]</label>
+            </div>
+            <div class="col-md-10">
+                <label class="control-label font-gray-dark">@Model.FirstName</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <label class="font-gray control-label">@Localizer[LabelConstants.FirstName]</label>
+            </div>
+            <div class="col-md-10">
+                <label class="control-label font-gray-dark">@Model.LastName</label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-2">
+                <label class="font-gray control-label">@Localizer[LabelConstants.Phone]</label>
+            </div>
+            <div class="col-md-10">
+                <label class="control-label font-gray-dark">@Model.Phone</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <label class="font-gray control-label">@Localizer[LabelConstants.Website]</label>
+            </div>
+            <div class="col-md-10">
+                <label class="control-label font-gray-dark">@Model.Website</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <label class="font-gray control-label">@Localizer[LabelConstants.AboutMe]</label>
+            </div>
+            <div class="col-md-10">
+                <label class="control-label font-gray-dark">@Model.AboutMe</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <label class="font-gray control-label">@Localizer[LabelConstants.TimeZone]</label>
+            </div>
+            <div class="col-md-10">
+                <label class="control-label font-gray-dark">@Model.TimeZone</label>
+            </div>
+        </div>
+    </div>
+</div>

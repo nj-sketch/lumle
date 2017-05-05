@@ -1,0 +1,14 @@
+[
+  {
+    "outputFileName": "wwwroot/js/localization-index-datatable.min.js",
+    "inputFiles": [
+      "wwwroot/js/localization-index-datatable.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/localization-resource-datatable.min.js",
+    "inputFiles": [
+      "wwwroot/js/localization-resource-datatable.js"
+    ]
+  }
+]

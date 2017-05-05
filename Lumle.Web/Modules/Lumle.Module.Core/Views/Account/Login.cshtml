@@ -1,0 +1,107 @@
+@using System.Threading.Tasks
+@using Lumle.Data.Models
+@using Microsoft.AspNetCore.Identity
+@model Lumle.Module.Core.ViewModels.AccountViewModels.LoginVM
+@inject SignInManager<User> SignInManager
+
+@{
+    ViewData["Title"] = Localizer[LabelConstants.LogIn];
+}
+
+<div id="fullpage">
+    <div class="section bg-gradient-9" id="section0">
+        <div class="slide">
+            <div class="center-vertical">
+                <div class="center-content">
+                    <div class="container">
+                        <div class="col-md-4 center-margin">
+                            <form asp-controller="Account" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" data-parsley-validate novalidate>
+                                <div class="content-box wow bounceInDown modal-content" style="border-style: none;">
+                                    <h3 class="content-box-header content-box-header-alt bg-default">
+                                        <span class="icon-separator">
+                                            <i class="glyph-icon icon-cog"></i>
+                                        </span>
+                                        <span class="header-wrapper">
+                                            @Localizer[LabelConstants.UserLogin]
+                                        </span>
+                                    </h3>
+                                    <div class="login_error">
+                                        @Html.Partial("_MessagePanel")
+                                    </div>
+                                        <div class="content-box-wrapper">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <input type="email" asp-for="Email" required class="form-control" placeholder=@Localizer[LabelConstants.EnterYourEmail]>
+                                                    <span class="input-group-addon bg-blue">
+                                                        <i class="glyph-icon icon-envelope-o"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <input type="password" asp-for="Password" required class="form-control" placeholder=@Localizer[LabelConstants.EnterPassword]>
+                                                    <span class="input-group-addon bg-blue">
+                                                        <i class="glyph-icon icon-unlock-alt"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group ">
+                                                <div class="input-group">
+                                                    <div class="checkbox checkbox-success">
+                                                        <input id="checkbox-signup" asp-for="RememberMe" type="checkbox">
+                                                        <label for="checkbox-signup">
+                                                            @Localizer[LabelConstants.RememberMe]
+                                                        </label>
+                                                        <a href="~/forgotpassword" class="col-md-7 pull-right" style="text-align:right;" title="Recover password">@Localizer[LabelConstants.ForgotYourPassword]</a>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="btn btn-success btn-block">@Localizer[LabelConstants.LogIn]</button>
+                                        </div>
+
+
+                                    </div>
+                            </form>
+                            <div class="panel-body" style="text-align:center;">
+                                @{
+                                    var loginProviders = SignInManager.GetExternalAuthenticationSchemes().ToList();
+                                    if (loginProviders.Any())
+                                    {
+                                        <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+                                            <div>
+                                                <p>
+                                                    @foreach (var provider in loginProviders)
+                                                    {
+                                                        <button class="btn bg-@provider.AuthenticationScheme.ToLower()" name="provider" value="@provider.AuthenticationScheme" title="Log in using your @provider.DisplayName account">
+                                                            <span class="glyph-icon icon-separator">
+                                                                <i class="glyph-icon icon-@provider.AuthenticationScheme.ToLower()"></i>
+                                                            </span>
+                                                            <span class="button-content">
+                                                                @provider.AuthenticationScheme
+                                                            </span>
+                                                        </button>
+                                                    }
+                                                </p>
+                                            </div>
+                                        </form>
+                                    }
+                                }
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script type="text/javascript" src="~/assets/widgets/parsley/parsley.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('form').parsley();
+        });
+    </script>
+}

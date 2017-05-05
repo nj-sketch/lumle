@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>@ViewData["Title"]</title>
+
+
+    <!-- new style refrences start -->
+    <!-- HELPERS -->
+    <link rel="stylesheet" type="text/css" href="~/assets/helpers/backgrounds.min.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/helpers/boilerplate.min.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/helpers/grid.min.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/helpers/spacing.min.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/helpers/utils.min.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/helpers/colors.min.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/helpers/typography.min.css">
+    <!-- ELEMENTS -->
+    <link rel="stylesheet" type="text/css" href="~/assets/elements/buttons.min.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/elements/content-box.min.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/elements/forms.min.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/elements/response-messages.min.css">
+    <!-- FRONTEND ELEMENTS -->
+    <link rel="stylesheet" type="text/css" href="~/assets/frontend-elements/footer.min.css">
+    <!--WIDGETS-->
+    <link rel="stylesheet" type="text/css" href="~/assets/widgets/dialog/dialog.min.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/widgets/dropdown/dropdown.min.css">
+    <!-- ICONS -->
+    <link rel="stylesheet" type="text/css" href="~/assets/icons/fontawesome/fontawesome.min.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/widgets/fullpage/fullpage.min.css">
+    <!-- SNIPPETS -->
+    <link rel="stylesheet" type="text/css" href="~/assets/snippets/login-box.min.css">
+    <!-- Frontend theme -->
+    <link rel="stylesheet" type="text/css" href="~/assets/themes/frontend/layout.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/themes/frontend/color-schemes/default.min.css">
+    <!-- Frontend responsive -->
+    <link rel="stylesheet" type="text/css" href="~/assets/helpers/responsive-elements.min.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/helpers/frontend-responsive.min.css">
+    <link href="~/css/custom.css" rel="stylesheet" />
+
+    @RenderSection("styles", required: false)
+    <!-- JS Core -->
+
+    <script type="text/javascript" src="~/assets/js-core/jquery-core.min.js"></script>
+    <script type="text/javascript" src="~/assets/js-core/jquery-ui-core.min.js"></script>
+
+    <script type="text/javascript">
+        $(window).load(function () {
+            setTimeout(function () {
+                $('#loading').fadeOut(400, "linear");
+            }, 300);
+        });
+    </script>
+</head>
+<body class="body-alt">
+    <link href="http://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet" type="text/css">
+    <div id="loading">
+        <div class="spinner">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+        </div>
+    </div>
+    <div id="page-wrapper">
+        <div class="main-header header-fixed font-inverse header-opacity header-resizable wow bounceInDown" data-0="padding: 35px 0; background: rgba(255,255,255,0.1);" data-250="padding: 0px 0; background: rgba(0,0,0,1)">
+            <div class="container">
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="header-logo" title="Freight Auditing System"></a>
+                <!-- .header-logo -->
+                <ul class="header-nav collapse">
+                    @await Html.PartialAsync("_LoginPartial")
+                </ul>
+
+            </div><!-- .container -->
+        </div><!-- .main-header -->
+
+    </div>
+    @RenderBody()
+    <footer>
+        <div class="footer-pane">
+            <div class="container clearfix">
+                <div class="logo">&copy; @DateTime.Now.Year All Rights Reserved.</div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
+
+<!-- Fullpage.js -->
+<script type="text/javascript" src="~/assets/widgets/fullpage/fullpage.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#fullpage').fullpage({
+            anchors: ['firstPage'],
+            autoScrolling: false,
+            css3: true
+        });
+    });
+</script>
+
+
+@RenderSection("scripts", required: false)
+
+
+

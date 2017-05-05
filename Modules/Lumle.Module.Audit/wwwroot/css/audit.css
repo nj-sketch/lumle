@@ -1,0 +1,225 @@
+﻿.size-md {
+    float: right;
+    margin-bottom: 15px;
+    height:auto;
+}
+.input-date {
+    margin-top: -6px;
+}
+.container {
+    width: 100%;
+}
+.edit-form {
+    border: none;
+    box-shadow: none;
+    padding: 6px 0 0 0;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd) {
+    background-color: #f9f9f9;
+}
+
+.table-wdt td{
+    width:17%;
+}
+
+.tbl-title td{
+    padding:5px;
+    background:#00bca4;
+    border:none;
+}
+
+.custom-audit-heading{
+    padding: 6px 0;
+    background: #00bca4;
+    color: #FFF;
+    font-size: 14px;
+    cursor:pointer;
+}
+
+.custom-audit-heading span{
+    padding-left:5px;
+}
+
+.panel-border{
+    border-width: 0 !important;
+}
+
+.table-wdt{
+    border-bottom:1px solid #DDD !important;
+    border-left:1px solid #DDD !important;
+    border-right:0 solid #DDD !important;
+    border-top:0 solid #FFF !important;
+}
+
+.green-text{
+    color: #32cf4e;
+    text-transform:uppercase;
+    font-weight:bold !important;
+}
+
+.orange-text{
+    color: #f26b33;
+    text-transform: uppercase;
+    font-weight: bold !important;
+}
+
+.blue-text{
+    color: #3792f2;
+    text-transform:uppercase;
+    font-weight:bold !important;
+}
+
+.table-wdt tr td:first-of-type{
+    font-weight:bold !important;
+}
+
+.audit-btn-arr{
+    position:absolute;
+    right:15px;
+}
+
+.panel-mb{
+    margin-bottom:6px;
+}
+
+.table-bordered {
+    border-width: 1px !important;
+}
+/****************************custom-query*****************************************/
+@media( max-width:1024px){
+    .gap-space{
+        width:100% !important;
+        margin-bottom:5px;
+    }
+
+    .custom-size{
+        width:100%;
+    }
+
+    .custom-right{
+        float:right ;
+    }
+
+    .small-size{
+        width:14% !important;
+        margin-bottom: 10px;
+    }
+
+    .small-size-date{
+        width: 100% !important;
+    }
+    .date-input{
+        width: 20% !important;
+    }
+
+    .form-control{
+        font-size: 11px;
+        display: block;
+        float: none;
+        background: #fff;
+        width: 100%;
+        height: 34px;
+        padding: 6px 0 6px 0;
+        color: #2b2f33;
+        /* border: #dfe8f1 solid 1px;*/
+        -webkit-box-shadow: inset 1px 1px 3px #f6f6f6;
+        -moz-box-shadow: inset 1px 1px 3px #f6f6f6;
+        box-shadow: inset 1px 1px 3px #f6f6f6;
+    }
+
+    .custom_size {
+        padding-left: 5px;
+    }
+
+    .custom-right{
+        float:right;
+    }
+    .eedit1{
+        padding-top:1px;
+    }
+    
+}
+
+.eedit{
+    padding-top:0;
+}
+
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+    vertical-align: middle;
+
+}
+
+.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td {
+    padding: 5px 5px;
+}
+
+.fc-button, .btn, .size-md {
+    line-height: 10px;
+    /*height: 25px;*/
+    min-width: 30px;
+}
+
+.dataTable tbody td .btn {
+    font-size: 13px;
+    font-weight: normal;
+    position: relative;
+    display: inline-block;
+    padding: 0 1px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    text-align: center;
+    white-space: nowrap;
+    border-width: 1px;
+    border-style: solid;
+    border-color: transparent;
+    background-image: none;
+    -o-user-select: none;
+}
+
+.dataTable tbody td:last-of-type {
+    text-align: center;
+}
+
+.custom-datatable tbody td:last-of-type {
+    text-align: left;
+}
+
+@media (max-width: 1200px) {
+    .small-size {
+        /* width: 25% !important; */
+        margin-bottom:10px;
+    }
+}
+    
+
+@media (max-width: 1440px) {
+    .small-size {
+        /* width: 25% !important; */
+        margin-bottom: 10px;
+    }
+
+    .modal-header {
+        min-height: 16.43px;
+        padding: 10px 20px;
+        border-bottom: 1px solid #dfe8f1;
+    }
+
+    .modal-title i {
+        font-size: 18px;
+        padding: 0 2px 0 2px;
+    }
+
+    .edit-form {
+        border: none;
+        box-shadow: none;
+        padding: 0;
+    }
+
+
+}
+
+     

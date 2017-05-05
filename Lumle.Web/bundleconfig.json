@@ -1,0 +1,1346 @@
+[
+  {
+    "outputFileName": "wwwroot/js/change-language.min.js",
+    "inputFiles": [
+      "wwwroot/js/change-language.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/applications/mailbox.min.css",
+    "inputFiles": [
+      "wwwroot/assets/applications/mailbox.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/bootstrap/css/bootstrap.min.css",
+    "inputFiles": [
+      "wwwroot/assets/bootstrap/css/bootstrap.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/bootstrap/css/bootstrap-theme.min.css",
+    "inputFiles": [
+      "wwwroot/assets/bootstrap/css/bootstrap-theme.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/bootstrap/js/npm.min.js",
+    "inputFiles": [
+      "wwwroot/assets/bootstrap/js/npm.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/elements/badges.min.css",
+    "inputFiles": [
+      "wwwroot/assets/elements/badges.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/elements/buttons.min.css",
+    "inputFiles": [
+      "wwwroot/assets/elements/buttons.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/elements/content-box.min.css",
+    "inputFiles": [
+      "wwwroot/assets/elements/content-box.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/elements/dashboard-box.min.css",
+    "inputFiles": [
+      "wwwroot/assets/elements/dashboard-box.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/elements/forms.min.css",
+    "inputFiles": [
+      "wwwroot/assets/elements/forms.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/elements/images.min.css",
+    "inputFiles": [
+      "wwwroot/assets/elements/images.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/elements/info-box.min.css",
+    "inputFiles": [
+      "wwwroot/assets/elements/info-box.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/elements/invoice.min.css",
+    "inputFiles": [
+      "wwwroot/assets/elements/invoice.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/elements/loading-indicators.min.css",
+    "inputFiles": [
+      "wwwroot/assets/elements/loading-indicators.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/elements/menus.min.css",
+    "inputFiles": [
+      "wwwroot/assets/elements/menus.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/elements/panel-box.min.css",
+    "inputFiles": [
+      "wwwroot/assets/elements/panel-box.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/elements/response-messages.min.css",
+    "inputFiles": [
+      "wwwroot/assets/elements/response-messages.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/elements/ribbon.min.css",
+    "inputFiles": [
+      "wwwroot/assets/elements/ribbon.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/elements/social-box.min.css",
+    "inputFiles": [
+      "wwwroot/assets/elements/social-box.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/elements/responsive-tables.min.css",
+    "inputFiles": [
+      "wwwroot/assets/elements/responsive-tables.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/elements/tables.min.css",
+    "inputFiles": [
+      "wwwroot/assets/elements/tables.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/elements/tile-box.min.css",
+    "inputFiles": [
+      "wwwroot/assets/elements/tile-box.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/elements/timeline.min.css",
+    "inputFiles": [
+      "wwwroot/assets/elements/timeline.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/frontend-elements/blog.min.css",
+    "inputFiles": [
+      "wwwroot/assets/frontend-elements/blog.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/frontend-elements/cta-box.min.css",
+    "inputFiles": [
+      "wwwroot/assets/frontend-elements/cta-box.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/frontend-elements/feature-box.min.css",
+    "inputFiles": [
+      "wwwroot/assets/frontend-elements/feature-box.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/frontend-elements/footer.min.css",
+    "inputFiles": [
+      "wwwroot/assets/frontend-elements/footer.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/frontend-elements/hero-box.min.css",
+    "inputFiles": [
+      "wwwroot/assets/frontend-elements/hero-box.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/frontend-elements/icon-box.min.css",
+    "inputFiles": [
+      "wwwroot/assets/frontend-elements/icon-box.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/frontend-elements/portfolio-navigation.min.css",
+    "inputFiles": [
+      "wwwroot/assets/frontend-elements/portfolio-navigation.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/frontend-elements/pricing-table.min.css",
+    "inputFiles": [
+      "wwwroot/assets/frontend-elements/pricing-table.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/frontend-elements/sliders.min.css",
+    "inputFiles": [
+      "wwwroot/assets/frontend-elements/sliders.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/frontend-elements/testimonial-box.min.css",
+    "inputFiles": [
+      "wwwroot/assets/frontend-elements/testimonial-box.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/helpers/admin-responsive.min.css",
+    "inputFiles": [
+      "wwwroot/assets/helpers/admin-responsive.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/helpers/animate.min.css",
+    "inputFiles": [
+      "wwwroot/assets/helpers/animate.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/helpers/backgrounds.min.css",
+    "inputFiles": [
+      "wwwroot/assets/helpers/backgrounds.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/helpers/boilerplate.min.css",
+    "inputFiles": [
+      "wwwroot/assets/helpers/boilerplate.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/helpers/border-radius.min.css",
+    "inputFiles": [
+      "wwwroot/assets/helpers/border-radius.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/icons/elusive/elusive.min.css",
+    "inputFiles": [
+      "wwwroot/assets/icons/elusive/elusive.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/icons/fontawesome/fontawesome.min.css",
+    "inputFiles": [
+      "wwwroot/assets/icons/fontawesome/fontawesome.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/icons/linecons/linecons.min.css",
+    "inputFiles": [
+      "wwwroot/assets/icons/linecons/linecons.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/icons/meteocons/meteocons.min.css",
+    "inputFiles": [
+      "wwwroot/assets/icons/meteocons/meteocons.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/icons/spinnericon/spinnericon.min.css",
+    "inputFiles": [
+      "wwwroot/assets/icons/spinnericon/spinnericon.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/icons/typicons/typicons.min.css",
+    "inputFiles": [
+      "wwwroot/assets/icons/typicons/typicons.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/js-core/d3.min.js",
+    "inputFiles": [
+      "wwwroot/assets/js-core/d3.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/js-core/greensock.min.js",
+    "inputFiles": [
+      "wwwroot/assets/js-core/greensock.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/js-core/jquery-cookie.min.js",
+    "inputFiles": [
+      "wwwroot/assets/js-core/jquery-cookie.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/js-core/jquery-core.min.js",
+    "inputFiles": [
+      "wwwroot/assets/js-core/jquery-core.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/js-core/jquery-ui-core.min.js",
+    "inputFiles": [
+      "wwwroot/assets/js-core/jquery-ui-core.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/js-core/jquery-ui-mouse.min.js",
+    "inputFiles": [
+      "wwwroot/assets/js-core/jquery-ui-mouse.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/js-core/jquery-ui-position.min.js",
+    "inputFiles": [
+      "wwwroot/assets/js-core/jquery-ui-position.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/js-core/jquery-ui-touch-punch.min.js",
+    "inputFiles": [
+      "wwwroot/assets/js-core/jquery-ui-touch-punch.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/js-core/jquery-ui-widget.min.js",
+    "inputFiles": [
+      "wwwroot/assets/js-core/jquery-ui-widget.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/js-core/modernizr.min.js",
+    "inputFiles": [
+      "wwwroot/assets/js-core/modernizr.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/js-core/raphael.min.js",
+    "inputFiles": [
+      "wwwroot/assets/js-core/raphael.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/js-core/transition.min.js",
+    "inputFiles": [
+      "wwwroot/assets/js-core/transition.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/js-init/frontend-init.min.js",
+    "inputFiles": [
+      "wwwroot/assets/js-init/frontend-init.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/js-init/widgets-init.min.js",
+    "inputFiles": [
+      "wwwroot/assets/js-init/widgets-init.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/snippets/chat.min.css",
+    "inputFiles": [
+      "wwwroot/assets/snippets/chat.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/snippets/files-box.min.css",
+    "inputFiles": [
+      "wwwroot/assets/snippets/files-box.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/snippets/login-box.min.css",
+    "inputFiles": [
+      "wwwroot/assets/snippets/login-box.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/snippets/mobile-navigation.min.css",
+    "inputFiles": [
+      "wwwroot/assets/snippets/mobile-navigation.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/snippets/notification-box.min.css",
+    "inputFiles": [
+      "wwwroot/assets/snippets/notification-box.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/snippets/progress-box.min.css",
+    "inputFiles": [
+      "wwwroot/assets/snippets/progress-box.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/snippets/todo.min.css",
+    "inputFiles": [
+      "wwwroot/assets/snippets/todo.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/snippets/user-profile.min.css",
+    "inputFiles": [
+      "wwwroot/assets/snippets/user-profile.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/helpers/utils.min.css",
+    "inputFiles": [
+      "wwwroot/assets/helpers/utils.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/helpers/page-transitions.min.css",
+    "inputFiles": [
+      "wwwroot/assets/helpers/page-transitions.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/helpers/frontend-responsive.min.css",
+    "inputFiles": [
+      "wwwroot/assets/helpers/frontend-responsive.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/helpers/typography.min.css",
+    "inputFiles": [
+      "wwwroot/assets/helpers/typography.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/helpers/spacing.min.css",
+    "inputFiles": [
+      "wwwroot/assets/helpers/spacing.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/themes/admin/color-schemes/default.min.css",
+    "inputFiles": [
+      "wwwroot/assets/themes/admin/color-schemes/default.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/themes/admin/layout.min.css",
+    "inputFiles": [
+      "wwwroot/assets/themes/admin/layout.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/themes/admin/layout.min.js",
+    "inputFiles": [
+      "wwwroot/assets/themes/admin/layout.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/themes/components/border-radius.min.css",
+    "inputFiles": [
+      "wwwroot/assets/themes/components/border-radius.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/themes/components/default.min.css",
+    "inputFiles": [
+      "wwwroot/assets/themes/components/default.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/themes/frontend/layout.min.js",
+    "inputFiles": [
+      "wwwroot/assets/themes/frontend/layout.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/_references.min.js",
+    "inputFiles": [
+      "wwwroot/_references.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/accordion-ui/accordion.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/accordion-ui/accordion.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/accordion-ui/accordion.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/accordion-ui/accordion.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/animation/animation.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/animation/animation.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/autocomplete/autocomplete.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/autocomplete/autocomplete.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/autocomplete/autocomplete-demo.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/autocomplete/autocomplete-demo.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/autocomplete/menu.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/autocomplete/menu.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/button/button.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/button/button.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/button-ui/button.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/button-ui/button.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/calendar/calendar.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/calendar/calendar.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/calendar/calendar.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/calendar/calendar.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/calendar/calendar-demo.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/calendar/calendar-demo.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/carousel/carousel.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/carousel/carousel.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/carousel/carousel.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/carousel/carousel.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/charts/chart-js/chart-bar.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/charts/chart-js/chart-bar.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/charts/chart-js/chart-core.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/charts/chart-js/chart-core.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/charts/chart-js/chart-demo.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/charts/chart-js/chart-demo.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/charts/chart-js/chart-doughnut.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/charts/chart-js/chart-doughnut.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/charts/chart-js/chart-line.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/charts/chart-js/chart-line.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/charts/chart-js/chart-polar.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/charts/chart-js/chart-polar.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/charts/chart-js/chart-radar.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/charts/chart-js/chart-radar.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/charts/flot/flot.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/charts/flot/flot.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/charts/flot/flot-demo.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/charts/flot/flot-demo.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/charts/flot/flot-demo-1.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/charts/flot/flot-demo-1.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/charts/flot/flot-pie.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/charts/flot/flot-pie.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/charts/flot/flot-resize.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/charts/flot/flot-resize.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/charts/flot/flot-stack.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/charts/flot/flot-stack.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/charts/flot/flot-tooltip.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/charts/flot/flot-tooltip.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/charts/justgage/justgage.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/charts/justgage/justgage.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/charts/justgage/justgage.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/charts/justgage/justgage.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/charts/justgage/justgage-demo.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/charts/justgage/justgage-demo.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/charts/morris/morris.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/charts/morris/morris.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/charts/morris/morris.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/charts/morris/morris.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/charts/morris/morris-demo.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/charts/morris/morris-demo.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/charts/piegage/piegage.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/charts/piegage/piegage.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/charts/piegage/piegage.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/charts/piegage/piegage.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/charts/piegage/piegage-demo.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/charts/piegage/piegage-demo.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/charts/sparklines/sparklines.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/charts/sparklines/sparklines.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/charts/sparklines/sparklines-demo.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/charts/sparklines/sparklines-demo.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/charts/xcharts/xcharts.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/charts/xcharts/xcharts.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/charts/xcharts/xcharts.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/charts/xcharts/xcharts.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/charts/xcharts/xcharts-demo.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/charts/xcharts/xcharts-demo.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/chosen/chosen.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/chosen/chosen.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/chosen/chosen.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/chosen/chosen.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/chosen/chosen-demo.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/chosen/chosen-demo.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/ckeditor/lang/en.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/ckeditor/lang/en.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/ckeditor/plugins/dialog/dialogDefinition.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/ckeditor/plugins/dialog/dialogDefinition.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/ckeditor/plugins/tabletools/dialogs/tableCell.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/ckeditor/plugins/tabletools/dialogs/tableCell.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/ckeditor/ckeditor.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/ckeditor/ckeditor.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/ckeditor/config.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/ckeditor/config.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/ckeditor/styles.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/ckeditor/styles.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/ckeditor/contents.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/ckeditor/contents.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/collapse/collapse.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/collapse/collapse.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/colorpicker/colorpicker.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/colorpicker/colorpicker.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/colorpicker/colorpicker.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/colorpicker/colorpicker.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/colorpicker/colorpicker-demo.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/colorpicker/colorpicker-demo.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/datatable/datatable.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/datatable/datatable.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/datatable/datatable.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/datatable/datatable.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/content-box/contentbox.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/content-box/contentbox.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/datatable/datatable-fixedcolumns.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/datatable/datatable-fixedcolumns.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/datatable/datatable-fixedheader.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/datatable/datatable-fixedheader.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/datatable/datatable-bootstrap.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/datatable/datatable-bootstrap.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/datatable/datatable-reorder.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/datatable/datatable-reorder.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/datatable/datatable-responsive.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/datatable/datatable-responsive.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/datatable/datatable-tabletools.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/datatable/datatable-tabletools.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/datepicker/datepicker.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/datepicker/datepicker.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/datepicker/datepicker.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/datepicker/datepicker.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/datepicker-ui/datepicker.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/datepicker-ui/datepicker.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/datepicker-ui/datepicker.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/datepicker-ui/datepicker.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/datepicker-ui/datepicker-demo.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/datepicker-ui/datepicker-demo.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/daterangepicker/daterangepicker.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/daterangepicker/daterangepicker.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/daterangepicker/daterangepicker.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/daterangepicker/daterangepicker.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/daterangepicker/daterangepicker-demo.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/daterangepicker/daterangepicker-demo.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/daterangepicker/moment.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/daterangepicker/moment.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/dialog/dialog.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/dialog/dialog.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/dialog/dialog.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/dialog/dialog.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/dialog/dialog-demo.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/dialog/dialog-demo.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/dropdown/dropdown.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/dropdown/dropdown.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/dropdown/dropdown.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/dropdown/dropdown.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/dropzone/dropzone.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/dropzone/dropzone.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/dropzone/dropzone.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/dropzone/dropzone.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/file-input/fileinput.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/file-input/fileinput.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/file-input/file-input.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/file-input/file-input.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/file-input/file-input-demo.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/file-input/file-input-demo.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/fullpage/fullpage.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/fullpage/fullpage.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/fullpage/fullpage.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/fullpage/fullpage.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/input-mask/inputmask.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/input-mask/inputmask.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/input-switch/inputswitch.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/input-switch/inputswitch.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/input-switch/inputswitch.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/input-switch/inputswitch.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/input-switch/inputswitch-alt.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/input-switch/inputswitch-alt.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/input-switch/inputswitch-alt.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/input-switch/inputswitch-alt.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/interactions-ui/draggable.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/interactions-ui/draggable.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/interactions-ui/droppable.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/interactions-ui/droppable.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/interactions-ui/resizable.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/interactions-ui/resizable.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/interactions-ui/selectable.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/interactions-ui/selectable.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/interactions-ui/sortable.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/interactions-ui/sortable.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/ionrangeslider/ionrangeslider.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/ionrangeslider/ionrangeslider.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/ionrangeslider/ionrangeslider.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/ionrangeslider/ionrangeslider.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/ionrangeslider/ionrangeslider-demo.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/ionrangeslider/ionrangeslider-demo.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/jcrop/jcrop.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/jcrop/jcrop.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/jcrop/jcrop.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/jcrop/jcrop.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/jcrop/jcrop-demo.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/jcrop/jcrop-demo.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/jgrowl-notifications/jgrowl.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/jgrowl-notifications/jgrowl.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/jgrowl-notifications/jgrowl-demo.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/jgrowl-notifications/jgrowl-demo.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/knobs/knob.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/knobs/knob.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/jgrowl-notifications/jgrowl.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/jgrowl-notifications/jgrowl.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/dropzone/dropdown/dropdown.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/dropzone/dropdown/dropdown.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/loading-bar/loadingbar.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/loading-bar/loadingbar.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/loading-bar/loadingbar.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/loading-bar/loadingbar.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/loading-bar/loadingbar-demo.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/loading-bar/loadingbar-demo.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/markdown/markdown.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/markdown/markdown.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/markdown/markdown.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/markdown/markdown.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/modal/modal.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/modal/modal.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/modal/modal.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/modal/modal.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/nestable/nestable.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/nestable/nestable.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/nestable/nestable.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/nestable/nestable.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/progressbar/progressbar.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/progressbar/progressbar.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/progressbar/progressbar.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/progressbar/progressbar.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/slidebars/slidebars.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/slidebars/slidebars.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/slidebars/slidebars.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/slidebars/slidebars.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/slider-ui/slider.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/slider-ui/slider.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/slider-ui/slider.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/slider-ui/slider.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/summernote-wysiwyg/summernote-wysiwyg.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/summernote-wysiwyg/summernote-wysiwyg.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/summernote-wysiwyg/summernote-wysiwyg.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/summernote-wysiwyg/summernote-wysiwyg.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/tabs-ui/tabs.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/tabs-ui/tabs.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/tabs-ui/tabs.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/tabs-ui/tabs.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/tocify/tocify.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/tocify/tocify.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/tocify/tocify.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/tocify/tocify.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/tooltip/tooltip.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/tooltip/tooltip.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/tooltip/tooltip.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/tooltip/tooltip.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/touchspin/touchspin.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/touchspin/touchspin.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/touchspin/touchspin.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/touchspin/touchspin.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/uniform/uniform.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/uniform/uniform.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/uniform/uniform.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/uniform/uniform.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/wizard/wizard.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/wizard/wizard.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/wizard/wizard.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/wizard/wizard.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/helpers/responsive-elements.min.css",
+    "inputFiles": [
+      "wwwroot/assets/helpers/responsive-elements.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/superclick/superclick.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/superclick/superclick.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/slimscroll/slimscroll.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/slimscroll/slimscroll.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/slidebars/slidebars-demo.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/slidebars/slidebars-demo.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/screenfull/screenfull.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/screenfull/screenfull.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/overlay/overlay.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/overlay/overlay.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/helpers/grid.min.css",
+    "inputFiles": [
+      "wwwroot/assets/helpers/grid.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/helpers/colors.min.css",
+    "inputFiles": [
+      "wwwroot/assets/helpers/colors.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/parsley/parsley.min.js",
+    "inputFiles": [
+      "wwwroot/assets/widgets/parsley/parsley.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/themes/frontend/layout.min.css",
+    "inputFiles": [
+      "wwwroot/assets/themes/frontend/layout.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/widgets/theme-switcher/themeswitcher.min.css",
+    "inputFiles": [
+      "wwwroot/assets/widgets/theme-switcher/themeswitcher.css"
+    ]
+  }
+]

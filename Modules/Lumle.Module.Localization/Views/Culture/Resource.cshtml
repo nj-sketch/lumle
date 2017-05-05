@@ -1,0 +1,122 @@
+﻿@using System.Globalization;
+@model ImportResourceModel
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+
+@functions
+{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+@section styles
+{
+    <link href="~/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="~/assets/widgets/datatable/datatable.min.css">
+    <link href="~/lib/toastr/toastr.css" rel="stylesheet" />
+}
+
+@{
+    ViewData["Title"] = Localizer[LabelConstants.Resource];
+    var hasPermissionForUpdateResource = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.LocalizationCultureUpdate), User);
+    var cultureName = new CultureInfo(Model.Culture).DisplayName;
+}
+
+<div id="page-title">
+    <h2 class="display-inline">@Localizer[LabelConstants.Localization]</h2>
+</div>
+
+<div class="breadcrumb-section clearfix">
+    <ol class="breadcrumb">
+        <li class="module">@Localizer[LabelConstants.Localization]</li>
+        <li><a href="~/localization/culture">@Localizer[LabelConstants.Culture]</a></li>
+        <li class="active">@Localizer[LabelConstants.Resource]</li>
+    </ol>
+</div>
+
+<label id="lblCulture" hidden="hidden" value="@Model.Culture"></label>
+@Html.Partial("_MessagePanel")
+<div class="panel">
+    <div class="panel-body">
+        <div class="row">
+            <div class="form-group">
+                <h5 class="control-label col-md-3">
+                    @cultureName
+                </h5>
+                <label class="control-label col-sm-1">@Localizer[LabelConstants.FilterBy]</label>
+                <div class="col-md-4">
+                    <select class="form-control" id="resourceFilterBy">
+                        <option value="0" selected>@Localizer[LabelConstants.All]</option>
+                        <option value="1">@Localizer[LabelConstants.Label]</option>
+                        <option value="2">@Localizer[LabelConstants.Message]</option>
+                    </select>
+                </div>
+                <div class="pull-right">
+                    <a href="#" title="Import Excel" class="user-profile clearfix" style="text-decoration: none;" data-toggle="modal" data-target="#importExcelModel">
+                        <i class="glyph-icon icon-arrow-circle-up"></i>
+                        <span>@Localizer[LabelConstants.ImportExcel]</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <table class="table table-hover table-responsive table-bordered" id="resourceDataTable" style="width:100% !important;">
+                <thead>
+                    <tr>
+                        <th>@Localizer[LabelConstants.SN]</th>
+                        <th></th>
+                        <th></th>
+                        <th>@Localizer[LabelConstants.OriginalWord]</th>
+                        <th>@Localizer[LabelConstants.TranslatedWord]</th>
+                        <th>@Localizer[LabelConstants.Action]</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!--Modal section-->
+<div id="importExcelModel" class="modal fade in" tabindex="-1" role="dialog" aria-hidden="true" style="padding-right:0px;">
+    <div class="modal-dialog" style="margin-top:10% !important;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                <h3 class="modal-title">@Localizer[LabelConstants.ImportDataFromExcel]</h3>
+            </div>
+            <form method="post" enctype="multipart/form-data" asp-controller="Culture" asp-action="ImportExcel" asp-route-resourcetype="">
+                <div class="modal-body">
+                    <input type="hidden" asp-for="Culture" />
+                    <h5 class="control-label">@Localizer[LabelConstants.Language] : <span>@cultureName</span></h5>
+                    <div class="form-group">
+                        <h5 class="control-label">@Localizer[LabelConstants.ResourceType] </h5>
+                        <select id="resourceType" asp-for="ResourceCategoryId" class="form-control">
+                            <option value="1">@Localizer[LabelConstants.Label]</option>
+                            <option value="2">@Localizer[LabelConstants.Message]</option>
+                        </select>
+                    </div>
+                    <p class="alert alert-notice">@Localizer[LabelConstants.ExcelSheetFormatMessageForResourceImport]</p>
+                    <h5 class="control-label">@Localizer[LabelConstants.ChooseExcelFilestoImportData]</h5>
+                    <input type="file" class="form-control" name="files" asp-for="files" multiple accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+                </div>
+                <div class="modal-footer">
+                    <button data-dismiss="modal" class="btn btn-default" type="button">@Localizer[LabelConstants.Cancel]</button>
+                    <input type="submit" id="btnSubmit" class="btn btn-success" value=@Localizer[LabelConstants.Submit] disabled />
+                    <img id="loadingImg" style="width: 30px; display:none;" src="~/assets/images/spinner/loader-dark.gif" alt="loading image">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section scripts
+{
+    <script type="text/javascript">
+        var $hasPermissionForUpdateResource=@hasPermissionForUpdateResource.ToString().ToLower();
+    </script>
+    <script src="~/lib/toastr/toastr.min.js"></script>
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/localization/js/localization-resource-datatable.js"></script>
+
+}

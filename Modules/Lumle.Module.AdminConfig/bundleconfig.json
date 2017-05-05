@@ -1,0 +1,26 @@
+[
+  {
+    "outputFileName": "wwwroot/js/emailtemplate-index-datatable.min.js",
+    "inputFiles": [
+      "wwwroot/js/emailtemplate-index-datatable.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/credential-index-datatable.min.js",
+    "inputFiles": [
+      "wwwroot/js/credential-index-datatable.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/credential-edit-datatable.min.js",
+    "inputFiles": [
+      "wwwroot/js/credential-edit-datatable.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/systemsetting-index.min.js",
+    "inputFiles": [
+      "wwwroot/systemsetting-index.js"
+    ]
+  }
+]

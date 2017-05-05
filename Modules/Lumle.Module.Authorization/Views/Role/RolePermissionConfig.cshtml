@@ -1,0 +1,75 @@
+﻿@model IEnumerable<Lumle.Module.Authorization.Models.PermissionModels.Module>
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+
+@{
+    ViewData["Title"] = Localizer[LabelConstants.RoleCredentialManagement];
+}
+
+@functions
+{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+
+<div>
+    <div id="page-title">
+        <h2>@Localizer[LabelConstants.RoleCredentialManagement]</h2>
+    </div>
+
+    <div class="breadcrumb-section clearfix">
+        <ol class="breadcrumb">
+            <li class="module">@Localizer[LabelConstants.Authorization]</li>
+            <li><a asp-action="Index" asp-controller="Role">@Localizer[LabelConstants.Role]</a></li>
+            <li class="active">@Localizer[LabelConstants.RoleCredentialManagement]</li>
+        </ol>
+    </div>
+    <label id="roleid" hidden="hidden">@ViewData["role"].ToString()</label>
+    <label id="info" class="col-md-12"></label>
+    <div class="row">
+        <div>
+            <input type="checkbox" id="checkAll" style="margin-left: 16px;" class="pull-left" value="0&0" /> @Localizer[LabelConstants.SelectAll]
+        </div>
+        <br />
+        <div class="form-horizontal">
+            @foreach (var item in Model)
+            {
+                <div class="panel col-md-12">
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <h3 class="title-hero" style="text-transform: capitalize;">@item.Name</h3><hr />
+                            @foreach (var subMod in item.SubModules)
+                            {
+
+                                <div class="col-md-3 submodule">
+                                    <h5 class="title-hero" style="text-transform: capitalize;">@subMod.Name</h5>
+                                    @foreach (var perm in subMod.ModulePermissions)
+                                    {
+                                        <label class="control-label">
+                                            <input type="checkbox" @(perm.IsAssigned ? "checked" : "") class="cke_dialog_ui_checkbox checkList" name="ckbox" value="@perm.Slug" />
+                                           @Localizer[perm.DisplayName]
+                                        </label><br />
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="bg-default content-box text-center pad20A mrg25T">
+            <a class="btn btn-default" asp-action="Index">@Localizer[LabelConstants.Cancel]</a>
+            <button id="btnSubmit" class="btn btn-success" type="submit">@Localizer[LabelConstants.Save]</button>
+            <img id="loadingImg" style="width: 30px; display:none;" src="~/assets/images/spinner/loader-dark.gif" alt="loading image">
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript" src="~/authorization/js/authorization-role-credential.js"></script>
+}

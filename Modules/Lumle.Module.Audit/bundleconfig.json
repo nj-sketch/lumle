@@ -1,0 +1,14 @@
+[
+  {
+    "outputFileName": "wwwroot/css/audit.min.css",
+    "inputFiles": [
+      "wwwroot/css/audit.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/audit-index.min.js",
+    "inputFiles": [
+      "wwwroot/js/audit-index.js"
+    ]
+  }
+]

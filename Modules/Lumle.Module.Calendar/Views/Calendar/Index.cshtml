@@ -1,0 +1,66 @@
+﻿@{
+    var hasPermissionForCreate = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.CalendarCreate), User);
+    ViewData["Title"] = Localizer[LabelConstants.Calendar];
+}
+
+@section styles{
+
+    <link href="~/Calendar/css/fullcalendar.min.css" rel="stylesheet" />
+
+    <style type="text/css">
+        #divCalendar {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .fc-button {
+            height: 34px !important;
+        }
+
+        .holiday {
+            background: #e74c3c;
+        }
+        .fc-today-button:first-letter{
+             text-transform: uppercase;
+        }
+    </style>
+
+}
+
+<div id="page-title">
+    <h2 class="display-inline">@Localizer[LabelConstants.Calendar]</h2>
+    <div class="pull-right">
+        @{
+            if (hasPermissionForCreate)
+            {
+                <a id="" asp-action="Events" class="btn btn-primary btn-sm">
+                    <i class=""></i> @Localizer[LabelConstants.ManageEvent]
+                </a>
+
+                <a id="" asp-action="Holidays" class="btn btn-primary btn-sm">
+                    <i class=""></i> @Localizer[LabelConstants.ManageHoliday]
+                </a>
+            }
+        }
+    </div>
+</div>
+
+<div class="breadcrumb-section clearfix">
+    <ol class="breadcrumb">
+        <li class="active">@Localizer[LabelConstants.Calendar]</li>
+    </ol>
+</div>
+
+@Html.Partial("_MessagePanel")
+
+<div class="panel">
+    <div class="panel-body">
+        <div id="divCalendar"></div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/calendar/js/moment.min.js"></script>
+    <script src="~/calendar/js/fullcalendar.min.js"></script>
+    <script type="text/javascript" src="~/calendar/js/calendar-index.min.js"></script>
+}

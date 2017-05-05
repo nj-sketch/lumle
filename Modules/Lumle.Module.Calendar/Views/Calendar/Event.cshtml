@@ -1,0 +1,111 @@
+﻿@model IEnumerable<CalendarEventVM>
+
+@{
+    var hasPermissionForCreate = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.CalendarCreate), User);
+    var hasPermissionForUpdate = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.CalendarUpdate), User);
+    var hasPermissionForDelete = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.CalendarDelete), User);
+
+    ViewData["Title"] = "Event";
+}
+
+@section styles{
+    <link rel="stylesheet" type="text/css" href="~/assets/widgets/datatable/datatable.min.css">
+}
+
+
+<div class="row">
+    <div id="page-title">
+        <h2 class="display-inline">@Localizer[LabelConstants.Event]</h2>
+        <div class="pull-right">
+            @if (hasPermissionForCreate)
+            {
+                <a class="btn btn-primary btn-sm" href="~/calendar/event/add"><i class="glyph-icon icon-plus"></i> @Localizer[LabelConstants.AddNew]</a>
+            }
+        </div>
+    </div>
+
+    <div class="breadcrumb-section clearfix">
+        <ol class="breadcrumb">
+            <li><a asp-action="Index" asp-controller="Calendar">@Localizer[LabelConstants.Calendar]</a></li>
+            <li class="active">@Localizer[LabelConstants.Event]</li>
+        </ol>
+    </div>
+    @Html.Partial("_MessagePanel")
+
+    <div class="panel">
+        <div class="panel-body">
+            <table id="eventDataTable" class="table table-bordered table-striped table-condensed">
+                <thead>
+                    <tr>
+                        <th>@Localizer[LabelConstants.Title]</th>
+                        <th>@Localizer[LabelConstants.Start]</th>
+                        <th>@Localizer[LabelConstants.End]</th>
+                        <th>@Localizer[LabelConstants.Description]</th>
+                        @if (hasPermissionForUpdate || hasPermissionForDelete){<th>@Localizer[LabelConstants.Action]</th>}
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        var deleteModal = "deleteModal" + item.Id;
+                        <tr>
+                            <td>@item.Title</td>
+                            <td>@item.Start</td>
+                            <td>@item.End</td>
+                            <td>@item.Remarks</td>
+                            @if (hasPermissionForUpdate || hasPermissionForDelete)
+                            {
+                                <td>
+                                    @if (hasPermissionForUpdate)
+                                    {
+                                        <a id="editEvent" asp-action="EditEvent" asp-route-id="@item.Id"
+                                           class="btn btn-info btn-sm">
+                                            <i class="glyph-icon icon-pencil"></i> Edit
+                                        </a>
+                                    }
+                                    @if (hasPermissionForDelete)
+                                    {
+                                        <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#@deleteModal">
+                                            <i class="glyph-icon icon-trash-o"></i> Delete
+                                        </button>
+
+                                    <!--Modal section-->
+                                        <div id="@deleteModal" class="modal fade in">
+                                            <div class="modal-dialog" style="width:40% !important; margin-top:10% !important;">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                        <h3 class="modal-title">@Localizer[LabelConstants.DeleteEvent]</h3>
+                                                    </div>
+
+                                                    <form asp-action="DeleteEvent" role="form" asp-route-id="@item.Id" method="post">
+                                                        <div class="modal-body">
+                                                            @Localizer[LabelConstants.DoYouWantToDelete] <span><b>@item.Title</b></span> ?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
+                                                            <button class="btn btn-success" type="submit">Delete</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@section scripts
+{
+    <script type="text/javascript" src="~/assets/widgets/datatable/datatable.min.js"></script>
+    <script type="text/javascript" src="~/assets/widgets/datatable/datatable-bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/assets/widgets/datatable/datatable-responsive.min.js"></script>
+    <script type="text/javascript" src="~/calendar/js/calendar-event.min.js"></script>
+}

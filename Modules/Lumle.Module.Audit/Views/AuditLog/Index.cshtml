@@ -1,0 +1,104 @@
+﻿@model Lumle.Module.Audit.Models.AuditLogFilter
+
+@{
+    ViewData["Title"] = Localizer[LabelConstants.AuditLog];
+}
+
+@section styles{
+    <link href="~/assets/widgets/datepicker/bootstrap-datepicker.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="~/css/dataTables.bootstrap.min.css" />
+    <link rel="stylesheet" href="~/assets/widgets/datatable/datatable.min.css">
+    <link rel="stylesheet" href="~/audit/css/audit.css" />
+}
+
+<div class="row">
+    <div id="page-title">
+        <h2 style="display:inline-block">@Localizer[LabelConstants.AuditLog]</h2>
+        <div class="right" style="float:right">
+        </div>
+    </div>
+
+    <div class="breadcrumb-section clearfix">
+        <ol class="breadcrumb">
+            <li>@Localizer[LabelConstants.Audit]</li>
+            <li class="active">@Localizer[LabelConstants.AuditLog]</li>
+        </ol>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel">
+                <div class="panel-body">
+                    <div class="example-box-wrapper">
+                        <div class="col-md-12 size-md">
+                            <div class="row">
+                                <form class="form-inline pull-right" data-parsley-validate novalidate>
+                                    <select asp-for="ModuleSearch" asp-items="Model.ModuleList" class="form-control small-size" required></select>
+                                    <select asp-for="ActionSearch" asp-items="Model.ActionList" class="form-control small-size" required></select>
+                                    <input type="text" asp-for="UserSearch" class="form-control small-size custom_size" placeholder="User Name" required>
+                                    <input type="text" asp-for="FieldSearch" class="form-control small-size custom_size" placeholder="Field Name" required>
+                                    <div class="form-control edit-form date-input eedit1">
+                                        <div class="input-prepend input-group input-date">
+                                            <span class="add-on input-group-addon">
+                                                <i class="glyph-icon icon-calendar"></i>
+                                            </span>
+                                            <input id="dp1" type="text" class="form-control small-sizes custom_size" placeholder="Start Date" readonly="readonly">
+                                        </div>
+                                    </div>
+                                    <div class="form-control edit-form date-input eedit1">
+                                        <div class="input-prepend input-group input-date">
+                                            <span class="add-on input-group-addon">
+                                                <i class="glyph-icon icon-calendar"></i>
+                                            </span>
+                                            <input id="dp2" type="text" class="form-control small-sizes custom_size" placeholder="End Date" readonly="readonly">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <table class="table table-hover table-responsive table-bordered" id="auditDataTable" style="width:100% !important;">
+                            <thead>
+                                <tr>
+                                    <th>@Localizer[LabelConstants.SN]</th>
+                                    <th>@Localizer[LabelConstants.Module]</th>
+                                    <th>@Localizer[LabelConstants.AuditBy]</th>
+                                    <th>@Localizer[LabelConstants.AuditAction]</th>
+                                    <th>@Localizer[LabelConstants.AuditDate]</th>
+                                    <th>@Localizer[LabelConstants.Summary]</th>
+                                    <th>@Localizer[LabelConstants.Tool]</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal-->
+<div id="auditModal" class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">AUDIT TRAIL <i class="glyph-icon icon-angle-double-right"></i> <label id="moduleTitle"></label></h4>
+            </div>
+            <div class="container modal-body">
+                <div id="audit" class="panel panel-border"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/assets/widgets/datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/audit/js/audit-index.js" asp-append-version="true"></script>
+
+}
+

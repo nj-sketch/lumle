@@ -1,0 +1,130 @@
+﻿@model IEnumerable<CultureModel>
+@section styles
+{
+    <link href="~/assets/widgets/datatable/datatable.min.css" rel="stylesheet" />
+    <link href="~/assets/widgets/input-switch/inputswitch-alt.min.css" rel="stylesheet" />
+    <link href="~/lib/toastr/toastr.css" rel="stylesheet" />
+    <style>
+        div.switch-toggle {
+            left: 110px;
+        }
+    </style>
+}
+
+@{
+    ViewData["Title"] = Localizer[LabelConstants.Culture];
+    var hasPermissionForAddNewCulture = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.LocalizationCultureCreate), User);
+    var inActiveCultureCount = Model.AsQueryable().Count(x => !x.IsEnable);
+}
+
+<div id="page-title">
+    <h2 class="display-inline">@Localizer[LabelConstants.Localization]</h2>
+
+    @if (hasPermissionForAddNewCulture)
+    {
+        @if (inActiveCultureCount > 0)
+        {
+            <button class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#addLanguageModal">
+                <i class="glyph-icon icon-plus"></i>  @Localizer[LabelConstants.AddNew]
+            </button>
+        }
+    }
+</div>
+
+<div class="breadcrumb-section clearfix">
+    <ol class="breadcrumb">
+        <li class="module">@Localizer[LabelConstants.Localization]</li>
+        <li class="active">@Localizer[LabelConstants.Culture]</li>
+    </ol>
+</div>
+
+@Html.Partial("_MessagePanel")
+
+<div class="example-box-wrapper">
+
+    <div class="modal fade" id="addLanguageModal" tabindex="-1" role="dialog" aria-labelledby="addLanguageModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form asp-action="AddNewCulture" method="post" role="form" class="form-horizontal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">@Localizer[LabelConstants.AddNew]</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">@Localizer[LabelConstants.SelectLanguage]</label>
+                            <div class="col-sm-6">
+                                <select class="form-control" name="selectedCulture" required>
+                                    <option value="" selected>@Localizer[LabelConstants.PleaseSelect]</option>
+                                    @foreach (var item in Model.Where(x => !x.IsEnable))
+                                    {
+                                        <option value="@item.Name">@item.DisplayName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">@Localizer[LabelConstants.Cancel]</button>
+                        <button type="submit" class="btn btn-success btn-sm">@Localizer[LabelConstants.Save]</button>
+                        <img id="loadingImg" style="width: 30px; display:none;" src="~/assets/images/spinner/loader-dark.gif" alt="loading image">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-body">
+        <h3 class="title-hero">
+            Culture
+        </h3>
+        <div class="example-box-wrapper">
+            <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="cultureDataTable">
+                <thead>
+                    <tr>
+                        <th>@Localizer[LabelConstants.SN]</th>
+                        <th>@Localizer[LabelConstants.Language]</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var culture in Model.Where(x => x.IsEnable))
+                    {
+                        <tr>
+                            <td>@culture.Sn</td>
+                            <td>@culture.DisplayName</td>
+                            <td>
+                                <div class="form-group ">
+                                    <a class="btn btn-info btn-sm display-inline" style="float:left;" href="~/localization/culture/@culture.Name"><i class="glyph-icon icon-cog"></i> @Localizer[LabelConstants.Manage]</a>
+                                    @if (culture.Name != "en-US")
+                                    {
+                                        if (culture.IsActive)
+                                        {
+                                            <div class="switch-toggle switch-on" value="@culture.Name"></div>
+                                        }
+                                        else
+                                        {
+                                            <div class="switch-toggle switch-off" value="@culture.Name"></div>
+                                        }
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script src="~/lib/toastr/toastr.min.js"></script>
+    <script type="text/javascript" src="~/assets/widgets/datatable/datatable.min.js"></script>
+    <script type="text/javascript" src="~/assets/widgets/datatable/datatable-bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/assets/widgets/datatable/datatable-responsive.min.js"></script>
+    <script src="~/assets/widgets/datatable/datatable-tabletools.js"></script>
+    <script src="~/localization/js/localization-index-datatable.js"></script>
+}

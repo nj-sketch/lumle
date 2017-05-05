@@ -1,0 +1,21 @@
+﻿@model Lumle.Module.Core.ViewModels.AccountViewModels.SendCodeVM
+@{
+    ViewData["Title"] = Localizer[LabelConstants.SendVerificationCode];
+}
+
+<h2>@ViewData["Title"].</h2>
+
+<form asp-controller="Account" asp-action="SendCode" asp-route-returnurl="@Model.ReturnUrl" method="post" class="form-horizontal">
+    <input asp-for="RememberMe" type="hidden" />
+    <div class="row">
+        <div class="col-md-8">
+            @Localizer[LabelConstants.SelectTwoFactorAuthenticationProvider]
+            <select asp-for="SelectedProvider" asp-items="Model.Providers"></select>
+            <button type="submit" class="btn btn-default">@Localizer[LabelConstants.Submit]</button>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    
+}

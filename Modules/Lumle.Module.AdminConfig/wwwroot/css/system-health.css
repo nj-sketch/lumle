@@ -1,0 +1,39 @@
+﻿tr:nth-child(odd) {
+        background-color: #f7f9fa;
+    }
+
+    .table_custom tbody  tr td  {
+        padding: 10px;
+        border-top-width: 0px;
+        border-top-style: solid;                  
+    }
+
+    .table_custom>thead>tr>th {
+        font-weight: bold;
+        vertical-align: bottom;
+        border-bottom-width: 0px;
+        border-bottom-style: solid;
+        border-top:1px solid #ddd !important;
+        background:#fff;
+    }
+
+    .icon-remove{
+        color:red; 
+        padding-left:15px;
+    }
+
+    .icon-check{
+        color:green;
+        padding-left:15px;
+    }
+
+    .table_title_system h4{
+        padding: 10px 0px 5px 0px;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+     .table_title_system p{
+         padding:0px 0px 15px 0px;
+     }
+     .example-box-wrapper .alert{margin-bottom: 0px;padding:5px;}

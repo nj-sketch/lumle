@@ -1,0 +1,88 @@
+﻿@model Lumle.Module.Audit.Models.CustomLogFilter
+
+@{
+    ViewData["Title"] = @Localizer[LabelConstants.CustomLog];
+}
+
+@section styles{
+    <link href="~/assets/widgets/datepicker/bootstrap-datepicker.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="~/css/dataTables.bootstrap.min.css" />
+    <link rel="stylesheet" href="~/assets/widgets/datatable/datatable.min.css">
+    <link rel="stylesheet" href="~/audit/css/audit.css" />
+}
+
+<div class="row">
+    <div id="page-title">
+        <h2 style="display:inline-block">@Localizer[LabelConstants.CustomLog]</h2>
+        <div class="right" style="float:right">
+        </div>
+    </div>
+
+    <div class="breadcrumb-section clearfix">
+        <ol class="breadcrumb">
+            <li>@Localizer[LabelConstants.Audit]</li>
+            <li class="active">@Localizer[LabelConstants.CustomLog]</li>
+        </ol>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel">
+                <div class="panel-body">
+                    <div class="example-box-wrapper">
+                        <div class="row">
+                            <div class="col-md-12 size-md">
+                                <form class="form-inline pull-right" data-parsley-validate novalidate>
+                                    <select asp-for="LogLevelSearch" asp-items="Model.LogLevels" class="form-control small-size" required></select>
+                                    <select asp-for="BrowserSearch" asp-items="Model.BrowserList" class="form-control small-size" required></select>
+                                    <input type="text" asp-for="UsernameSearch" class="form-control small-size" placeholder="User Name" required>
+                                    <div class="form-control edit-form date-input eedit1">
+                                        <div class="input-prepend input-group input-date">
+                                            <span class="add-on input-group-addon">
+                                                <i class="glyph-icon icon-calendar"></i>
+                                            </span>
+                                            <input id="dp1" type="text" class="form-control small-sizes custom_size" placeholder="Start Date" readonly="readonly">
+                                        </div>
+                                    </div>
+                                    <div class="form-control edit-form date-input eedit1">
+                                        <div class="input-prepend input-group input-date">
+                                            <span class="add-on input-group-addon">
+                                                <i class="glyph-icon icon-calendar"></i>
+                                            </span>
+                                            <input id="dp2" type="text" class="form-control small-sizes custom_size" placeholder="End Date" readonly="readonly">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                       
+                        <table class="table table-hover table-responsive custom-datatable table-bordered" id="customLogDataTable" style="width: 100% !important;">
+                            <thead>
+                            <tr>
+                                <th>@Localizer[LabelConstants.SN]</th>
+                                <th>@Localizer[LabelConstants.Username]</th>
+                                <th>@Localizer[LabelConstants.RemoteAddress]</th>
+                                <th>@Localizer[LabelConstants.LogLevel]</th>
+                                <th>@Localizer[LabelConstants.LoggedDate]</th>
+                                <th>@Localizer[LabelConstants.Browser]</th>
+                                <th>@Localizer[LabelConstants.Message]</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="~/assets/widgets/datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/assets/widgets/datepicker/datepicker.min.js"></script>
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/audit/js/customlog-datatables.js" asp-append-version="true"></script>
+
+}
+

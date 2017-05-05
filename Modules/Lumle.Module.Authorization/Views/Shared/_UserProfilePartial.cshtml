@@ -1,0 +1,55 @@
+﻿@using Lumle.Data.Models;
+@using Microsoft.AspNetCore.Identity;
+@using System.Security.Claims;
+
+@inject UserManager<User> UserManager;
+
+@{
+    var timeZone1 = ((ClaimsIdentity)User.Identity).FindFirst("TimeZone");
+}
+
+<style>
+    .custom_user a {
+        min-width: 165px;
+    } 
+
+    .custom_user span {
+        width: 95px;
+        float: left;
+        line-height: 25px;
+    }
+</style>
+
+<div class="user-account-btn dropdown custom_user">
+    <a href="#" title="My Account" class="user-profile clearfix" data-toggle="dropdown">
+        <img width="28" src="~/assets/image-resources/gravatar.png" alt="@User.Identity.Name's Image">
+        <span>@User.Identity.Name</span>
+        <i class="glyph-icon icon-angle-down"></i>
+    </a>
+    <div class="dropdown-menu float-left">
+        <div class="box-sm">
+            <div class="login-box clearfix">
+                <div class="user-img">
+                    <a href="#" title="" class="change-img">@Localizer[LabelConstants.ChangePhoto]</a>
+                    <img src="~/assets/image-resources/gravatar.png" alt="">
+                </div>
+                <div class="user-info">
+                    <span>
+                        @User.Identity.Name
+                    </span>
+                    <a asp-controller="User" asp-action="Profile" title="Profile">@Localizer[LabelConstants.Profile]</a>
+                    <a asp-controller="Manage" asp-action="ChangePassword" title="Change Password">@Localizer[LabelConstants.ChangePassword]</a>
+                </div>
+            </div>
+            <form asp-action="LogOff" asp-controller="Account" method="post">
+                <div class="pad5A button-pane button-pane-alt text-center">
+                    <button type="submit" style="width: 100%" class="btn display-block font-normal btn-danger">
+                        <i class="glyph-icon icon-power-off"></i>
+                        @Localizer[LabelConstants.Logout]
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

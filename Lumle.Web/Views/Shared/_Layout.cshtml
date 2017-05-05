@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Lumle</title>
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="~/assets/images/icons/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="~/assets/images/icons/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="~/assets/images/icons/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="~/assets/images/icons/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" href="~/assets/images/icons/favicon.png">
+    
+    @Html.Partial("_ApplicationStylesPartial")
+
+    @RenderSection("styles", required: false)
+
+</head>
+
+<body>
+    <div id="sb-site">
+        <div id="page-wrapper">
+            <div id="page-header" class="bg-gradient-9">
+                <div id="mobile-navigation">
+                    <button id="nav-toggle" class="collapsed" data-toggle="collapse" data-target="#page-sidebar"><span></span></button>
+                    <a asp-area="" asp-controller="Account" asp-action="Index" class="logo-content-small" title="Freight Auditing System"></a>
+                </div>
+                <div id="header-logo" class="logo-bg">
+                    <a asp-area="" asp-controller="Account" asp-action="Index" class="logo-content-big" title="Freight Auditing System">
+                        Lumle <i>CMS</i>
+                        <span>Freight Auditing System</span>
+                    </a>
+                    <a asp-area="" asp-controller="Account" asp-action="Index" class="logo-content-small" title="MonarchUI">
+                        Lumle <i>CMS</i>
+                        <span>Freight Auditing System</span>
+                    </a>
+                    <a id="close-sidebar" href="#" title="Close sidebar">
+                        <i class="glyph-icon icon-angle-left"></i>
+                    </a>
+                </div>
+                <div id="header-nav-left">
+                    @Html.Partial("~/Modules/Lumle.Module.Authorization/Views/Shared/_UserProfilePartial.cshtml")
+                </div><!-- #header-nav-left -->
+
+                <div id="header-nav-right">
+                    @Html.Partial("~/Modules/Lumle.Module.Localization/Views/Shared/_SelectLanguagePartial.cshtml")
+                </div>
+
+            </div>
+
+            <div id="page-sidebar">
+                @Html.Partial("~/Modules/Lumle.Module.Authorization/Views/Shared/_SidebarMenuPartial.cshtml")
+            </div>
+
+            <div id="page-content-wrapper">
+                <div id="page-content">                
+                        @RenderBody()
+                </div>
+            </div>
+        </div>
+
+        @Html.Partial("_ApplicationScriptPartial")
+
+        <!--Get root directory. Any js reference inside js file shoul append root directory to build complete valid path-->
+       
+        <script type="text/javascript">
+            var deleteButtonDisplayName = "@Localizer[LabelConstants.Delete].Value";
+            var editButtonDisplayName = "@Localizer[LabelConstants.Edit].Value";
+            var resendButtonDisplayName = "@Localizer[LabelConstants.Resend].Value";
+            var cancelButtonDisplayName = "@Localizer[LabelConstants.Cancel].Value";
+            var saveButtonDisplayName = "@Localizer[LabelConstants.Save].Value";
+            var rootDir = "@Url.Content("~/")";
+            var languageFileUrl = "";
+            $(document).ready(function () {
+                var cultureInfo = $("#currentCultureName").val();
+                switch (cultureInfo) {
+                    case "fr-FR":
+                        languageFileUrl = rootDir + "datatablelanguages/fr-FR.json";
+                        break;
+                    case "ne":
+                        languageFileUrl = rootDir + "datatablelanguages/ne.json";
+                        break;
+                    case "de":
+                        languageFileUrl = rootDir + "datatablelanguages/de.json";
+                        break;
+                    case "es-ES":
+                        languageFileUrl = rootDir + "datatablelanguages/es-ES.json";
+                        break;
+                    case "ja":
+                        languageFileUrl = rootDir + "datatablelanguages/ja.json";
+                        break;
+                    case "ko":
+                        languageFileUrl = rootDir + "datatablelanguages/ko.json";
+                        break;
+                    case "zh-Hans":
+                        languageFileUrl = rootDir + "datatablelanguages/zh-Hans.json";
+                        break;
+                    case "it-it":
+                        languageFileUrl = rootDir + "datatablelanguages/it-it.json";
+                        break;
+                    default:
+                        languageFileUrl = "";
+                        break;
+                }
+            });
+
+        </script>
+    </div>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

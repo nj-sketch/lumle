@@ -1,0 +1,101 @@
+@model SystemSettingVM
+@using Lumle.Infrastructure.Constants.SystemSetting
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+
+@functions
+{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+@section styles
+{
+    <link href="~/assets/widgets/input-switch/inputswitch-alt.min.css" rel="stylesheet" />
+    <link href="~/lib/toastr/toastr.css" rel="stylesheet" />
+}
+@{
+    ViewData["Title"] =Localizer[LabelConstants.SystemSetting];
+    var hasPermissionForUpdate = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.AdminConfigSystemSettingUpdate), User);
+}
+
+<div id="page-title">
+    <h2>@Localizer[LabelConstants.SystemSetting]</h2>
+</div>
+
+<div class="breadcrumb-section clearfix">
+    <ol class="breadcrumb">
+        <li class="module">@Localizer[LabelConstants.Configuration]</li>
+        <li class="active">@Localizer[LabelConstants.SystemSetting]</li>
+    </ol>
+</div>
+<div class="panel">
+    <div class="panel-body">
+        @if (Model.Slug == SystemSetting.MaintenanceMode)
+            {
+            <div class="form-group">
+                <h3 class="title-hero ">@Localizer[LabelConstants.SystemMaintanceMode]</h3>
+                <input type="checkbox" data-toggletarget="fixed-header" @(Model.Status == "1" ? "checked" : "") value="@Model.Id" name="systemMaintananceMode" class="input-switch-alt" style="display: none;">
+                @if (Model.Status.Trim() == "1")
+                {
+                    <span id="lblStatus" class="display-inline">@Localizer[LabelConstants.On]</span>
+                    <div id="systemMaintananceModeclass" class="switch-toggle switch-on" style="display: block;"></div><br />
+                }
+                else
+                {
+                    <span id="lblStatus" class="display-inline">@Localizer[LabelConstants.Off]</span>
+                    <div id="systemMaintananceModeclass" class="switch-toggle" style="display: block;"></div><br />
+                }
+                <div id="divRoles" style="@(Model.Status =="0" ? "display:none;":"")">
+                    <div class="row">
+                        <p class="alert alert-notice">@Localizer[LabelConstants.SelectRolesThatCanAccessSystemOnMaintenanceMode]</p>
+                        <input type="checkbox" id="checkAll" style="margin-left: 10px;" class="pull-left" value="0" />&nbsp;Select All<br /><hr />
+                        <div class="col-md-4 submodule">
+                            @foreach (var role in Model.Roles)
+                            {
+                                <label class="control-label">
+                                    <input type="checkbox" @(role.IsBlocked == false ? "checked" : "") class="cke_dialog_ui_checkbox checkList" name="ckbox" value="@role.RoleId" />
+                                    @role.RoleName.ToUpperInvariant()
+                                </label><br />
+                            }
+                        </div>
+                        <br /><br />
+                    </div>
+                    <div class="bg-default content-box text-center pad20A mrg25T">
+                        <a class="btn btn-default" asp-action="Index">@Localizer[LabelConstants.Reset]</a>
+                        <button id="btnSubmit" class="btn btn-success" type="submit">@Localizer[LabelConstants.Save]</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!--Modal section-->
+<div id="confirmModel" class="modal fade in">
+    <div class="modal-dialog" style="margin-top:10% !important;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                <h3 class="modal-title">@Localizer[LabelConstants.UpdateSystemMaintenanceMode]</h3>
+            </div>
+            <div class="modal-body">
+                <p>@Localizer[LabelConstants.EnterPasswordToUpdateSystemMaintenanceMode]</p><br />
+                    <input type="password" required id="txtPassword" class="form-control" placeholder="@Localizer[LabelConstants.EnterYourPassword]" autocomplete="off" />
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-default" type="button">@Localizer[LabelConstants.Cancel]</button>
+                <button id="btnOk" class="btn btn-success" type="button" disabled>@Localizer[LabelConstants.Save]</button>
+                <img id="loadingImgforPopup" style="width: 30px; display:none;" src="~/assets/images/spinner/loader-dark.gif" alt="loading image">
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+            var hasPermissionForUpdate = @hasPermissionForUpdate.ToString().ToLower();
+    </script>
+    <script src="~/lib/toastr/toastr.min.js"></script>
+    <script src="~/adminconfig/js/systemsetting-index.js"></script>
+}

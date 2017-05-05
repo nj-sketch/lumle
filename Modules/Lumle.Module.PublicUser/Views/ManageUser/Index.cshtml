@@ -1,0 +1,108 @@
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+
+@functions
+{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+@{
+    var hasPermissionForUpdate = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.PublicUserUpdate), User);
+
+    ViewData["Title"] = Localizer[LabelConstants.PublicUser];
+}
+
+@section styles{
+    <link rel="stylesheet" type="text/css" href="~/assets/elements/badges.min.css">
+    <link href="~/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="~/assets/widgets/datatable/datatable.min.css">
+    <link href="~/lib/toastr/toastr.css" rel="stylesheet" />
+}
+
+<div class="row">
+    <div id="page-title">
+        <h2>@Localizer[LabelConstants.PublicUser]</h2>
+    </div>
+
+    <div class="breadcrumb-section clearfix">
+        <ol class="breadcrumb">
+            <li class="active">@Localizer[LabelConstants.PublicUser]</li>
+        </ol>
+    </div>
+
+    @Html.Partial("_MessagePanel")
+
+    <div class="panel">
+        <div class="panel-body">
+            <table class="table table-hover table-responsive table-bordered" id="publicUserDataTable" style="width:100% !important;">
+                <thead>
+                    <tr>
+                        <th>@Localizer[LabelConstants.SN]</th>
+                        <th></th>
+                        <th>@Localizer[LabelConstants.User]</th>
+                        <th>@Localizer[LabelConstants.Email]</th>
+                        <th>@Localizer[LabelConstants.Gender]</th>
+                        <th>@Localizer[LabelConstants.Provider]</th>
+                        <th>@Localizer[LabelConstants.SignUpdate]</th>
+                        <th>@Localizer[LabelConstants.AccountType]</th>
+                        <th>@Localizer[LabelConstants.EmailConfirmed]</th>
+                        <th>@Localizer[LabelConstants.Status]</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!--Modal section-->
+<div id="updateModel" class="modal fade in">
+    <div class="modal-dialog" style="margin-top:10% !important;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                <h3 class="modal-title display-inline">@Localizer[LabelConstants.UpdatePublicUser] </h3>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="userId" />
+                <div class="form-group">
+                    <label class="control-label">@Localizer[LabelConstants.Username] : &nbsp; </label>
+                    <span id="lblUserName"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">@Localizer[LabelConstants.AccountType]</label>
+                        <select id="userType" class="form-control" required>
+                            <option value="false">@Localizer[LabelConstants.General]</option>
+                            <option value="true">@Localizer[LabelConstants.Staff]</option>
+                        </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">@Localizer[LabelConstants.AccountStatus]</label>
+                        <select id="accountStatus" class="form-control" required>
+                            <option value="false">@Localizer[LabelConstants.Enabled]</option>
+                            <option value="true">@Localizer[LabelConstants.Blocked]</option>
+                        </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-default" type="button">@Localizer[LabelConstants.Cancel]</button>
+                <button id="btnOk" class="btn btn-success" type="button">@Localizer[LabelConstants.Save]</button>
+                <img id="loadingImgforPopup" style="width: 30px; display:none;" src="~/assets/images/spinner/loader-dark.gif" alt="loading image">
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts
+    {
+    <script type="text/javascript">
+        var hasPermissionForUpdate = @hasPermissionForUpdate.ToString().ToLower();
+    </script>
+    <script src="~/lib/toastr/toastr.min.js"></script>
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/lib/toastr/toastr.min.js"></script>
+    <script src="~/publicuser/js/publicuser-manageuser-index.js"></script>
+}

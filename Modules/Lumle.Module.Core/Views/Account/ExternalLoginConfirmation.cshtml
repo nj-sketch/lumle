@@ -1,0 +1,84 @@
+﻿@using Lumle.Module.Core.ViewModels.AccountViewModels
+@model ExternalLoginConfirmationVM
+@{
+    ViewData["Title"] = Localizer[LabelConstants.SignUp];
+}
+
+<div id="fullpage">
+    <div class="section bg-gradient-9" id="section0">
+        <div class="slide">
+            <div class="center-vertical">
+                <div class="center-content">
+                    <div class="container">
+                        <div class="col-md-4 center-margin">
+
+                            @Html.Partial("_MessagePanel")<br />
+
+                            <div class="alert alert-success" role="alert">
+                                @Localizer[LabelConstants.YouHaveSuccessfullyAuthenticatedWith] <strong>@ViewData["LoginProvider"]</strong>.
+                                @Localizer[LabelConstants.EnterEmailToCompleteExternalLoginMessage]
+                            </div>
+
+                            <form asp-controller="Account" asp-action="ExternalLoginConfirmation" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" data-parsley-validate novalidate>
+
+                                <div class="content-box wow bounceInDown modal-content">
+                                    <div class="content-box-wrapper">
+
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <input type="text" asp-for="Username" required class="form-control" placeholder=@Localizer[LabelConstants.UserName]>
+                                                <span class="input-group-addon bg-blue">
+                                                    <i class="glyph-icon icon-unlock-alt"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <input type="email" asp-for="Email" required class="form-control" placeholder=@Localizer[LabelConstants.EnterYourEmail]>
+                                                <span class="input-group-addon bg-blue">
+                                                    <i class="glyph-icon icon-envelope-o"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <input type="text" asp-for="FirstName" required class="form-control" placeholder=@Localizer[LabelConstants.FirstName]>
+                                                <span class="input-group-addon bg-blue">
+                                                    <i class="glyph-icon icon-unlock-alt"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <input type="text" asp-for="LastName" required class="form-control" placeholder=@Localizer[LabelConstants.LastName]>
+                                                <span class="input-group-addon bg-blue">
+                                                    <i class="glyph-icon icon-unlock-alt"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-success btn-block">@Localizer[LabelConstants.Register]</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript" src="~/assets/widgets/parsley/parsley.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('form').parsley();
+        });
+    </script>
+}
+

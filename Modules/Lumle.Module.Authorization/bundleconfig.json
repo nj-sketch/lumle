@@ -1,0 +1,26 @@
+[
+  {
+    "outputFileName": "wwwroot/js/authorization-permission-index.min.js",
+    "inputFiles": [
+      "wwwroot/js/authorization-permission-index.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/authorization-role-credential.min.js",
+    "inputFiles": [
+      "wwwroot/js/authorization-role-credential.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/authorization-role-index.min.js",
+    "inputFiles": [
+      "wwwroot/js/authorization-role-index.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/authorization-user-index.min.js",
+    "inputFiles": [
+      "wwwroot/js/authorization-user-index.js"
+    ]
+  }
+]
