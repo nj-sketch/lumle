@@ -13,7 +13,7 @@ using Lumle.Data.Data;
 using Lumle.Module.Authorization.Models.PermissionModels;
 using Microsoft.Extensions.Caching.Memory;
 using Lumle.Data.Models;
-using Lumle.Infrastructure.Constants.Log;
+using Lumle.Infrastructure.Constants.LumleLog;
 using NLog;
 using Lumle.Infrastructure.Constants.Cache;
 

@@ -19,7 +19,7 @@ using System;
 using Lumle.Data.Data;
 using Lumle.Infrastructure.Utilities;
 using Lumle.Data.Data.Abstracts;
-using Lumle.Infrastructure.Constants.Log;
+using Lumle.Infrastructure.Constants.LumleLog;
 using Lumle.Infrastructure.Constants.Token;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -36,6 +36,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Lumle.Infrastructure.Constants.Cache;
+using Lumle.Infrastructure.Constants.Log;
 
 namespace Lumle.Module.Core.Controllers
 {

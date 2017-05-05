@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Lumle.Infrastructure.Constants.AuthorizeRules;
 using Lumle.Data.Models;
 using Lumle.Infrastructure.Constants.IdentityConstants;
-using Lumle.Infrastructure.Constants.Log;
+using Lumle.Infrastructure.Constants.LumleLog;
 using Lumle.Infrastructure.Utilities;
 using Lumle.Module.AdminConfig.Services;
 using Lumle.Module.Audit.Enums;

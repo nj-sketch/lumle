@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO.Compression;
-using Hangfire;
-using Hangfire.PostgreSql;
 using Lumle.Infrastructure;
 using Lumle.Infrastructure.Web;
 using Microsoft.AspNetCore.Builder;
@@ -19,7 +17,6 @@ using Microsoft.AspNetCore.Http;
 using Lumle.Data.Data;
 using GlobalConfiguration = Lumle.Infrastructure.GlobalConfiguration;
 using Lumle.Web.DataSeed;
-using Lumle.Web.Infrastructures.Filters;
 
 namespace Lumle.Web
 {
@@ -61,7 +58,7 @@ namespace Lumle.Web
             services.AddFrameworkServices(Configuration);     
                   
             // Add Hangfire services.  
-            services.AddHangfire(x => x.UsePostgreSqlStorage(Configuration.GetConnectionString("PostGreSQLConnection")));
+           // services.AddHangfire(x => x.UsePostgreSqlStorage(Configuration.GetConnectionString("PostGreSQLConnection")));
 
             //call this in case you need aspnet-user-authtype/aspnet-user-identity
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -90,13 +87,13 @@ namespace Lumle.Web
 
             app.UseIdentity();
 
-            var options = new DashboardOptions
-            {
-                Authorization = new[] { new HangfireAuthorizationFilter() }
-            };
-            app.UseHangfireDashboard("/jobs", options);
+            //var options = new DashboardOptions
+            //{
+            //    Authorization = new[] { new HangfireAuthorizationFilter() }
+            //};
+            //app.UseHangfireDashboard("/jobs", options);
 
-            app.UseHangfireServer();
+            //app.UseHangfireServer();
 
            // For Linux Deployment
             //app.UseForwardedHeaders(new ForwardedHeadersOptions
@@ -131,7 +128,7 @@ namespace Lumle.Web
             app.UseAppSystemMiddleware();
 
             // Use only while using scheduler
-            app.UseSchedularMiddleware();
+           // app.UseSchedularMiddleware();
             app.UseStatusCodePagesWithRedirects("~/{0}");
 
             app.UseMvc(routes =>

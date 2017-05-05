@@ -5,7 +5,7 @@ using Lumle.Module.AdminConfig.Entities;
 using Lumle.Data.Data.Abstracts;
 using Lumle.Module.AdminConfig.Models;
 using System.Linq;
-using Lumle.Infrastructure.Constants.Log;
+using Lumle.Infrastructure.Constants.LumleLog;
 using NLog;
 using System.Text.RegularExpressions;
 

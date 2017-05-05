@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using Lumle.Module.PublicUser.Entities;
 using Lumle.Data.Data.Abstracts;
 using NLog;
-using Lumle.Infrastructure.Constants.Log;
+using Lumle.Infrastructure.Constants.LumleLog;
 
 namespace Lumle.Module.PublicUser.Services
 {
