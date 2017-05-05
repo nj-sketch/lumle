@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Lumle.Data.Data.Abstracts;
 using Lumle.Data.Models;
 using Lumle.Infrastructure.Constants.AuthorizeRules;
-using Lumle.Infrastructure.Constants.Log;
+using Lumle.Infrastructure.Constants.LumleLog;
 using Lumle.Module.AdminConfig.Entities;
 using Lumle.Module.AdminConfig.Models;
 using Lumle.Module.AdminConfig.Services;

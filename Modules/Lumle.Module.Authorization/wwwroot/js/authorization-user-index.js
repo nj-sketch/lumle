@@ -162,7 +162,7 @@ var actionButton = function (data, type, full, meta) {
     var currentUserRolePriority = parseInt(full.rolePriority);
     if (loggedUserRolePriority <= currentUserRolePriority) {
         if (hasPermissionForUpdate) {
-            actionBtn = '<a href="' + rootDir + 'authorization/User/edit/' + data + '"class="btn btn-info btn-sm"><i class="glyph-icon icon-pencil"></i> ' + editButtonDisplayName + '</a>';
+            actionBtn = '<a href="' + rootDir + 'authorization/User/edit/' + data + '"class="btn btn-info btn-xs"><i class="glyph-icon icon-pencil"></i> ' + editButtonDisplayName + '</a>';
         }
         if (hasPermissionForDelete) {
             if (loggedUser !== full.name.trim()) {

@@ -6,7 +6,7 @@ using Lumle.Data.Data.Abstracts;
 using Lumle.Module.Localization.Models;
 using System.Globalization;
 using Lumle.Core.Models;
-using Lumle.Infrastructure.Constants.Log;
+using Lumle.Infrastructure.Constants.LumleLog;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Caching.Memory;
 using NLog;
