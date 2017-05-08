@@ -66,4 +66,8 @@
     <ProjectReference Include="..\Modules\Lumle.Module.Schedular\Lumle.Module.Schedular.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="InternalLogs\" />
+  </ItemGroup>
+
 </Project>
