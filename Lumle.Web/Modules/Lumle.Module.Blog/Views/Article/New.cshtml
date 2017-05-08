@@ -22,33 +22,7 @@
 
 <div class="panel">
     <div class="panel-body">
-        <style>
-            .font-fix {
-                padding: 6px 12px;
-            }
 
-            .btn-file > input {
-                position: absolute;
-                top: 0;
-                right: 0;
-                width: 100%;
-                height: 100%;
-                margin: 0;
-                font-size: 23px;
-                cursor: pointer;
-                filter: alpha(opacity=0);
-                opacity: 0;
-                direction: ltr;
-            }
-
-            .fileinput-exists .fileinput-new, .fileinput-new .fileinput-exists {
-                display: none;
-            }
-
-            .fileinput-exists .fileinput-new, .fileinput-new .fileinput-exists {
-                display: none;
-            }
-        </style>
 
         @Html.Partial("_MessagePanel")
 
@@ -70,17 +44,9 @@
             </div>
 
             <div class="form-group">
-                <label class="col-sm-3 control-label">FeaturedImage</label>
+                <label class="col-sm-3 control-label">Featured Image</label>
                 <div class="col-sm-6">
-                    <div class="fileinput fileinput-new" data-provides="fileinput">
-                        <span class="btn btn-primary btn-file">
-                            <span class="fileinput-new">Select file</span>
-                            <span class="fileinput-exists">Change</span>
-                            <input type="file" asp-for="FeaturedImage" name="FeaturedImage" accept="image/png,image/jpg,image/jpeg">
-                        </span>
-                        <span class="fileinput-filename"></span>
-                        <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">×</a>
-                    </div>
+                    <input type="file" class="form-control" asp-for="FeaturedImage" name="FeaturedImage" accept="image/png,image/jpg,image/jpeg">
                 </div>
             </div>
 
