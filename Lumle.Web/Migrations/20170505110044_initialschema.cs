@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Lumle.Web.Migrations
 {
-    public partial class InitialSchema : Migration
+    public partial class initialschema : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

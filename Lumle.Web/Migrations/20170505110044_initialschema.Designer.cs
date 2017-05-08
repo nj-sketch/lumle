@@ -8,8 +8,8 @@ using Lumle.Data.Data;
 namespace Lumle.Web.Migrations
 {
     [DbContext(typeof(BaseContext))]
-    [Migration("20170504114605_InitialSchema")]
-    partial class InitialSchema
+    [Migration("20170505110044_initialschema")]
+    partial class initialschema
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
