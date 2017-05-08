@@ -15,8 +15,8 @@ namespace Lumle.AuthServer.Infrastructures.Configuration
                 {
                     SubjectId = "0c4d5b43-f29c-4f7b-bc88-0041a06fdc78",
                     UserName = "janak",
-                    PasswordHash = "janak100",
-                    PasswordSalt = "janaks200",
+                    PasswordHash = "GS+iZYlAFDx3STjWrgl8OdXEc4/9bNKH",
+                    PasswordSalt = "MgWjDCjvnVXJ7ncFkjN0bh4cubYGL0dU",
                     Email = "janak@ekbana.com",
                     Gender = "male",
                     IsStaff = true,

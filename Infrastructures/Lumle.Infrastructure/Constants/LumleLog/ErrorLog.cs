@@ -1,6 +1,4 @@
-﻿using Lumle.Infrastructure.Constants.Log;
-
-namespace Lumle.Infrastructure.Constants.LumleLog
+﻿namespace Lumle.Infrastructure.Constants.LumleLog
 {
     public static class ErrorLog
     {

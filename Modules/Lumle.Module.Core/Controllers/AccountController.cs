@@ -36,7 +36,6 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Lumle.Infrastructure.Constants.Cache;
-using Lumle.Infrastructure.Constants.Log;
 
 namespace Lumle.Module.Core.Controllers
 {
