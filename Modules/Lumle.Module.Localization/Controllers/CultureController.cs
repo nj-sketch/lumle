@@ -118,7 +118,7 @@ namespace Lumle.Module.Localization.Controllers
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.LocalizationCultureView)]
         public IActionResult Resource(string culture)
         {
-            var model = new ImportResourceModel {Culture = culture};
+            var model = new ImportResourceModel { Culture = culture };
             return View("Resource", model);
         }
 
@@ -171,7 +171,7 @@ namespace Lumle.Module.Localization.Controllers
 
                     return Json(new { success = true, messageTitle = _localizer[ActionMessageConstants.UpdatedSuccessfully].Value, message = _localizer[ActionMessageConstants.UpdatedSuccessfully].Value });
                 }
-                var isCultureContainKey = _resourceService.ISCultureContainKey(DefaultCultureConstants.DefaultCultureName, resource.ResourceCategoryId, resource.Key);
+                var isCultureContainKey = _resourceService.IsCultureContainKey(DefaultCultureConstants.DefaultCultureName, resource.ResourceCategoryId, resource.Key);
                 if (isCultureContainKey)
                 {
                     var newResource = new Resource
@@ -184,23 +184,21 @@ namespace Lumle.Module.Localization.Controllers
                         LastUpdated = DateTime.UtcNow
                     };
                     _resourceService.Add(newResource);
+
+                    #region Resource Create AuditLog
+                    var oldResource = new Resource(); // dummy resource
+                    var resourceAuditLogModel = new AuditLogModel
+                    {
+                        AuditActionType = AuditActionType.Create,
+                        KeyField = newResource.Id.ToString(),
+                        OldObject = oldResource,
+                        NewObject = newResource,
+                        LoggedUserEmail = loggedUser.Email,
+                        ComparisonType = ComparisonType.ObjectCompare
+                    };
+                    _auditLogService.Add(resourceAuditLogModel);
                     _unitOfWork.Save();
                 }
-
-                #region Resource Create AuditLog
-                var oldResource = new Resource(); // dummy resource
-                var resourceAuditLogModel = new AuditLogModel
-                {
-                    AuditActionType = AuditActionType.Create,
-                    KeyField = newResource.Id.ToString(),
-                    OldObject = oldResource,
-                    NewObject = newResource,
-                    LoggedUserEmail = loggedUser.Email,
-                    ComparisonType = ComparisonType.ObjectCompare
-                };
-                _auditLogService.Add(resourceAuditLogModel);
-                _unitOfWork.Save();
-
                 #endregion
 
                 ReloadLocalizationResourceCache(loggedUser.Culture);
@@ -411,7 +409,7 @@ namespace Lumle.Module.Localization.Controllers
                     if (file.Length <= 0) continue;
                     var fileStream = file.OpenReadStream();
                     var mappedDataModel = MapExcelDataToResourceKeyValueHeper(fileStream);
-                    if(mappedDataModel != null)
+                    if (mappedDataModel != null)
                     {
                         excelDataModel.AddRange(mappedDataModel);
                     }
@@ -436,7 +434,7 @@ namespace Lumle.Module.Localization.Controllers
                             entity.Value = data.Value.Trim();
                             _resourceService.Update(entity);
                             count++;
-                           
+
                             #region Resource Audit Log
 
                             var auditLogModel = new AuditLogModel
@@ -454,7 +452,7 @@ namespace Lumle.Module.Localization.Controllers
                         }
                         else
                         {
-                            var isCultureContainKey = _resourceService.ISCultureContainKey(DefaultCultureConstants.DefaultCultureName, model.ResourceCategoryId, data.Key);
+                            var isCultureContainKey = _resourceService.IsCultureContainKey(DefaultCultureConstants.DefaultCultureName, model.ResourceCategoryId, data.Key);
                             if (isCultureContainKey)
                             {
                                 var newResource = new Resource
@@ -469,7 +467,7 @@ namespace Lumle.Module.Localization.Controllers
                                 _resourceService.Add(newResource);
                                 _unitOfWork.Save();
                                 count++;
-                            }                            
+                           
 
                             #region Resource Create AuditLog
                             var oldResource = new Resource(); // dummy resource
@@ -485,17 +483,18 @@ namespace Lumle.Module.Localization.Controllers
                             _auditLogService.Add(resourceAuditLogModel);
                             _unitOfWork.Save();
 
-                            #endregion
-                        }  
+                                #endregion
+                            }
+                        }
                     }
                 }
-                if(count == 0)
+                if (count == 0)
                 {
                     TempData["ErrorMsg"] = _localizer[ActionMessageConstants.InvalidExcelFormatError].Value;
                     return RedirectToAction("Resource", new { model.Culture });
                 }
                 ReloadLocalizationResourceCache(loggedUser.Culture);
-                TempData["SuccessMsg"] = _localizer[count + $" "+ ActionMessageConstants.Of +$" "+ excelDataModel.Count +$" "+ ActionMessageConstants.DataInsertedSuccessfully].Value;
+                TempData["SuccessMsg"] = _localizer[count + $" " + ActionMessageConstants.Of + $" " + excelDataModel.Count + $" " + ActionMessageConstants.DataInsertedSuccessfully].Value;
                 return RedirectToAction("Resource", new { model.Culture });
             }
             TempData["ErrorMsg"] = _localizer[ActionMessageConstants.UnableToInsertDataError].Value;

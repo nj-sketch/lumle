@@ -2,8 +2,7 @@
 @using Lumle.Data.Models
 @using Microsoft.AspNetCore.Identity
 @model Lumle.Module.Core.ViewModels.AccountViewModels.LoginVM
-@inject SignInManager<User>
-    SignInManager
+@inject SignInManager<User> SignInManager
 
     @{
         ViewData["Title"] = Localizer[LabelConstants.LogIn];

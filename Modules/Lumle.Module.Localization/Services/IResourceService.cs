@@ -17,6 +17,6 @@ namespace Lumle.Module.Localization.Services
         IEnumerable<ResourceModel> GetAllResource(string culture);
         IEnumerable<ResourceModel> GetAllResource(int resourceCategoryId, string culture);
 
-        bool ISCultureContainKey(string culture, int resourceCategoryId, string key);
+        bool IsCultureContainKey(string culture, int resourceCategoryId, string key);
     }
 }
