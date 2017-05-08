@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Lumle.AuthServer.Data.Contexts;
 using Lumle.AuthServer.Data.Entities;
 using Lumle.AuthServer.Infrastructures.Security.CryptoService;
@@ -23,8 +24,6 @@ namespace Lumle.AuthServer.Data.Store
                 var requestedUserHash = Convert.FromBase64String(user.PasswordHash);
                 var requestedUserSalt = Convert.FromBase64String(user.PasswordSalt);
                 return CryptoService.VerifyHash(password.Trim(), requestedUserSalt, requestedUserHash);
-
-                //return user.PasswordHash.Equals(password, StringComparison.CurrentCultureIgnoreCase);
             }
 
             return false;
@@ -77,6 +76,11 @@ namespace Lumle.AuthServer.Data.Store
 
             _userDbContext.Customers.Add(entity);
             _userDbContext.SaveChanges();
+        }
+
+        public Task<CustomUser> FindBySubjectIdAsync(string subjectId)
+        {
+            return Task.FromResult(_userDbContext.Customers.FirstOrDefault(x => x.SubjectId == subjectId));
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Lumle.AuthServer.Data.Entities;
+using System.Threading.Tasks;
 
 namespace Lumle.AuthServer.Data.Store
 {
@@ -7,6 +8,7 @@ namespace Lumle.AuthServer.Data.Store
         bool ValidateCredentials(string username, string password);
 
         CustomUser FindBySubjectId(string subjectId);
+        Task<CustomUser> FindBySubjectIdAsync(string subjectId);
 
         CustomUser FindByProviderAndSubjectId(string provider, string subjectId);
 

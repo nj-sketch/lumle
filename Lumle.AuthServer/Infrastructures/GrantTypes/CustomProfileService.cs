@@ -20,7 +20,7 @@ namespace Lumle.AuthServer.Infrastructures.GrantTypes
 
         public async Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
-            var user = UserStore.FindBySubjectId(context.Subject.GetSubjectId());
+            var user = await UserStore.FindBySubjectIdAsync(context.Subject.GetSubjectId());
 
             var claims = new List<Claim>
             {
@@ -34,7 +34,7 @@ namespace Lumle.AuthServer.Infrastructures.GrantTypes
 
         public async Task IsActiveAsync(IsActiveContext context)
         {
-            var user = UserStore.FindBySubjectId(context.Subject.GetSubjectId());
+            var user = await UserStore.FindBySubjectIdAsync(context.Subject.GetSubjectId());
             context.IsActive = user != null;
         }
     }

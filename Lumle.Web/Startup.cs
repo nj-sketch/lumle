@@ -35,10 +35,10 @@ namespace Lumle.Web
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
-            //if (env.IsDevelopment())
-            //{
-            //    builder.AddUserSecrets();
-            //}
+            if (env.IsDevelopment())
+            {
+                builder.AddUserSecrets<Startup>();
+            }
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
@@ -58,7 +58,7 @@ namespace Lumle.Web
             services.AddFrameworkServices(Configuration);     
                   
             // Add Hangfire services.  
-           // services.AddHangfire(x => x.UsePostgreSqlStorage(Configuration.GetConnectionString("PostGreSQLConnection")));
+            services.AddHangFireWithPostGreSql(Configuration);
 
             //call this in case you need aspnet-user-authtype/aspnet-user-identity
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -102,8 +102,8 @@ namespace Lumle.Web
             //});
 
             //add NLog to ASP.NET Core
-            loggerFactory.AddNLog();
-            app.AddNLogWeb();
+            //loggerFactory.AddNLog();
+            //app.AddNLogWeb();
 
             if (env.IsDevelopment())
             {

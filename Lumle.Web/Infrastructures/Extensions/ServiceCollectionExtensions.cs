@@ -35,6 +35,8 @@ using NodaTime;
 using NodaTime.TimeZones;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Hangfire;
+using Hangfire.PostgreSql;
 
 namespace Lumle.Web.Infrastructures.Extensions
 {
@@ -84,7 +86,7 @@ namespace Lumle.Web.Infrastructures.Extensions
                 }
             }
 
-            GlobalConfiguration.Modules = modules;
+            Infrastructure.GlobalConfiguration.Modules = modules;
             return services;
         }
         public static IServiceCollection AddCustomizedMvc(this IServiceCollection services, IList<ModuleInfo> modules)
@@ -156,7 +158,7 @@ namespace Lumle.Web.Infrastructures.Extensions
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
             services.AddDbContext<BaseContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("LocalConnection"),
+                options.UseSqlServer(configuration.GetConnectionString("SQLConnection"),
                     b => b.MigrationsAssembly(migrationsAssembly)));
             return services;
         }
@@ -178,6 +180,20 @@ namespace Lumle.Web.Infrastructures.Extensions
             services.AddDbContext<BaseContext>(options =>
                 options.UseNpgsql(configuration.GetConnectionString("PostGreSQLConnection"),
                     b => b.MigrationsAssembly(migrationsAssembly)));
+            return services;
+        }
+
+        public static IServiceCollection AddHangFireWithPostGreSql(this IServiceCollection services, IConfigurationRoot configuration)
+        {
+            services.AddHangfire(x => x.UsePostgreSqlStorage(configuration.GetConnectionString("PostGreSQLConnection")));
+
+            return services;
+        }
+
+        public static IServiceCollection AddHangFireWithMsSql(this IServiceCollection services, IConfigurationRoot configuration)
+        {
+            services.AddHangfire(x => x.UseSqlServerStorage(configuration.GetConnectionString("SQLConnection")));
+
             return services;
         }
 
@@ -218,6 +234,8 @@ namespace Lumle.Web.Infrastructures.Extensions
             return services;
         }
 
+
+
         public static IApplicationBuilder AddGoogleAuthentication(this IApplicationBuilder app, IConfigurationRoot configuration)
         {
             app.UseGoogleAuthentication(new GoogleOptions
@@ -244,6 +262,8 @@ namespace Lumle.Web.Infrastructures.Extensions
         }
 
 
+
+
         public static IServiceProvider Build(this IServiceCollection services,
             IConfigurationRoot configuration, IHostingEnvironment hostingEnvironment)
         {
@@ -264,7 +284,7 @@ namespace Lumle.Web.Infrastructures.Extensions
                 return t => (IEnumerable<object>)c.Resolve(typeof(IEnumerable<>).MakeGenericType(t));
             });
 
-            foreach (var module in GlobalConfiguration.Modules)
+            foreach (var module in Infrastructure.GlobalConfiguration.Modules)
             {
                 builder.RegisterAssemblyTypes(module.Assembly).AsImplementedInterfaces();
             }
