@@ -37,7 +37,7 @@ namespace Lumle.Web
 
             if (env.IsDevelopment())
             {
-                builder.AddUserSecrets();
+                builder.AddUserSecrets<Startup>();
             }
 
             builder.AddEnvironmentVariables();
@@ -58,11 +58,7 @@ namespace Lumle.Web
             services.AddFrameworkServices(Configuration);     
                   
             // Add Hangfire services.  
-<<<<<<< HEAD
             services.AddHangFireWithPostGreSql(Configuration);
-=======
-           // services.AddHangfire(x => x.UsePostgreSqlStorage(Configuration.GetConnectionString("PostGreSQLConnection")));
->>>>>>> upstream/master
 
             //call this in case you need aspnet-user-authtype/aspnet-user-identity
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

@@ -1,4 +1,4 @@
-﻿namespace Lumle.Infrastructure.Constants.Log
+﻿namespace Lumle.Infrastructure.Constants.LumleLog
 {
     public static class CustomLogIdentifier
     {
