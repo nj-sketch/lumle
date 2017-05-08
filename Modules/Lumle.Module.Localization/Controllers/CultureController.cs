@@ -9,7 +9,7 @@ using Lumle.Core.Models;
 using Lumle.Data.Data.Abstracts;
 using Lumle.Data.Models;
 using Lumle.Infrastructure.Constants.AuthorizeRules;
-using Lumle.Infrastructure.Constants.Log;
+using Lumle.Infrastructure.Constants.LumleLog;
 using Lumle.Module.Audit.Enums;
 using Lumle.Module.Audit.Models;
 using Lumle.Module.Audit.Services;

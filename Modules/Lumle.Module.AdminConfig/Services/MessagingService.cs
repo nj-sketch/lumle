@@ -3,7 +3,7 @@ using Lumle.Infrastructure.Utilities.Abstracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Lumle.Infrastructure.Constants.Log;
+using Lumle.Infrastructure.Constants.LumleLog;
 using NLog;
 using System.Threading.Tasks;
 

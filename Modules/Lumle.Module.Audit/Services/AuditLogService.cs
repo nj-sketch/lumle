@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using KellermanSoftware.CompareNetObjects;
 using Lumle.Data.Data.Abstracts;
-using Lumle.Infrastructure.Constants.Log;
+using Lumle.Infrastructure.Constants.LumleLog;
 using Lumle.Infrastructure.Utilities;
 using Lumle.Module.Audit.Entities;
 using Lumle.Module.Audit.Enums;

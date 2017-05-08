@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Lumle.Core.Models;
 using Lumle.Data.Data.Abstracts;
-using Lumle.Infrastructure.Constants.Log;
+using Lumle.Infrastructure.Constants.LumleLog;
 using Lumle.Module.Localization.Models;
 using NLog;
 

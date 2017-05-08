@@ -2,7 +2,7 @@
 using Lumle.Data.Data.Abstracts;
 using Lumle.Module.AdminConfig.Entities;
 using NLog;
-using Lumle.Infrastructure.Constants.Log;
+using Lumle.Infrastructure.Constants.LumleLog;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;

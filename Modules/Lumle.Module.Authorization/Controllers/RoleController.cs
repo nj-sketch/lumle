@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Authorization;
 using Lumle.Data.Models;
 using Lumle.Module.Audit.Enums;
 using Lumle.Module.Audit.Services;
-using Lumle.Infrastructure.Constants.Log;
+using Lumle.Infrastructure.Constants.LumleLog;
 using Lumle.Infrastructure.Utilities;
 using Lumle.Module.Audit.Models;
 using NLog;
@@ -62,14 +62,22 @@ namespace Lumle.Module.Authorization.Controllers
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.AuthorizationRoleView)]
         public IActionResult Index()
         {
-            var roles = _roleManager.Roles.Select(r => new RoleListVM
+            var roles = _roleManager.Roles.Select(c => new
             {
-                RoleName = r.Name,
+                RoleName = c.Name,
+                Id = c.Id,
+                Description = c.Description,
+                NumberOfUsers = c.Users.Count(),
+                Priority = c.Priority
+            }).ToList().Select(r => new RoleListVM
+            {
+                RoleName = r.RoleName,
                 Id = r.Id,
                 Description = r.Description,
-                NumberOfUsers = r.Users.Count,
+                NumberOfUsers = r.NumberOfUsers,
                 Priority = r.Priority
-            }).ToList();
+            });
+
 
             return View(roles);
         }

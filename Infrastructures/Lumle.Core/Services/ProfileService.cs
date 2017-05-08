@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 using Lumle.Core.Models;
 using Lumle.Core.Services.Abstracts;
 using Lumle.Data.Data.Abstracts;
-using Lumle.Infrastructure.Constants.Log;
+using Lumle.Infrastructure.Constants.LumleLog;
 using NLog;
 
 namespace Lumle.Core.Services

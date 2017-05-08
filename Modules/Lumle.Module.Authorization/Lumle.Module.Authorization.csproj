@@ -12,20 +12,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="5.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="1.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="1.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.2" />
-    <PackageReference Include="NLog.Extensions.Logging" Version="1.0.0-rtm-beta1" />
-    <PackageReference Include="NLog.Web.AspNetCore" Version="4.3.0" />
     <PackageReference Include="PdfRpt.Core" Version="1.0.0-*" />
     <PackageReference Include="System.Text.RegularExpressions" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Infrastructures\Lumle.Core\Lumle.Core.csproj" />
     <ProjectReference Include="..\Lumle.Module.AdminConfig\Lumle.Module.AdminConfig.csproj" />
-    <ProjectReference Include="..\Lumle.Module.Audit\Lumle.Module.Audit.csproj" />
   </ItemGroup>
   
   

@@ -11,7 +11,6 @@
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
   </PropertyGroup>
 
-
   <ItemGroup>
     <ProjectReference Include="..\Lumle.Data\Lumle.Data.csproj" />
   </ItemGroup>
