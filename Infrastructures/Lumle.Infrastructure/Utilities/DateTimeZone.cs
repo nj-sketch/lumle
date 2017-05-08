@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Lumle.Infrastructure.Constants.LumleLog;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NLog;
-using Lumle.Infrastructure.Constants.LumleLog;
 
 namespace Lumle.Infrastructure.Utilities
 {
