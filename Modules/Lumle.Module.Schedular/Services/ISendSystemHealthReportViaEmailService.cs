@@ -1,7 +1,9 @@
-﻿namespace Lumle.Module.Schedular.Services
+﻿using System.Threading.Tasks;
+
+namespace Lumle.Module.Schedular.Services
 {
     public interface ISendSystemHealthReportViaEmailService
     {
-        void SendHealthReportViaMail();
+        Task SendHealthReportViaMailAsync();
     }
 }

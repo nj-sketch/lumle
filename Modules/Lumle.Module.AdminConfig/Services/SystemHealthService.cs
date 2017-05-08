@@ -6,7 +6,7 @@ using Lumle.Infrastructure.Constants.LumleLog;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-
+using System.Threading.Tasks;
 
 namespace Lumle.Module.AdminConfig.Services
 {
@@ -78,7 +78,7 @@ namespace Lumle.Module.AdminConfig.Services
             }
         }
 
-        public ICollection<ServiceHealth> GetSystemHealthReport(string loggedInUserEmail)
+        public async Task<ICollection<ServiceHealth>> GetSystemHealthReportAsync(string loggedInUserEmail)
         {
             try
             {
@@ -93,7 +93,7 @@ namespace Lumle.Module.AdminConfig.Services
                 Add(systemHealth);
                 _unitOfWork.Save();
 
-                var serviceHealths = GetServiceHealthReport();
+                var serviceHealths = await GetServiceHealthReportAsync();
                 foreach (var item in serviceHealths)
                 {
                     item.SystemHealth = systemHealth;
@@ -111,7 +111,7 @@ namespace Lumle.Module.AdminConfig.Services
             }
         }
 
-        public ICollection<ServiceHealth> GetServiceHealthReport()
+        public async Task<ICollection<ServiceHealth>> GetServiceHealthReportAsync()
         {
             try
             {
@@ -131,7 +131,7 @@ namespace Lumle.Module.AdminConfig.Services
                             serviceHealth.ServiceName = "EmailService";
                             try
                             {
-                                _messagingService.SendMailAsync(emailTemplate.Slug, "niraj@ekbana.com");
+                              await  _messagingService.SendMailAsync(emailTemplate.Slug, "niraj@ekbana.com");
                                 serviceHealth.Status = true;
                                 serviceHealth.Message = "Operational";
                             }
