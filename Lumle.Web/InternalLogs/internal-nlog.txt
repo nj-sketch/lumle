@@ -274,3 +274,95 @@
    at NLog.Targets.DatabaseTarget.EnsureConnectionOpen(String connectionString)
    at NLog.Targets.DatabaseTarget.WriteEventToDatabase(LogEventInfo logEvent)
    at NLog.Targets.DatabaseTarget.Write(LogEventInfo logEvent)
+2017-05-08 10:04:08.0266 Error Error when writing to database. Exception: Npgsql.PostgresException: 28P01: password authentication failed for user "postgres"
+   at Npgsql.NpgsqlConnector.<DoReadMessage>d__148.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at System.Runtime.CompilerServices.ValueTaskAwaiter`1.GetResult()
+   at Npgsql.NpgsqlConnector.<ReadMessage>d__147.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at System.Runtime.CompilerServices.ValueTaskAwaiter`1.GetResult()
+   at Npgsql.NpgsqlConnector.<ReadExpecting>d__154`1.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at System.Runtime.CompilerServices.ValueTaskAwaiter`1.GetResult()
+   at Npgsql.NpgsqlConnector.<AuthenticateMD5>d__2.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Npgsql.NpgsqlConnector.<Authenticate>d__0.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Npgsql.NpgsqlConnector.<Open>d__137.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Npgsql.ConnectorPool.<AllocateLong>d__23.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at System.Runtime.CompilerServices.ValueTaskAwaiter`1.GetResult()
+   at Npgsql.NpgsqlConnection.<Open>d__22.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Npgsql.NpgsqlConnection.Open()
+   at NLog.Targets.DatabaseTarget.OpenConnection(String connectionString)
+   at NLog.Targets.DatabaseTarget.EnsureConnectionOpen(String connectionString)
+   at NLog.Targets.DatabaseTarget.WriteEventToDatabase(LogEventInfo logEvent)
+   at NLog.Targets.DatabaseTarget.Write(LogEventInfo logEvent)
+2017-05-08 10:19:22.6427 Error Error when writing to database. Exception: Npgsql.PostgresException: 28P01: password authentication failed for user "postgres"
+   at Npgsql.NpgsqlConnector.<DoReadMessage>d__148.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at System.Runtime.CompilerServices.ValueTaskAwaiter`1.GetResult()
+   at Npgsql.NpgsqlConnector.<ReadMessage>d__147.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at System.Runtime.CompilerServices.ValueTaskAwaiter`1.GetResult()
+   at Npgsql.NpgsqlConnector.<ReadExpecting>d__154`1.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at System.Runtime.CompilerServices.ValueTaskAwaiter`1.GetResult()
+   at Npgsql.NpgsqlConnector.<AuthenticateMD5>d__2.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Npgsql.NpgsqlConnector.<Authenticate>d__0.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Npgsql.NpgsqlConnector.<Open>d__137.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Npgsql.ConnectorPool.<AllocateLong>d__23.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at System.Runtime.CompilerServices.ValueTaskAwaiter`1.GetResult()
+   at Npgsql.NpgsqlConnection.<Open>d__22.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Npgsql.NpgsqlConnection.Open()
+   at NLog.Targets.DatabaseTarget.OpenConnection(String connectionString)
+   at NLog.Targets.DatabaseTarget.EnsureConnectionOpen(String connectionString)
+   at NLog.Targets.DatabaseTarget.WriteEventToDatabase(LogEventInfo logEvent)
+   at NLog.Targets.DatabaseTarget.Write(LogEventInfo logEvent)

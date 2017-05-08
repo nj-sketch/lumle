@@ -16,5 +16,7 @@ namespace Lumle.Module.Localization.Services
         void DeleteWhere(Expression<Func<Resource, bool>> predicate);
         IEnumerable<ResourceModel> GetAllResource(string culture);
         IEnumerable<ResourceModel> GetAllResource(int resourceCategoryId, string culture);
+
+        bool ISCultureContainKey(string culture, int resourceCategoryId, string key);
     }
 }
