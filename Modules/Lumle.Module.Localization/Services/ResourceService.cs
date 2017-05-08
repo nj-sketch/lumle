@@ -43,7 +43,7 @@ namespace Lumle.Module.Localization.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DeleteError);
-                throw new Exception (ex.Message);
+                throw new Exception(ex.Message);
             }
         }
 
@@ -85,7 +85,7 @@ namespace Lumle.Module.Localization.Services
                                 select new ResourceModel
                                 {
                                     CultureId = cultureEntity.Id,
-                                    ResourceCategoryId=f.Select(x=>x.ResourceCategoryId).FirstOrDefault(),
+                                    ResourceCategoryId = f.Select(x => x.ResourceCategoryId).FirstOrDefault(),
                                     Key = f.Key,
                                     Value = f.FirstOrDefault(x => x.CultureId == cultureEntity.Id).Value ?? ""
                                 });
@@ -147,6 +147,24 @@ namespace Lumle.Module.Localization.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.UpdateError);
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public bool IsCultureContainKey(string culture, int resourceCategoryId, string key)
+        {
+            try
+            {
+                var cultureContainKey = _resourceRepository.GetSingle(x => x.Culture.Name.ToLower() == culture.Trim().ToLower() && x.Key.ToLower() == key.Trim().ToLower() && x.ResourceCategoryId == resourceCategoryId);
+                if (cultureContainKey != null)
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, ErrorLog.DataFetchError);
                 throw new Exception(ex.Message);
             }
         }

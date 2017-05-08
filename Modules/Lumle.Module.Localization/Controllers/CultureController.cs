@@ -118,7 +118,7 @@ namespace Lumle.Module.Localization.Controllers
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.LocalizationCultureView)]
         public IActionResult Resource(string culture)
         {
-            var model = new ImportResourceModel {Culture = culture};
+            var model = new ImportResourceModel { Culture = culture };
             return View("Resource", model);
         }
 
@@ -171,33 +171,34 @@ namespace Lumle.Module.Localization.Controllers
 
                     return Json(new { success = true, messageTitle = _localizer[ActionMessageConstants.UpdatedSuccessfully].Value, message = _localizer[ActionMessageConstants.UpdatedSuccessfully].Value });
                 }
-
-                var newResource = new Resource
+                var isCultureContainKey = _resourceService.IsCultureContainKey(DefaultCultureConstants.DefaultCultureName, resource.ResourceCategoryId, resource.Key);
+                if (isCultureContainKey)
                 {
-                    CultureId = resource.CultureId,
-                    ResourceCategoryId = resource.ResourceCategoryId,
-                    Key = resource.Key.Trim(),
-                    Value = resource.Value.Trim(),
-                    CreatedDate = DateTime.UtcNow,
-                    LastUpdated = DateTime.UtcNow
-                };
-                _resourceService.Add(newResource);
-                _unitOfWork.Save();
+                    var newResource = new Resource
+                    {
+                        CultureId = resource.CultureId,
+                        ResourceCategoryId = resource.ResourceCategoryId,
+                        Key = resource.Key.Trim(),
+                        Value = resource.Value.Trim(),
+                        CreatedDate = DateTime.UtcNow,
+                        LastUpdated = DateTime.UtcNow
+                    };
+                    _resourceService.Add(newResource);
 
-                #region Resource Create AuditLog
-                var oldResource = new Resource(); // dummy resource
-                var resourceAuditLogModel = new AuditLogModel
-                {
-                    AuditActionType = AuditActionType.Create,
-                    KeyField = newResource.Id.ToString(),
-                    OldObject = oldResource,
-                    NewObject = newResource,
-                    LoggedUserEmail = loggedUser.Email,
-                    ComparisonType = ComparisonType.ObjectCompare
-                };
-                _auditLogService.Add(resourceAuditLogModel);
-                _unitOfWork.Save();
-
+                    #region Resource Create AuditLog
+                    var oldResource = new Resource(); // dummy resource
+                    var resourceAuditLogModel = new AuditLogModel
+                    {
+                        AuditActionType = AuditActionType.Create,
+                        KeyField = newResource.Id.ToString(),
+                        OldObject = oldResource,
+                        NewObject = newResource,
+                        LoggedUserEmail = loggedUser.Email,
+                        ComparisonType = ComparisonType.ObjectCompare
+                    };
+                    _auditLogService.Add(resourceAuditLogModel);
+                    _unitOfWork.Save();
+                }
                 #endregion
 
                 ReloadLocalizationResourceCache(loggedUser.Culture);
@@ -272,7 +273,7 @@ namespace Lumle.Module.Localization.Controllers
         {
             try
             {
-                if (cultureViewModel.Name == "en-US") return Json(new { success = false, messageTitle = _localizer[ActionMessageConstants.ErrorOccured].Value, message = _localizer[ActionMessageConstants.InternalServerErrorMessage].Value });
+                if (cultureViewModel.Name == DefaultCultureConstants.DefaultCultureName) return Json(new { success = false, messageTitle = _localizer[ActionMessageConstants.ErrorOccured].Value, message = _localizer[ActionMessageConstants.InternalServerErrorMessage].Value });
 
                 var culture = _cultureService.GetSingle(x => x.IsEnable && x.Name == cultureViewModel.Name.Trim());
                 if (culture == null)
@@ -295,11 +296,11 @@ namespace Lumle.Module.Localization.Controllers
                     });
                 Response.Cookies.Append(
                     CookieRequestCultureProvider.DefaultCookieName,
-                    CookieRequestCultureProvider.MakeCookieValue(new RequestCulture("en-US")),
+                    CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(DefaultCultureConstants.DefaultCultureName)),
                     new CookieOptions { Expires = DateTime.UtcNow.AddYears(1) }
                 );
 
-                ReloadLocalizationResourceCache("en-US");
+                ReloadLocalizationResourceCache(DefaultCultureConstants.DefaultCultureName);
 
                 return Json(new { success = true, messageTitle = _localizer[ActionMessageConstants.UpdatedSuccessfully].Value, message = _localizer[ActionMessageConstants.UpdatedSuccessfully].Value });
             }
@@ -408,7 +409,7 @@ namespace Lumle.Module.Localization.Controllers
                     if (file.Length <= 0) continue;
                     var fileStream = file.OpenReadStream();
                     var mappedDataModel = MapExcelDataToResourceKeyValueHeper(fileStream);
-                    if(mappedDataModel != null)
+                    if (mappedDataModel != null)
                     {
                         excelDataModel.AddRange(mappedDataModel);
                     }
@@ -433,7 +434,7 @@ namespace Lumle.Module.Localization.Controllers
                             entity.Value = data.Value.Trim();
                             _resourceService.Update(entity);
                             count++;
-                           
+
                             #region Resource Audit Log
 
                             var auditLogModel = new AuditLogModel
@@ -451,18 +452,22 @@ namespace Lumle.Module.Localization.Controllers
                         }
                         else
                         {
-                            var newResource = new Resource
+                            var isCultureContainKey = _resourceService.IsCultureContainKey(DefaultCultureConstants.DefaultCultureName, model.ResourceCategoryId, data.Key);
+                            if (isCultureContainKey)
                             {
-                                CultureId = culture.Id,
-                                ResourceCategoryId = model.ResourceCategoryId,
-                                Key = data.Key.Trim(),
-                                Value = data.Value.Trim(),
-                                CreatedDate = DateTime.UtcNow,
-                                LastUpdated = DateTime.UtcNow
-                            };
-                            _resourceService.Add(newResource);
-                            _unitOfWork.Save();
-                            count++;
+                                var newResource = new Resource
+                                {
+                                    CultureId = culture.Id,
+                                    ResourceCategoryId = model.ResourceCategoryId,
+                                    Key = data.Key.Trim(),
+                                    Value = data.Value.Trim(),
+                                    CreatedDate = DateTime.UtcNow,
+                                    LastUpdated = DateTime.UtcNow
+                                };
+                                _resourceService.Add(newResource);
+                                _unitOfWork.Save();
+                                count++;
+                           
 
                             #region Resource Create AuditLog
                             var oldResource = new Resource(); // dummy resource
@@ -478,17 +483,18 @@ namespace Lumle.Module.Localization.Controllers
                             _auditLogService.Add(resourceAuditLogModel);
                             _unitOfWork.Save();
 
-                            #endregion
-                        }  
+                                #endregion
+                            }
+                        }
                     }
                 }
-                if(count == 0)
+                if (count == 0)
                 {
                     TempData["ErrorMsg"] = _localizer[ActionMessageConstants.InvalidExcelFormatError].Value;
                     return RedirectToAction("Resource", new { model.Culture });
                 }
                 ReloadLocalizationResourceCache(loggedUser.Culture);
-                TempData["SuccessMsg"] = _localizer[count + $" "+ ActionMessageConstants.Of +$" "+ excelDataModel.Count +$" "+ ActionMessageConstants.DataInsertedSuccessfully].Value;
+                TempData["SuccessMsg"] = _localizer[count + $" " + ActionMessageConstants.Of + $" " + excelDataModel.Count + $" " + ActionMessageConstants.DataInsertedSuccessfully].Value;
                 return RedirectToAction("Resource", new { model.Culture });
             }
             TempData["ErrorMsg"] = _localizer[ActionMessageConstants.UnableToInsertDataError].Value;
