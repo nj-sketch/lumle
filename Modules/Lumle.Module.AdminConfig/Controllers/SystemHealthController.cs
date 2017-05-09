@@ -55,7 +55,7 @@ namespace Lumle.Module.AdminConfig.Controllers
             try
             {
                 var loggedUser = await GetCurrentUserAsync(); // Get current logged user info
-                var data = _systemHealthService.GetSystemHealthReport(loggedUser.Email);
+                var data = await _systemHealthService.GetSystemHealthReportAsync(loggedUser.Email);
                 return Json(data);
             }
 

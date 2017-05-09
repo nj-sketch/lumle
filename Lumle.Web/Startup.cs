@@ -58,7 +58,7 @@ namespace Lumle.Web
             services.AddFrameworkServices(Configuration);     
                   
             // Add Hangfire services.  
-            services.AddHangFireWithPostGreSql(Configuration);
+            //services.AddHangFireWithPostGreSql(Configuration);
 
             //call this in case you need aspnet-user-authtype/aspnet-user-identity
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

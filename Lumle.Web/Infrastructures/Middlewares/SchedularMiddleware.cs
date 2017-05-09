@@ -14,7 +14,7 @@ namespace Lumle.Web.Infrastructures.Middlewares
         public SchedularMiddleware(RequestDelegate next, ISendSystemHealthReportViaEmailService sendSystemHealthReportViaEmailService)
         {
             _next = next;
-            sendSystemHealthReportViaEmailService.SendHealthReportViaMail();
+            sendSystemHealthReportViaEmailService.SendHealthReportViaMailAsync();
         }
         public async Task Invoke(HttpContext httpContext)
         {         
