@@ -29,7 +29,7 @@ namespace Lumle.AuthServer
             services.AddMvc();
 
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
-            services.AddPostgreSqlProvider(Configuration, migrationsAssembly);
+            services.AddMsSqlDataProvider(Configuration, migrationsAssembly);
 
             return services.BuildServiceProvider(validateScopes: true);
         }
