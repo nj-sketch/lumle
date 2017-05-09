@@ -44,6 +44,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Databases", "Databases", "{
 		..\..\lumle\lumle\StaticData.sql = ..\..\lumle\lumle\StaticData.sql
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lumle.AuthSample", "Lumle.AuthSample\Lumle.AuthSample.csproj", "{A4C5599F-8E59-4D29-A687-7A873AD67A7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lumle.AuthClient", "Lumle.AuthClient\Lumle.AuthClient.csproj", "{E54AD182-3136-4230-A5AF-C812EC287DBB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -114,6 +118,14 @@ Global
 		{5323BF4F-1814-487E-97E4-9C304580BA26}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5323BF4F-1814-487E-97E4-9C304580BA26}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5323BF4F-1814-487E-97E4-9C304580BA26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4C5599F-8E59-4D29-A687-7A873AD67A7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4C5599F-8E59-4D29-A687-7A873AD67A7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4C5599F-8E59-4D29-A687-7A873AD67A7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4C5599F-8E59-4D29-A687-7A873AD67A7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E54AD182-3136-4230-A5AF-C812EC287DBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E54AD182-3136-4230-A5AF-C812EC287DBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E54AD182-3136-4230-A5AF-C812EC287DBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E54AD182-3136-4230-A5AF-C812EC287DBB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
