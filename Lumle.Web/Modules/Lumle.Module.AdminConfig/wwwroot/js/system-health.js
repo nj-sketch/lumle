@@ -1,7 +1,6 @@
 $(document).ready(function () {
     var url = rootDir + "adminconfig/systemhealth/status";
     $.getJSON(url, function (data) {
-        debugger;
         for (var i = 0; i < data.length; i++) {
             $('#' + data[i].serviceName).removeAttr("class");
             $('#' + data[i].serviceName + 'Img').hide();
