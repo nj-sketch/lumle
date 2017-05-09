@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Serialization;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Lumle.Api
 {
@@ -24,18 +24,35 @@ namespace Lumle.Api
 
         public IConfigurationRoot Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
-            services.AddMvc();
+            services.AddMvc()
+                .AddJsonOptions(options =>
+                {
+                    options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+                });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            var identityServerValidationOptions = new IdentityServerAuthenticationOptions
+            {
+                Authority = "http://localhost:30193/",
+                AllowedScopes = new List<string> { "LumleApi.full_access" },
+                ApiSecret = "secret",
+                ApiName = "LumleApi",
+                AutomaticAuthenticate = true,
+                SupportedTokens = SupportedTokens.Jwt,
+                AutomaticChallenge = true,
+            };
+
+            app.UseIdentityServerAuthentication(identityServerValidationOptions);
 
             app.UseMvc();
         }

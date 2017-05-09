@@ -27,14 +27,16 @@ namespace Lumle.AuthServer.Infrastructures.Configuration
                     AlwaysSendClientClaims = true,
                     Enabled = true,
                     IncludeJwtId = true,
-                    ClientSecrets=  new List<Secret> { new Secret("295265f0-c060-4782-9688-36854dba9af5".Sha256()) },
+                    ClientSecrets=  new List<Secret>
+                    {
+                        new Secret("295265f0-c060-4782-9688-36854dba9af5".Sha256())
+                    },
                     AllowedScopes = {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
                         IdentityServerConstants.StandardScopes.OfflineAccess,
-                        "dataEventRecords",
-                        "api2.full_access"
+                        "LumleApi.full_access"
                     }
                 }
             };
