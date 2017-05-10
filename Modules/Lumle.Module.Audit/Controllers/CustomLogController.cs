@@ -83,7 +83,7 @@ namespace Lumle.Module.Audit.Controllers
                 customLogVms = customLogVms.Select(x =>
                 {
                     x.Sn = i++;
-                    x.ConvertedCreatedDate = _timeZoneHelper.ConvertToLocalTime(x.CreatedDate, loggedUser.TimeZone).ToString("g");
+                    x.LoggedDate = _timeZoneHelper.ConvertToLocalTime(DateTime.Parse(x.LoggedDate), loggedUser.TimeZone).ToString("g");
                     return x;
                 }).ToList();
 
@@ -138,7 +138,7 @@ namespace Lumle.Module.Audit.Controllers
                     case 3:
                         return orderDirection.Equals("DESC", StringComparison.CurrentCultureIgnoreCase) ? data.OrderByDescending(p => p.Level) : data.OrderBy(p => p.Level);
                     default:
-                        return data.OrderByDescending(p => p.CreatedDate); 
+                        return data.OrderByDescending(p => p.LoggedDate); 
                 }
             }
             catch (Exception)
@@ -160,7 +160,7 @@ namespace Lumle.Module.Audit.Controllers
                     Url = customLog.Url,
                     RemoteAddress = customLog.RemoteAddress,
                     Exception = customLog.Exception,
-                    CreatedDate = customLog.CreatedDate
+                    LoggedDate = customLog.LoggedDate
                 }).AsQueryable();
 
             if (!string.IsNullOrEmpty(usernameSearch))
@@ -180,12 +180,12 @@ namespace Lumle.Module.Audit.Controllers
 
             if (!string.IsNullOrEmpty(startDate))
             {
-                customLogEntities = customLogEntities.Where(sD => sD.CreatedDate >= DateTime.Parse(startDate));
+                customLogEntities = customLogEntities.Where(sD => DateTime.Parse(sD.LoggedDate) >= DateTime.Parse(startDate));
             }
 
             if (!string.IsNullOrEmpty(endDate))
             {
-                customLogEntities = customLogEntities.Where(eD => eD.CreatedDate <= DateTime.Parse(endDate).AddDays(1));
+                customLogEntities = customLogEntities.Where(eD => DateTime.Parse(eD.LoggedDate) <= DateTime.Parse(endDate).AddDays(1));
             }
 
             return customLogEntities;

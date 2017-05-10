@@ -238,6 +238,7 @@ namespace Lumle.Web.Migrations
                     Exception = table.Column<string>(nullable: true),
                     LastUpdated = table.Column<DateTime>(nullable: false, defaultValueSql: "now()"),
                     Level = table.Column<string>(nullable: true),
+                    LoggedDate = table.Column<string>(nullable: true),
                     Message = table.Column<string>(nullable: true),
                     Port = table.Column<string>(nullable: true),
                     RemoteAddress = table.Column<string>(nullable: true),

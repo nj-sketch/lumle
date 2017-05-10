@@ -8,7 +8,7 @@ using Lumle.Data.Data;
 namespace Lumle.Web.Migrations
 {
     [DbContext(typeof(BaseContext))]
-    [Migration("20170508063633_InitialSchema")]
+    [Migration("20170510080955_InitialSchema")]
     partial class InitialSchema
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -556,6 +556,8 @@ namespace Lumle.Web.Migrations
                         .HasDefaultValueSql("now()");
 
                     b.Property<string>("Level");
+
+                    b.Property<string>("LoggedDate");
 
                     b.Property<string>("Message");
 

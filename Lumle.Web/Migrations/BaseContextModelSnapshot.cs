@@ -556,6 +556,8 @@ namespace Lumle.Web.Migrations
 
                     b.Property<string>("Level");
 
+                    b.Property<string>("LoggedDate");
+
                     b.Property<string>("Message");
 
                     b.Property<string>("Port");

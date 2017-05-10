@@ -143,7 +143,7 @@ function CustomLogReport() {
             { "data": "username" },
             { "data": "remoteAddress" },
             { "data": "level" },
-            { "data": "convertedCreatedDate" },
+            { "data": "loggedDate" },
             { "data": "userAgent" },
             { "data": "message" }
         ],
