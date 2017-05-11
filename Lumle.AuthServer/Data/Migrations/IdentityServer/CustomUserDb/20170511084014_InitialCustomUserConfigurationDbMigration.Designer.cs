@@ -8,8 +8,8 @@ using Lumle.AuthServer.Data.Contexts;
 namespace Lumle.AuthServer.Data.Migrations.IdentityServer.CustomUserDb
 {
     [DbContext(typeof(UserDbContext))]
-    [Migration("20170508102124_InitialIdentityServerCustomUserDbMigration")]
-    partial class InitialIdentityServerCustomUserDbMigration
+    [Migration("20170511084014_InitialCustomUserConfigurationDbMigration")]
+    partial class InitialCustomUserConfigurationDbMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -57,6 +57,30 @@ namespace Lumle.AuthServer.Data.Migrations.IdentityServer.CustomUserDb
                     b.HasKey("Id");
 
                     b.ToTable("PublicUser_CustomUser");
+                });
+
+            modelBuilder.Entity("Lumle.AuthServer.Data.Entities.TokenSnapShot", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<DateTime>("ExpireDate");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<string>("JwtId")
+                        .IsRequired();
+
+                    b.Property<DateTime>("LastUpdated");
+
+                    b.Property<string>("SubId")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Auth_TokenSnapShot");
                 });
         }
     }

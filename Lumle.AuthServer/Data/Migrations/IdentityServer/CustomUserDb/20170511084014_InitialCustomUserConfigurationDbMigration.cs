@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Lumle.AuthServer.Data.Migrations.IdentityServer.CustomUserDb
 {
-    public partial class InitialIdentityServerCustomUserDbMigration : Migration
+    public partial class InitialCustomUserConfigurationDbMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -34,12 +34,33 @@ namespace Lumle.AuthServer.Data.Migrations.IdentityServer.CustomUserDb
                 {
                     table.PrimaryKey("PK_PublicUser_CustomUser", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "Auth_TokenSnapShot",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    ExpireDate = table.Column<DateTime>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    JwtId = table.Column<string>(nullable: false),
+                    LastUpdated = table.Column<DateTime>(nullable: false),
+                    SubId = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Auth_TokenSnapShot", x => x.Id);
+                });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "PublicUser_CustomUser");
+
+            migrationBuilder.DropTable(
+                name: "Auth_TokenSnapShot");
         }
     }
 }

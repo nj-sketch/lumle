@@ -11,25 +11,29 @@ namespace Lumle.AuthServer.Data.Contexts
     public class UserDbContext : DbContext, IUserDbContext
     {
         private readonly UserStoreOptions _storeOptions;
+        private readonly TokenSnapShotOptions _tokenOptions;
 
-        public UserDbContext(DbContextOptions<UserDbContext> options, UserStoreOptions storeOptions)
+        public UserDbContext(DbContextOptions<UserDbContext> options, UserStoreOptions storeOptions, TokenSnapShotOptions tokenOptions)
             :base(options)
         {
-            if (storeOptions == null) throw  new ArgumentNullException(nameof(storeOptions));
-            _storeOptions = storeOptions;
+            _storeOptions = storeOptions ?? throw new ArgumentNullException(nameof(storeOptions));
+            _tokenOptions = tokenOptions ?? throw new ArgumentNullException(nameof(tokenOptions));
         }
 
 
         public DbSet<CustomUser> Customers { get; set; }
 
-        public Task<int> SaveChangesAsync()
+        public DbSet<TokenSnapShot> TokenSnapShots { get; set; }
+
+        public async Task<int> SaveChangesAsync()
         {
-            return  base.SaveChangesAsync();
+            return await base.SaveChangesAsync();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ConfigureUserContext(_storeOptions);
+            modelBuilder.ConfigureTokenSnapShot(_tokenOptions);
 
             base.OnModelCreating(modelBuilder);
         }

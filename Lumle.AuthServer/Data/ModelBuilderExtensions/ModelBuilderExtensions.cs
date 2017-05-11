@@ -23,5 +23,14 @@ namespace Lumle.AuthServer.Data.ModelBuilderExtensions
                 customUser.ToTable(storeOptions.CustomUser);
             });
         }
+
+        public static void ConfigureTokenSnapShot(this ModelBuilder modelBuilder, TokenSnapShotOptions tokenOptions)
+        {
+            modelBuilder.Entity<TokenSnapShot>(token =>
+            {
+                token.ToTable(tokenOptions.TokenSnapShot);
+            });
+        }
+
     }
 }

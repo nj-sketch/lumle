@@ -9,6 +9,8 @@ namespace Lumle.AuthServer.Data.Interfaces
     {
         DbSet<CustomUser> Customers { get; set; }
 
+        DbSet<TokenSnapShot> TokenSnapShots { get; set; }
+
         int SaveChanges();
         Task<int> SaveChangesAsync();
     }

@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using IdentityServer4.Services;
+using Lumle.AuthServer.Infrastructures.Services;
 
 namespace Lumle.AuthServer
 {
@@ -26,6 +28,8 @@ namespace Lumle.AuthServer
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<ITokenService, LumleTokenService>();
+
             services.AddMvc();
 
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;

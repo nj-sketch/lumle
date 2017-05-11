@@ -15,12 +15,14 @@ namespace Lumle.AuthServer.Data.EntityFrameworkBuilderExtensions
         public static IIdentityServerBuilder AddCustomUserStore(
             this IIdentityServerBuilder builder,
             Action<DbContextOptionsBuilder> dbContextOptionsAction = null,
-            Action<UserStoreOptions> storeOptionsAction = null)
+            Action<UserStoreOptions> storeOptionsAction = null,
+            Action<TokenSnapShotOptions> tokenOptionsAction = null)
         {
             builder.Services.AddDbContext<UserDbContext>(dbContextOptionsAction);
             builder.Services.AddScoped<IUserDbContext, UserDbContext>();
 
             builder.Services.AddTransient<IUserStore, UserStore>();
+            builder.Services.AddTransient<ITokenSnapShotStore, TokenSnapShotStore>();
             builder.AddProfileService<CustomProfileService>();
             builder.AddResourceOwnerValidator<CustomResourceOwnerPasswordValidator>();
 
@@ -29,7 +31,11 @@ namespace Lumle.AuthServer.Data.EntityFrameworkBuilderExtensions
 
             var options = new UserStoreOptions();
             storeOptionsAction?.Invoke(options);
+            var tokenOptions = new TokenSnapShotOptions();
+            tokenOptionsAction?.Invoke(tokenOptions);
+
             builder.Services.AddSingleton(options);
+            builder.Services.AddSingleton(tokenOptions);
 
             return builder;
 
