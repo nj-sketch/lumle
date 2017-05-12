@@ -4,5 +4,6 @@
     {
         public string SubMenu { get; set; }
         public string SubMenuDisplayName { get; set; }
+        public int Sequence { get; set; }
     }
 }
