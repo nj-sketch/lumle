@@ -9,7 +9,7 @@ namespace Lumle.Module.PublicUser.ViewModels.PublicUserViewModels
         public string Email { get; set; }
         public string UserName { get; set; }
         public string ProfileUrl { get; set; }
-        public string Gender { get; set; }
+        public int Gender { get; set; }
         public bool IsStaff { get; set; }
         public string Provider { get; set; }
         public bool IsEmailVerified { get; set; }
