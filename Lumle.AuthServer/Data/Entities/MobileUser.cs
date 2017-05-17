@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Lumle.AuthServer.Data.Entities
 {
-    public class CustomUser
+    public class MobileUser
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         //[Column(TypeName = "bigserial ")]
@@ -15,6 +15,10 @@ namespace Lumle.AuthServer.Data.Entities
         
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
+
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
         
         public string UserName { get; set; }
 
@@ -22,7 +26,7 @@ namespace Lumle.AuthServer.Data.Entities
 
         public string ProfileUrl { get; set; }
 
-        public string Gender { get; set; }
+        public int Gender { get; set; } //1 = Male, 2 = Female, 3 = Other, 0= Unknown
 
         [Required]
         public string PasswordHash { get; set; }

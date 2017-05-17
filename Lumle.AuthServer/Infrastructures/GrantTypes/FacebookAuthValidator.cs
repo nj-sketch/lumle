@@ -11,7 +11,6 @@ using Lumle.AuthServer.Infrastructures.Helpers.Constants;
 using Lumle.AuthServer.Infrastructures.Helpers.Utilities;
 using Lumle.AuthServer.Infrastructures.Providers;
 using Lumle.AuthServer.Infrastructures.Security.CryptoService;
-using Lumle.AuthServer.Utilities;
 
 namespace Lumle.AuthServer.Infrastructures.GrantTypes
 {
@@ -100,7 +99,7 @@ namespace Lumle.AuthServer.Infrastructures.GrantTypes
                         //Get User Information
 
                         //Create new User
-                        var customUser = new CustomUser
+                        var customUser = new MobileUser
                         {
                             SubjectId = fbTokenResponse.Id,
                             Email = EmailValidator.IsValidEmail(fbTokenResponse.Email)? fbTokenResponse.Email.ToLower():"",
@@ -108,9 +107,11 @@ namespace Lumle.AuthServer.Infrastructures.GrantTypes
                             PasswordHash = Convert.ToBase64String(pwdHash),
                             PasswordSalt = Convert.ToBase64String(pwdSalt),
                             PhoneNo = "",
+                            FirstName = "",
+                            LastName = "",
                             IsStaff = false,
                             ProfileUrl = fbTokenResponse.Picture.Data.Url,
-                            Gender = fbTokenResponse.Gender,
+                            Gender = GenderResolver.GetNumericGenderValue(fbTokenResponse.Gender),
                             IsEmailVerified = true, //Verified by default
                             IsBlocked = false,
                             Provider = ProviderConstants.Facebook,

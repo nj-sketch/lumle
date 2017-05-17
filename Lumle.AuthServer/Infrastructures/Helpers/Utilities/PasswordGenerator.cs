@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Lumle.AuthServer.Utilities
+namespace Lumle.AuthServer.Infrastructures.Helpers.Utilities
 {
     public static class PasswordGenerator
     {

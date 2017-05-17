@@ -21,7 +21,7 @@ namespace Lumle.AuthServer.Data.Contexts
         }
 
 
-        public DbSet<CustomUser> Customers { get; set; }
+        public DbSet<MobileUser> Customers { get; set; }
 
         public DbSet<TokenSnapShot> TokenSnapShots { get; set; }
 

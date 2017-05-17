@@ -18,7 +18,7 @@ namespace Lumle.AuthServer.Data.ModelBuilderExtensions
         public static void ConfigureUserContext(this ModelBuilder modelBuilder,
             UserStoreOptions storeOptions)
         {
-            modelBuilder.Entity<CustomUser>(customUser =>
+            modelBuilder.Entity<MobileUser>(customUser =>
             {
                 customUser.ToTable(storeOptions.CustomUser);
             });

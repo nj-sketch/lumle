@@ -7,7 +7,7 @@ namespace Lumle.AuthServer.Data.Interfaces
 {
     public interface IUserDbContext: IDisposable
     {
-        DbSet<CustomUser> Customers { get; set; }
+        DbSet<MobileUser> Customers { get; set; }
 
         DbSet<TokenSnapShot> TokenSnapShots { get; set; }
 

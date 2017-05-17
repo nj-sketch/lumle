@@ -1,7 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Services\Abstracts\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="JsonApiDotNetCore" Version="2.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Lumle.Api.Data\Lumle.Api.Data.csproj" />
+  </ItemGroup>
 
 </Project>
