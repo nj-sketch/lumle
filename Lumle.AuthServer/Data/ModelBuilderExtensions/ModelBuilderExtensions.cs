@@ -18,10 +18,19 @@ namespace Lumle.AuthServer.Data.ModelBuilderExtensions
         public static void ConfigureUserContext(this ModelBuilder modelBuilder,
             UserStoreOptions storeOptions)
         {
-            modelBuilder.Entity<CustomUser>(customUser =>
+            modelBuilder.Entity<MobileUser>(customUser =>
             {
                 customUser.ToTable(storeOptions.CustomUser);
             });
         }
+
+        public static void ConfigureTokenSnapShot(this ModelBuilder modelBuilder, TokenSnapShotOptions tokenOptions)
+        {
+            modelBuilder.Entity<TokenSnapShot>(token =>
+            {
+                token.ToTable(tokenOptions.TokenSnapShot);
+            });
+        }
+
     }
 }

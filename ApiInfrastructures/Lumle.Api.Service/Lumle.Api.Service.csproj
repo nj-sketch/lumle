@@ -1,7 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <TargetFramework>netstandard1.6</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="JsonApiDotNetCore" Version="2.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructures\Lumle.Infrastructure\Lumle.Infrastructure.csproj" />
+    <ProjectReference Include="..\Lumle.Api.Data\Lumle.Api.Data.csproj" />
+  </ItemGroup>
 
 </Project>

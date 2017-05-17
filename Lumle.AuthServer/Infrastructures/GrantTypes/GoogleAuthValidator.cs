@@ -10,7 +10,8 @@ using Lumle.AuthServer.Infrastructures.Helpers;
 using Lumle.AuthServer.Infrastructures.Helpers.Constants;
 using Lumle.AuthServer.Infrastructures.Providers;
 using Lumle.AuthServer.Infrastructures.Security.CryptoService;
-using Lumle.AuthServer.Utilities;
+using static Lumle.AuthServer.Infrastructures.Enums.AuthEnums;
+using Lumle.AuthServer.Infrastructures.Helpers.Utilities;
 
 namespace Lumle.AuthServer.Infrastructures.GrantTypes
 {
@@ -85,14 +86,16 @@ namespace Lumle.AuthServer.Infrastructures.GrantTypes
                         #endregion
 
                         //Create new User
-                        var customUser = new CustomUser
+                        var customUser = new MobileUser
                         {
                             SubjectId = googleAuthResponse.Sub,
                             Email = googleAuthResponse.Email.ToLower(),
                             UserName = string.Empty,
                             ProfileUrl = googleAuthResponse.Picture,
                             PhoneNo = string.Empty,
-                            Gender = string.Empty,
+                            Gender = (int)Gender.Unknown,
+                            FirstName = string.Empty,
+                            LastName = string.Empty,
                             PasswordHash = Convert.ToBase64String(pwdHash),
                             PasswordSalt = Convert.ToBase64String(pwdSalt),
                             IsStaff = false,

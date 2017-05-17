@@ -8,7 +8,7 @@ namespace Lumle.AuthServer.Infrastructures.DbproviderExtensions
     public static class DbproviderExtensions
     {
 
-        public static IServiceCollection AddMsSqlDataStore(this IServiceCollection services, IConfigurationRoot configuration, string migrationsAssembly)
+        public static IServiceCollection AddMsSqlDataProvider(this IServiceCollection services, IConfigurationRoot configuration, string migrationsAssembly)
         {
             var connectionString = configuration.GetConnectionString("SQLConnection");
 
@@ -27,7 +27,7 @@ namespace Lumle.AuthServer.Infrastructures.DbproviderExtensions
             return services;
         }
 
-        public static IServiceCollection AddMySqlDataStore(this IServiceCollection services, IConfigurationRoot configuration, string migrationsAssembly)
+        public static IServiceCollection AddMySqlDataProvider(this IServiceCollection services, IConfigurationRoot configuration, string migrationsAssembly)
         {
 
             var connectionString = configuration.GetConnectionString("MySQLConnection");

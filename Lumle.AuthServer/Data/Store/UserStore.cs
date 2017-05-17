@@ -29,27 +29,27 @@ namespace Lumle.AuthServer.Data.Store
             return false;
         }
 
-        public CustomUser FindBySubjectId(string subjectId)
+        public MobileUser FindBySubjectId(string subjectId)
         {
             return _userDbContext.Customers.FirstOrDefault(x => x.SubjectId == subjectId);
         }
 
-        public CustomUser FindByProviderAndSubjectId(string provider, string subjectId)
+        public MobileUser FindByProviderAndSubjectId(string provider, string subjectId)
         {
             return _userDbContext.Customers.FirstOrDefault(x => x.Provider == provider && x.SubjectId == subjectId);
         }
 
-        public CustomUser FindByUsername(string username)
+        public MobileUser FindByUsername(string username)
         {
             return _userDbContext.Customers.FirstOrDefault(x => x.UserName.Equals(username, StringComparison.OrdinalIgnoreCase));
         }
 
-        public CustomUser FindByEmail(string email)
+        public MobileUser FindByEmail(string email)
         {
             return _userDbContext.Customers.FirstOrDefault(x => x.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
         }
 
-        public CustomUser FindByProviderAndEmail(string provider, string email)
+        public MobileUser FindByProviderAndEmail(string provider, string email)
         {
             return _userDbContext.Customers.FirstOrDefault(x => x.Provider == provider && x.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
         }
@@ -66,7 +66,7 @@ namespace Lumle.AuthServer.Data.Store
             return user != null;
         }
 
-        public void AddNewUser(CustomUser entity)
+        public void AddNewUser(MobileUser entity)
         {
             var user = _userDbContext.Customers.FirstOrDefault(x => x.Email.Equals(entity.Email, StringComparison.OrdinalIgnoreCase));
             if (user != null)
@@ -78,7 +78,7 @@ namespace Lumle.AuthServer.Data.Store
             _userDbContext.SaveChanges();
         }
 
-        public Task<CustomUser> FindBySubjectIdAsync(string subjectId)
+        public Task<MobileUser> FindBySubjectIdAsync(string subjectId)
         {
             return Task.FromResult(_userDbContext.Customers.FirstOrDefault(x => x.SubjectId == subjectId));
         }

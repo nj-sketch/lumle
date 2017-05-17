@@ -10,7 +10,7 @@ namespace Lumle.AuthServer.Infrastructures.Configuration
         {
             return new List<Client>
             {
-                //Resource Owner Password Flow
+                
                 new Client
                 {
                     ClientId = "lumle-mbl",
@@ -26,13 +26,17 @@ namespace Lumle.AuthServer.Infrastructures.Configuration
                     RefreshTokenUsage = TokenUsage.OneTimeOnly,
                     AlwaysSendClientClaims = true,
                     Enabled = true,
-                    ClientSecrets=  new List<Secret> { new Secret("295265f0-c060-4782-9688-36854dba9af5".Sha256()) },
+                    IncludeJwtId = true,
+                    ClientSecrets=  new List<Secret>
+                    {
+                        new Secret("295265f0-c060-4782-9688-36854dba9af5".Sha256())
+                    },
                     AllowedScopes = {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
                         IdentityServerConstants.StandardScopes.OfflineAccess,
-                        "dataEventRecords"
+                        "LumleApi.full_access"
                     }
                 }
             };

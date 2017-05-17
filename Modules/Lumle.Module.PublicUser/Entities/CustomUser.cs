@@ -18,7 +18,7 @@ namespace Lumle.Module.PublicUser.Entities
 
         public string ProfileUrl { get; set; }
 
-        public string Gender { get; set; }
+        public int Gender { get; set; }
 
         [Required]
         public string PasswordHash { get; set; }

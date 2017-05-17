@@ -132,7 +132,7 @@ namespace Lumle.Module.PublicUser.Controllers
                     Expression<Func<PublicUserIndexVM, bool>> search =
                         x => (x.UserName ?? "").ToString().ToLower().Contains(parameters.Search.Value.ToLower()) ||
                              (x.Email ?? "").ToString().ToLower().Contains(parameters.Search.Value.ToLower()) ||
-                             (x.Gender ?? "").ToString().ToLower().Contains(parameters.Search.Value.ToLower()) ||
+                             (x.Gender.ToString()).Contains(parameters.Search.Value.ToLower()) ||
                              (x.Provider ?? "").ToString().ToLower().Contains(parameters.Search.Value.ToLower());
                     totalUser = publicUsers.Count(search);
                     publicUsers = publicUsers.Where(search);

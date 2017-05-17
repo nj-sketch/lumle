@@ -7,21 +7,21 @@ namespace Lumle.AuthServer.Data.Store
     {
         bool ValidateCredentials(string username, string password);
 
-        CustomUser FindBySubjectId(string subjectId);
-        Task<CustomUser> FindBySubjectIdAsync(string subjectId);
+        MobileUser FindBySubjectId(string subjectId);
+        Task<MobileUser> FindBySubjectIdAsync(string subjectId);
 
-        CustomUser FindByProviderAndSubjectId(string provider, string subjectId);
+        MobileUser FindByProviderAndSubjectId(string provider, string subjectId);
 
-        CustomUser FindByUsername(string username);
+        MobileUser FindByUsername(string username);
 
-        CustomUser FindByEmail(string email);
+        MobileUser FindByEmail(string email);
 
-        CustomUser FindByProviderAndEmail(string provider, string email);
+        MobileUser FindByProviderAndEmail(string provider, string email);
 
         bool IsUserAvailable(string provider, string subId);
 
         bool IsEmailExist(string email);
 
-        void AddNewUser(CustomUser entity);
+        void AddNewUser(MobileUser entity);
     }
 }
