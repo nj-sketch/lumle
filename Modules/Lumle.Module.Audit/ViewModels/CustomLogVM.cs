@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Lumle.Module.Audit.ViewModels
+﻿namespace Lumle.Module.Audit.ViewModels
 {
     public class CustomLogVM
     {
@@ -18,8 +16,6 @@ namespace Lumle.Module.Audit.ViewModels
         public string UserAgent { get; set; }
         public string CallSite { get; set; }
         public string Exception { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public string ConvertedCreatedDate { get; set; }
-
+        public string LoggedDate { get; set; }
     }
 }

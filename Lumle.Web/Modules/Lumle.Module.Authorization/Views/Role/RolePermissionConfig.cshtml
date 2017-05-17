@@ -17,7 +17,6 @@
     <div id="page-title">
         <h2>@Localizer[LabelConstants.RoleCredentialManagement]</h2>
     </div>
-
     <div class="breadcrumb-section clearfix">
         <ol class="breadcrumb">
             <li class="module">@Localizer[LabelConstants.Authorization]</li>
@@ -41,14 +40,13 @@
                             <h3 class="title-hero" style="text-transform: capitalize;">@item.Name</h3><hr />
                             @foreach (var subMod in item.SubModules)
                             {
-
                                 <div class="col-md-3 submodule">
                                     <h5 class="title-hero" style="text-transform: capitalize;">@subMod.Name</h5>
                                     @foreach (var perm in subMod.ModulePermissions)
                                     {
                                         <label class="control-label">
                                             <input type="checkbox" @(perm.IsAssigned ? "checked" : "") class="cke_dialog_ui_checkbox checkList" name="ckbox" value="@perm.Slug" />
-                                           @Localizer[perm.DisplayName]
+                                            @Localizer[perm.DisplayName]
                                         </label><br />
                                     }
                                 </div>
@@ -57,10 +55,8 @@
                     </div>
                 </div>
             }
-
         </div>
     </div>
-
     <div class="row">
         <div class="bg-default content-box text-center pad20A mrg25T">
             <a class="btn btn-default" asp-action="Index">@Localizer[LabelConstants.Cancel]</a>

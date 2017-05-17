@@ -16,5 +16,6 @@ namespace Lumle.Module.Audit.Entities
         public string UserAgent { get; set; }
         public string CallSite { get; set; }
         public string Exception { get; set; }
+        public string LoggedDate { get; set; }
     }
 }

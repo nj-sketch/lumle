@@ -156,49 +156,50 @@ namespace Lumle.Module.Authorization.Services
 
         public async Task<List<SidebarMenuModel>> GetSideBarMenuAsync(User user)
         {
-            List<SidebarMenuModel> menuList;
 
-            if (_memoryCache.TryGetValue(CacheConstants.AuthorizationSidebarMenuCache, out menuList)) return menuList;
+            if (_memoryCache.TryGetValue(CacheConstants.AuthorizationSidebarMenuCache, out List<SidebarMenuModel> orderedMenuList)) return orderedMenuList;
 
             if (user == null) return null;
 
             var role = await _userManager.GetRolesAsync(user);
+
             if (!role.Any()) return null;
 
             var roleModel = await _roleManager.FindByNameAsync(role.FirstOrDefault());
-
             var roleClaims = _baseRoleClaimService.GetAll(x => x.RoleId == roleModel.Id).ToList();
             //var roleClaims = await _roleManager.GetClaimsAsync(roleModel) as List<Claim>; //Use this if default roleclaim table is used
             if (!roleClaims.Any()) return null;
 
             var filteredPermissions = (from e in roleClaims
-                                       join f in _permissionRepository.GetAll() on e.ClaimValue equals f.Slug
-                                       orderby f.Id
-                                       group f by f.Menu
-                                       into g
-                                       select new
-                                       {
-                                           Menu = g.Key,
-                                           SubMenu = (from h in g
-                                                      where !string.IsNullOrEmpty(h.SubMenu)
-                                                      group h by h.SubMenu
-                                               into i
-                                                      select new { subMenu = i.Key }).ToList()
-                                       }).ToList();
-
+                join f in _permissionRepository.GetAll() on e.ClaimValue equals f.Slug
+                orderby f.Id
+                group f by f.Menu
+                into g
+                select new
+                {
+                    Menu = g.Key,
+                    SubMenu = (from h in g
+                        where !string.IsNullOrEmpty(h.SubMenu)
+                        group h by h.SubMenu
+                        into i
+                        select new { subMenu = i.Key }).ToList()
+                }).ToList();
 
             var defaultMenuList = GetSideBarMenuDetails();
-            menuList = new List<SidebarMenuModel>();
+
+            var menuList = new List<SidebarMenuModel>();
 
             foreach (var filteredMenu in filteredPermissions)
             {
+                var menuInfo = defaultMenuList.FirstOrDefault(x => x.Name == filteredMenu.Menu && x.MenuLevel == 0);
                 var menu = new SidebarMenuModel
                 {
                     Menu = filteredMenu.Menu,
                     MenuDisplayName =
-                        defaultMenuList.FirstOrDefault(x => x.Name == filteredMenu.Menu)?.DisplayName ??
+                        menuInfo?.DisplayName ??
                         filteredMenu.Menu,
-                    Icon = defaultMenuList.FirstOrDefault(x => x.Name == filteredMenu.Menu)?.Icon ?? ""
+                    Icon = menuInfo?.Icon ?? "",
+                    Sequence = menuInfo?.Sequence ?? 1
                 };
 
                 var subMenuList = filteredMenu.SubMenu
@@ -206,22 +207,26 @@ namespace Lumle.Module.Authorization.Services
                     {
                         SubMenu = filteredSubMenu.subMenu,
                         SubMenuDisplayName =
-                            defaultMenuList.FirstOrDefault(x => x.Name == filteredSubMenu.subMenu)?.DisplayName ??
+                            defaultMenuList.FirstOrDefault(x => x.Name == filteredSubMenu.subMenu && x.MenuLevel == 1)?.DisplayName ??
                             filteredSubMenu.subMenu,
-                    }).ToList();
+                        Sequence = defaultMenuList.FirstOrDefault(x => x.Name == filteredSubMenu.subMenu && x.MenuLevel == 1)?.Sequence ?? 1
+                    });
 
-                menu.SubMenu = subMenuList;
+                menu.SubMenu = subMenuList.OrderBy(x => x.Sequence).ToList();
+
                 menuList.Add(menu);
             }
+
+            orderedMenuList = (from e in menuList orderby e.Sequence select e).ToList();
 
             var cacheOption = new MemoryCacheEntryOptions()
             {
                 Priority = CacheItemPriority.High
             };
 
-            _memoryCache.Set(CacheConstants.AuthorizationSidebarMenuCache, menuList, cacheOption);
+            _memoryCache.Set(CacheConstants.AuthorizationSidebarMenuCache, orderedMenuList, cacheOption);
 
-            return menuList;
+            return orderedMenuList;
         }
 
         private static List<SidebarMenuDetailsModel> GetSideBarMenuDetails()
@@ -232,85 +237,109 @@ namespace Lumle.Module.Authorization.Services
                 {
                     Name = "dashboard",
                     DisplayName = "Dashboard",
-                    Icon = "glyph-icon icon-linecons-tv"
+                    Icon = "glyph-icon icon-linecons-tv",
+                    Sequence = 1,
+                    MenuLevel = 0
                 },
-                new SidebarMenuDetailsModel {Name = "blog", DisplayName = "Blog", Icon = "glyph-icon icon-rss"},
-                new SidebarMenuDetailsModel {Name = "article", DisplayName = "Article", Icon = ""},
+                new SidebarMenuDetailsModel
+                {
+                    Name = "blog",
+                    DisplayName = "Blog",
+                    Icon = "glyph-icon icon-rss",
+                    Sequence = 2,
+                    MenuLevel = 0
+                },
+                new SidebarMenuDetailsModel { Name = "article", DisplayName = "Article", Icon = "", Sequence = 1, MenuLevel = 1 },
                 new SidebarMenuDetailsModel
                 {
                     Name = "authorization",
                     DisplayName = "Authorization",
-                    Icon = "glyph-icon icon-unlock"
+                    Icon = "glyph-icon icon-unlock",
+                    Sequence = 3,
+                    MenuLevel = 0
                 },
-                new SidebarMenuDetailsModel {Name = "permission", DisplayName = "Permission", Icon = ""},
-                new SidebarMenuDetailsModel {Name = "role", DisplayName = "Role", Icon = ""},
-                new SidebarMenuDetailsModel {Name = "user", DisplayName = "User", Icon = ""},
+                new SidebarMenuDetailsModel { Name = "permission", DisplayName = "Permission", Icon = "", Sequence = 1, MenuLevel = 1 },
+                new SidebarMenuDetailsModel { Name = "role", DisplayName = "Role", Icon = "", Sequence = 2, MenuLevel = 1 },
+                new SidebarMenuDetailsModel { Name = "user", DisplayName = "User", Icon = "", Sequence = 3, MenuLevel = 1 },
                 new SidebarMenuDetailsModel
                 {
                     Name = "localization",
                     DisplayName = "Localization",
-                    Icon = "glyph-icon icon-language"
+                    Icon = "glyph-icon icon-language",
+                    Sequence = 4,
+                    MenuLevel = 0
                 },
-                new SidebarMenuDetailsModel {Name = "culture", DisplayName = "Culture", Icon = ""},
+                new SidebarMenuDetailsModel { Name = "culture", DisplayName = "Culture", Icon = "", Sequence = 1, MenuLevel = 1 },
                 new SidebarMenuDetailsModel
                 {
                     Name = "audit",
                     DisplayName = "Audit",
-                    Icon = "glyph-icon icon-database"
+                    Icon = "glyph-icon icon-database",
+                    Sequence = 5,
+                    MenuLevel = 0
                 },
-                new SidebarMenuDetailsModel {Name = "auditlog", DisplayName = "Audit Log", Icon = ""},
-                new SidebarMenuDetailsModel {Name = "customlog", DisplayName = "Custom Log", Icon = ""},
+                new SidebarMenuDetailsModel { Name = "auditlog", DisplayName = "Audit Log", Icon = "", Sequence = 1, MenuLevel = 1 },
+                new SidebarMenuDetailsModel { Name = "customlog", DisplayName = "Custom Log", Icon = "", Sequence = 2, MenuLevel = 1 },
                 new SidebarMenuDetailsModel
                 {
                     Name = "calendar",
                     DisplayName = "Calendar",
-                    Icon = "glyph-icon icon-calendar"
+                    Icon = "glyph-icon icon-calendar",
+                    Sequence = 6,
+                    MenuLevel = 0
                 },
-                new SidebarMenuDetailsModel {Name = "event", DisplayName = "Event", Icon = ""},
                 new SidebarMenuDetailsModel
                 {
                     Name = "adminconfig",
                     DisplayName = "Configuration",
-                    Icon = "glyph-icon icon-gear"
+                    Icon = "glyph-icon icon-gear",
+                    Sequence = 7,
+                    MenuLevel = 0
                 },
-                new SidebarMenuDetailsModel {Name = "emailtemplate", DisplayName = "Email Template", Icon = ""},
-                new SidebarMenuDetailsModel {Name = "credential", DisplayName = "Credential", Icon = ""},
-                new SidebarMenuDetailsModel {Name = "systemsetting", DisplayName = "System Setting", Icon = ""},
-                new SidebarMenuDetailsModel {Name = "systemhealth", DisplayName = "System Health", Icon = ""},
-                new SidebarMenuDetailsModel {Name = "publicuser", DisplayName = "Public User", Icon = "glyph-icon icon-group"}
+                new SidebarMenuDetailsModel{ Name = "emailtemplate", DisplayName = "Email Template", Icon = "", Sequence = 1, MenuLevel = 1 },
+                new SidebarMenuDetailsModel { Name = "credential", DisplayName = "Credential", Icon = "", Sequence = 2, MenuLevel = 1 },
+                new SidebarMenuDetailsModel { Name = "systemsetting", DisplayName = "System Setting", Icon = "", Sequence = 3, MenuLevel = 1 },
+                new SidebarMenuDetailsModel { Name = "systemhealth", DisplayName = "System Health", Icon = "", Sequence = 4, MenuLevel = 1 },
+                new SidebarMenuDetailsModel
+                {
+                    Name = "publicuser",
+                    DisplayName = "Public User",
+                    Icon = "glyph-icon icon-group",
+                    Sequence = 8,
+                    MenuLevel = 0
+                }
             };
         }
 
         public IEnumerable<Models.PermissionModels.Module> GetPermissionsIncludingAssigned(IEnumerable<BaseRoleClaim> roleClaims)
         {
             var rolePermissions = GetAll();
-
-
+            var menuList = GetSideBarMenuDetails();
             var modules = from p in rolePermissions
-                          orderby p.Id
-                          group p by p.Menu
-                          into o
-                          select new Models.PermissionModels.Module
-                          {
-                              Name = o.Key,
-                              SubModules = from j in o
-                                           group j by j.SubMenu
-                                  into k
-                                           select
-                                           new SubModule
-                                           {
-                                               Name = k.Key,
-                                               ModulePermissions = k.ToList()
-                                                   .Select(x =>
-                                                       new ModulePermission
-                                                       {
-                                                           Id = x.Id,
-                                                           Slug = x.Slug,
-                                                           DisplayName = x.DisplayName,
-                                                           IsAssigned = roleClaims.Select(h => h.ClaimValue).ToList().Contains(x.Slug)
-                                                       })
-                                           }
-                          };
+                orderby p.Id
+                group p by p.Menu
+                into o
+                select new Models.PermissionModels.Module
+                {
+                    Name = menuList.FirstOrDefault(y => y.Name == o.Key && y.MenuLevel == 0)?.DisplayName ?? o.Key,
+                    SubModules = from j in o
+                        group j by j.SubMenu
+                        into k
+                        select
+                        new SubModule
+                        {
+                            Name = menuList.FirstOrDefault(y => y.Name == k.Key && y.MenuLevel == 1)?.DisplayName ?? "",
+                            ModulePermissions = k.ToList()
+                                .Select(x =>
+                                    new ModulePermission
+                                    {
+                                        Id = x.Id,
+                                        Slug = x.Slug,
+                                        DisplayName = x.DisplayName,
+                                        IsAssigned = roleClaims.Select(h => h.ClaimValue).ToList().Contains(x.Slug)
+                                    })
+                        }
+                };
 
             return modules;
         }
