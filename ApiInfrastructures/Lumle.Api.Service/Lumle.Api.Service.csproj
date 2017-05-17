@@ -5,14 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Services\Abstracts\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="JsonApiDotNetCore" Version="2.0.5" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructures\Lumle.Infrastructure\Lumle.Infrastructure.csproj" />
     <ProjectReference Include="..\Lumle.Api.Data\Lumle.Api.Data.csproj" />
   </ItemGroup>
 

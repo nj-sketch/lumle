@@ -2,7 +2,6 @@
 using Lumle.Api.Data.Abstracts;
 using System.ComponentModel.DataAnnotations;
 using JsonApiDotNetCore.Services;
-using System;
 using System.Collections.Generic;
 
 namespace Lumle.Api.Data.Entities
@@ -21,8 +20,8 @@ namespace Lumle.Api.Data.Entities
         public Dictionary<string, object> GetMeta(IJsonApiContext context)
         {
             return new Dictionary<string, object> {
-            { "copyright", "Copyright 2015 Example Corp." },
-            { "authors", new string[] { "Jared Nance" } }
+            { "copyright", "EKbana Solutions." },
+            { "authors", new string[] { "Janak Shrestha" } }
         };
         }
     }

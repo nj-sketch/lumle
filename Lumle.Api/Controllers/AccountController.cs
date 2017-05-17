@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Lumle.Api.Data.Entities;
 using JsonApiDotNetCore.Controllers;
 using JsonApiDotNetCore.Services;
 using Microsoft.Extensions.Logging;
@@ -9,26 +8,29 @@ using JsonApiDotNetCore.Internal;
 using Lumle.Api.Infrastructures.Helpers;
 using Lumle.Infrastructure.Utilities;
 using System.Threading.Tasks;
+using Lumle.Api.Data.Entities;
+using Lumle.Api.Service.Services.Abstracts;
+using Lumle.Api.Data.Abstracts;
 
 namespace Lumle.Api.Controllers
 {
     [Route("[controller]")]
-    [Produces("application/json")]
-    [Consumes("application/json")]
-    public class AccountController : JsonApiController<MobileUser>
+    [Produces("application/json","application/vnd.api+json")]
+    [Consumes("application/json", "application/vnd.api+json")]
+    public class AccountController : Controller
     {
-        private readonly IResourceService<MobileUser> _mobileUserService;
+        private readonly IAccountService _accountService;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public AccountController(IJsonApiContext jsonApiContext, IResourceService<MobileUser> resourceService, ILoggerFactory loggerFactory) : base(jsonApiContext, resourceService, loggerFactory)
+        public AccountController(IAccountService accountService, IUnitOfWork unitOfWork)
         {
-
-            _mobileUserService = resourceService;
-
+            _unitOfWork = unitOfWork;
+            _accountService = accountService;
         }
 
 
         [HttpPost("signup")]
-        public async Task<IActionResult> SignUp([FromBody]SignupVM model)
+        public IActionResult SignUp([FromBody]SignupVM model)
         {
 
             try
@@ -36,27 +38,13 @@ namespace Lumle.Api.Controllers
                 if (!ModelState.IsValid)
                     return AppUtil.Error(new Error("400", "Bad Request.", "Please fill all required details."));
 
+                if (_accountService.IsUserAvailable(x => x.Email == model.Email))
+                    return AppUtil.Error(new Error("400", "Duplicate user.", "User with this email already exist. Please try with new one."));
 
-                var passwordSalt = CryptoService.GenerateSalt();
-                var passwordHash = CryptoService.ComputeHash(model.Password, passwordSalt);
+                var entity = AutoMapper.Mapper.Map<MobileUser>(model);
+                _accountService.CreateSignupUser(entity, model.Password);
 
-                var entity = new MobileUser
-                {
-                    SubjectId = Guid.NewGuid().ToString(),
-                    Email = model.Email,
-                    FirstName = model.FirstName,
-                    LastName = model.LastName,
-                    Gender = model.Gender,
-                    PasswordSalt = Convert.ToBase64String(passwordSalt),
-                    PasswordHash = Convert.ToBase64String(passwordHash),
-                    IsStaff = false,
-                    IsBlocked = false,
-                    IsEmailVerified = false,
-                    Provider = "application"
-
-                };
-
-                return await base.PostAsync(entity);
+                return Created($"{HttpContext.Request.Host}", model);
             }
             catch (Exception)
             {
