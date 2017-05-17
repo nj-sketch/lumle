@@ -5,7 +5,6 @@ using Lumle.Api.Infrastructures.Extensions;
 using Lumle.Api.Infrastructures.Mappers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -40,11 +39,11 @@ namespace Lumle.Api
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             var migrationAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
-            services.AddDbContext<BaseContext>(builder =>
-                                builder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
-                                options => options.MigrationsAssembly(migrationAssembly)));
+            services.AddMsSqlDbProvider(Configuration, migrationAssembly);
 
             services.AddServices(Configuration);
+
+            AutoMapperConfiguration.Configure();
 
             services.AddJsonApi<BaseContext>( op => 
             {
@@ -57,9 +56,8 @@ namespace Lumle.Api
                 //});
             });
 
-            AutoMapperConfiguration.Configure();
-
-
+            
+            
             services.AddMvc()
                 .AddJsonOptions(options =>
                 {
@@ -76,6 +74,7 @@ namespace Lumle.Api
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            #region Authentication Handler
             //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             //var identityServerValidationOptions = new IdentityServerAuthenticationOptions
             //{
@@ -89,7 +88,8 @@ namespace Lumle.Api
             //};
 
             //app.UseIdentityServerAuthentication(identityServerValidationOptions);
-
+            #endregion
+            
             context.Database.EnsureCreated();
             if (!context.Places.Any())
             {

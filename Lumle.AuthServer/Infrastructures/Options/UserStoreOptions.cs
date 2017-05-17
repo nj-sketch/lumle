@@ -6,6 +6,6 @@ namespace Lumle.AuthServer.Infrastructures.Options
     {
         public TableConfiguration DefaultSchema { get; set; } = null;
 
-        public  TableConfiguration CustomUser { get; set; } = new TableConfiguration("PublicUser_CustomUser");
+        public  TableConfiguration CustomUser { get; set; } = new TableConfiguration("PublicUser_MobileUser");
     }
 }

@@ -9,7 +9,7 @@ namespace Lumle.Module.PublicUser.Data
         public void Build(ModelBuilder builder)
         {
             builder.Entity<CustomUser>()
-            .ToTable("PublicUser_CustomUser");
+            .ToTable("PublicUser_MobileUser");
         }
     }
 }

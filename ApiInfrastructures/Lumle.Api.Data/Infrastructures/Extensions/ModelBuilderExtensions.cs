@@ -9,7 +9,7 @@ namespace Lumle.Api.Data.Infrastructures.Extensions
         {
 
             builder.Entity<Place>()
-                .ToTable("Place");
+                .ToTable("Api_Place");
 
             return builder;
         }
@@ -18,7 +18,7 @@ namespace Lumle.Api.Data.Infrastructures.Extensions
         {
 
             builder.Entity<MobileUser>()
-                .ToTable("MobileUser");
+                .ToTable("PublicUser_MobileUser");
 
             return builder;
         }
