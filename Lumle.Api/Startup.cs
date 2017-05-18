@@ -33,7 +33,7 @@ namespace Lumle.Api
             Configuration = builder.Build();
         }
 
-        public IConfigurationRoot Configuration { get; }
+        private IConfigurationRoot Configuration { get; }
 
         
         public IServiceProvider ConfigureServices(IServiceCollection services)
@@ -42,6 +42,8 @@ namespace Lumle.Api
             services.AddMsSqlDbProvider(Configuration, migrationAssembly);
 
             services.AddServices(Configuration);
+
+            services.AddApiVersioning();
 
             AutoMapperConfiguration.Configure();
 
