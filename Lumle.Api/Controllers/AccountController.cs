@@ -14,9 +14,11 @@ using Lumle.Api.Data.Abstracts;
 
 namespace Lumle.Api.Controllers
 {
-    [Route("[controller]")]
+    
     [Produces("application/json","application/vnd.api+json")]
     [Consumes("application/json", "application/vnd.api+json")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class AccountController : Controller
     {
         private readonly IAccountService _accountService;
