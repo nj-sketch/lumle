@@ -10,9 +10,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Swashbuckle.AspNetCore.Swagger;
 using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using Microsoft.Extensions.PlatformAbstractions;
 
 namespace Lumle.Api
 {
@@ -51,10 +54,6 @@ namespace Lumle.Api
             {
                 op.DefaultPageSize = 10;
                 op.IncludeTotalRecordCount = true;
-                //op.AllowClientGeneratedIds = false;
-                //op.BuildContextGraph(builder =>
-                //{
-                //    builder.AddResource<SignupVM>("signupvm");
                 //});
             });
 
@@ -66,6 +65,24 @@ namespace Lumle.Api
                     options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 });
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info
+                {
+                    Title = "Sipradi Mobile API",
+                    Version = "v1",
+                    Contact = new Contact
+                    {
+                        Email = "info@ekbana.com",
+                        Name = "EKbana Solutions"
+                    }
+                });
+
+                var filePath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "LumleApiDoc.xml");
+                c.IncludeXmlComments(filePath);
+            });
+
 
             return services.Build(Configuration, _hostingEnvironment);
         }
@@ -104,6 +121,12 @@ namespace Lumle.Api
                 });
                 context.SaveChanges();
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "V1 docs");
+            });
 
             app.UseJsonApi();
         }
