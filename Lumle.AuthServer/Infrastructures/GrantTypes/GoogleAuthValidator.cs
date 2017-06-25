@@ -30,7 +30,7 @@ namespace Lumle.AuthServer.Infrastructures.GrantTypes
         {
             try
             {
-                var idToken = context.Request.Raw.Get("id_token");
+                var idToken = context.Request.Raw.Get("access_token");
 
                 if (string.IsNullOrEmpty(idToken))
                 {

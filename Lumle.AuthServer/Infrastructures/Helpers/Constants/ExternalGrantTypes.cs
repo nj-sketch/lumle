@@ -4,5 +4,6 @@
     {
         public const string Facebok = "facebookauth";
         public const string Google = "googleauth";
+        public const string GoogleFireBase = "googlefirebaseauth";
     }
 }
