@@ -1,0 +1,56 @@
+@{
+    var hasPermissionForCreate = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.BlogArticleCreate), User);
+    var hasPermissionForUpdate = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.BlogArticleUpdate), User);
+    var hasPermissionForDelete = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.BlogArticleDelete), User);
+
+    ViewData["Title"] = Localizer[LabelConstants.Article];
+}
+@section styles{
+    <link href="~/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="~/assets/widgets/datatable/datatable.min.css">
+}
+<div class="row">
+    <div id="page-title">
+        <h2 class="display-inline">@Localizer[LabelConstants.Article]</h2>
+        <div class="pull-right">
+            @if (hasPermissionForCreate)
+            {
+                <a class="btn btn-primary btn-sm" href="~/blog/article/new"><i class="glyph-icon icon-plus"></i> @Localizer[LabelConstants.AddNew]</a>
+            }
+        </div>
+    </div>
+    <div class="breadcrumb-section clearfix">
+        <ol class="breadcrumb">
+            <li class="module">@Localizer[LabelConstants.Blog]</li>
+            <li class="active">@Localizer[LabelConstants.Article]</li>
+        </ol>
+    </div>
+    @Html.Partial("_MessagePanel")
+    <div class="panel">
+        <div class="panel-body">
+            <table class="table table-hover table-responsive table-bordered" id="articleDataTable" style="width:100% !important;">
+                <thead>
+                    <tr>
+                        <th>@Localizer[LabelConstants.SN]</th>
+                        <th></th>
+                        <th>@Localizer[LabelConstants.Title]</th>
+                        <th>@Localizer[LabelConstants.Author]</th>
+                        <th>@Localizer[LabelConstants.CreatedDate]</th>
+                        <th>@Localizer[LabelConstants.Action]</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        var hasPermissionForUpdate = @hasPermissionForUpdate.ToString().ToLower();
+        var hasPermissionForDelete = @hasPermissionForDelete.ToString().ToLower();
+    </script>
+    <script src="~/lib/toastr/toastr.min.js"></script>
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/blog/js/blog-index.js"></script>
+}

@@ -1,0 +1,53 @@
+@using Lumle.Module.Authorization.Services;
+@using Microsoft.AspNetCore.Identity;
+@using Lumle.Data.Models;
+
+@inject IPermissionService PermissionService
+@inject UserManager<User> UserManager
+
+@{
+    var user = await UserManager.GetUserAsync(User);
+    var sidebarMenuList = await PermissionService.GetSideBarMenuAsync(user);
+}
+
+<div class="scroll-sidebar">
+    <ul id="sidebar-menu">
+        @if (sidebarMenuList != null)
+            {
+            foreach (var sidebarMenu in sidebarMenuList)
+                {
+                <li>
+                    @if (sidebarMenu.SubMenu.Count == 0)
+                    {
+                        <a href="~/@sidebarMenu.Menu" title="@Localizer[sidebarMenu.MenuDisplayName]">
+                            <i class="@sidebarMenu.Icon"></i>
+                            <span>@Localizer[sidebarMenu.MenuDisplayName]</span>
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="#" title="@Localizer[sidebarMenu.MenuDisplayName]">
+                            <i class="@sidebarMenu.Icon"></i>
+                            <span>@Localizer[sidebarMenu.MenuDisplayName]</span>
+                        </a>
+                        <div class="sidebar-submenu">
+                            <ul>
+                                @foreach (var subMenu in sidebarMenu.SubMenu)
+                                {
+                                    <li>
+                                        <a href="~/@sidebarMenu.Menu/@subMenu.SubMenu" title="@Localizer[subMenu.SubMenuDisplayName]">
+                                            <span>@Localizer[subMenu.SubMenuDisplayName]</span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
+
+
+                </li>
+                <li class="divider"></li>
+            }
+        }
+    </ul>
+</div>

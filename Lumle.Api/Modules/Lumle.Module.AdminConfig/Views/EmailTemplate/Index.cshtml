@@ -1,0 +1,62 @@
+@model IEnumerable<EmailTemplateModel>
+
+@{
+    ViewData["Title"] =Localizer[LabelConstants.EmailTemplate];
+}
+
+@section styles
+{
+    <link href="~/assets/widgets/datatable/datatable.min.css" rel="stylesheet" />
+}
+<style type="text/css">
+    .alert-dismissable .close, .alert-dismissible .close {right: 0px;}
+</style>
+
+<div id="page-title">
+    <h2>@Localizer[LabelConstants.EmailTemplate]</h2>
+</div>
+
+<div class="breadcrumb-section clearfix">
+    <ol class="breadcrumb">
+        <li class="module">@Localizer[LabelConstants.Configuration]</li>
+        <li class="active">@Localizer[LabelConstants.EmailTemplate]</li>
+    </ol>
+</div>
+
+@Html.Partial("_MessagePanel")
+
+<div class="panel">
+    <div class="panel-body">
+        <div class="example-box-wrapper">
+            <table class="table table-bordered table-striped table-condensed" id="emailTemplateDataTable">
+                <thead>
+                    <tr>
+                        <th>@Localizer[LabelConstants.SN]</th>
+                        <th>@Localizer[LabelConstants.Title]</th>
+                        <th>@Localizer[LabelConstants.Subject]</th>
+                        <th>@Localizer[LabelConstants.Action]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var emailTemplate in Model)
+                    {
+                        <tr>
+                            <td>@emailTemplate.Sn</td>
+                            <td>@emailTemplate.SlugDisplayName</td>
+                            <td>@emailTemplate.Subject</td>
+                            <td><a class="btn btn-info btn-sm" href="~/adminconfig/emailtemplate/edit/@emailTemplate.Id"><i class="glyph-icon icon-cog"></i> @Localizer[LabelConstants.Manage]</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <!--datatable js-->
+    <script type="text/javascript" src="~/assets/widgets/datatable/datatable.min.js"></script>
+    <script type="text/javascript" src="~/assets/widgets/datatable/datatable-bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/assets/widgets/datatable/datatable-responsive.min.js"></script>
+    <script src="~/adminconfig/js/emailtemplate-index-datatable.min.js"></script>
+}

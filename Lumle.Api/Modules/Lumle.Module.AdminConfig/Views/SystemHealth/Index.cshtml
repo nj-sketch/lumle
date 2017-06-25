@@ -1,0 +1,64 @@
+@model SystemHealthVM
+@{
+    ViewData["Title"] =Localizer[LabelConstants.SystemHealth];
+}
+
+@section styles{
+    <link rel="stylesheet" href="~/adminConfig/css/system-health.css" />
+}
+
+<div id="page-title">
+    <h2>@Localizer[LabelConstants.SystemHealth]</h2>
+</div>
+
+<div class="breadcrumb-section clearfix">
+    <ol class="breadcrumb">
+        <li class="module">@Localizer[LabelConstants.Configuration]</li>
+        <li class="active">@Localizer[LabelConstants.SystemHealth]</li>
+    </ol>
+</div>
+
+<div class="panel">
+    <div class="panel-body">
+
+        <div class="table_title_system">
+            <h4>@Localizer[LabelConstants.SystemHealthReport]</h4>
+            <p>@Localizer[LabelConstants.LastCheckedOn]: @Model.LastCheckedDate</p>
+        </div>
+        <div class="example-box-wrapper">
+            <table class="table table-hover table_custom" id="emailTemplateDataTable">
+                <thead>
+                    <tr>
+                        <th>@Localizer[LabelConstants.SN]</th>
+                        <th>@Localizer[LabelConstants.Service]</th>
+                        <th>@Localizer[LabelConstants.Status]</th>
+                        <th>@Localizer[LabelConstants.Response]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var credentialCategory in Model.Categories)
+                    {
+                        <tr>
+                            <td>@credentialCategory.Sn</td>
+                            <td>@credentialCategory.Name</td>
+                            <td>
+                                <img id="@string.Concat(credentialCategory.NameIdentifier, "Img")" style="width: 30px;" src="~/assets/images/spinner/loader-dark.gif" alt="loading image">
+                                <i id="@credentialCategory.NameIdentifier"></i>
+                            </td>    
+                            <td>
+                                <div id="@string.Concat(credentialCategory.NameIdentifier, "Msg")">
+                                    <label id="@string.Concat(credentialCategory.NameIdentifier, "Lbl")"></label>
+                                </div>
+                            </td>                    
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script type="text/javascript" src="~/adminconfig/js/system-health.js"></script>
+}

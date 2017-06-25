@@ -1,0 +1,66 @@
+@using Lumle.Module.Authorization.ViewModels.PermissionViewModels
+@model IEnumerable<PermissionVM>
+@{
+    //var hasPermissionForCreate = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.AuthorizationPermissionCreate), User);
+    var hasPermissionForUpdate = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.AuthorizationPermissionUpdate), User);
+    //var hasPermissionForDelete = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.AuthorizationPermissionDelete), User);
+
+    ViewData["Title"] = "Permission";
+}
+@section styles{
+    <link rel="stylesheet" type="text/css" href="~/assets/widgets/datatable/datatable.css">
+}
+<div class="row">
+    <div id="page-title">
+        <h2 class="display-inline">Permissions</h2>
+    </div>
+    <div class="breadcrumb-section clearfix">
+        <ol class="breadcrumb">
+            <li class="module">Authorization</li>
+            <li class="active">Permissions</li>
+        </ol>
+    </div>
+    @Html.Partial("_MessagePanel")
+    <div class="panel">
+        <div class="panel-body">
+            <table id="permissionTable" class="table table-bordered table-striped table-condensed">
+                <thead>
+                    <tr>
+                        <th>Slug</th>
+                        <th>Display Name</th>
+                        @if (hasPermissionForUpdate)
+                        {
+                            <th>Action</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        //var deleteModal = "deleteModal" + item.Id;
+                        <tr>
+                            <td>@item.Slug</td>
+                            <td>@item.DisplayName</td>
+                            @if (hasPermissionForUpdate)
+                            {
+                                <td>
+                                    <a id="editPermission" href="~/authorization/permission/edit/@item.Id"
+                                       class="btn btn-info btn-sm">
+                                        <i class="glyph-icon icon-pencil"></i> Edit
+                                    </a>
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@section scripts
+{
+    <script type="text/javascript" src="~/assets/widgets/datatable/datatable.min.js"></script>
+    <script type="text/javascript" src="~/assets/widgets/datatable/datatable-bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/assets/widgets/datatable/datatable-responsive.min.js"></script>
+    <script src="~/authorization/js/authorization-permission-index.js" asp-append-version="true"></script>
+}

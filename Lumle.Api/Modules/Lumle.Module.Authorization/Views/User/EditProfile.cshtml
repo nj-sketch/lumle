@@ -1,0 +1,108 @@
+@model ProfileVM
+
+@{
+    ViewData["Title"] = Localizer[LabelConstants.EditProfile];
+}
+@section styles{
+    <style type="text/css">
+        .parsley-pattern{
+            color:red;
+        }
+    </style>
+}
+<div class="row">
+    <div id="page-title">
+        <h2>@Localizer[LabelConstants.EditProfile]</h2>
+    </div>
+
+    <div class="breadcrumb-section clearfix">
+        <ol class="breadcrumb">
+            <li><a href="~/dashboard">@Localizer[LabelConstants.Dashboard]</a></li>
+            <li><a asp-action="profile" asp-controller="User">@Localizer[LabelConstants.Profile]</a></li>
+            <li class="active">@Localizer[LabelConstants.Edit]</li>
+        </ol>
+    </div>
+
+    <div class="panel">
+        <div class="panel-body">
+            <form id="mainForm" class="form-horizontal bordered-row" asp-action="EditProfile" role="form" method="post" data-parsley-validate novalidate>
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="UserId" />
+                <div class="form-group" style="border-top: 0px;">
+                    <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.UserName] <span class="text-danger">*</span></label>
+                    <div class="col-lg-6">
+                        <input asp-for="UserName" type="text" required class="form-control" readonly="readonly" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.Email] <span class="text-danger">*</span></label>
+                    <div class="col-lg-6">
+                        <input asp-for="Email" type="email" required class="form-control" readonly="readonly" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.FirstName]</label>
+                    <div class="col-lg-6">
+                        <input asp-for="FirstName" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.LastName]</label>
+                    <div class="col-lg-6">
+                        <input asp-for="LastName" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.Phone]</label>
+                    <div class="col-lg-6">
+                        <input asp-for="Phone" class="form-control" data-parsley-pattern="^[\d\+\-\.\(\)\/\s]*$" data-parsley-pattern-message="Please enter valid phone number."/>
+                    </div>
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.Website]</label>
+                    <div class="col-lg-6">
+                        <input asp-for="Website" type="url" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.AboutMe]</label>
+                    <div class="col-lg-6">
+                        <textarea asp-for="AboutMe" class="form-control" rows="5"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.TimeZone] <span class="text-danger">*</span></label>
+                    <div class="col-lg-6">
+                        <select asp-for="TimeZone" asp-items="ViewBag.TimeZoneList" class="form-control" required=""></select>
+                    </div>
+                    <span asp-validation-for="TimeZone" class="text-danger"></span>
+                </div>
+                <div class="bg-default content-box text-center pad20A mrg25T">
+                    <a class="btn btn-default" asp-action="Profile">@Localizer[LabelConstants.Cancel]</a>
+                    <button type="submit" class="btn btn-success">@Localizer[LabelConstants.Save]</button>
+                    <img id="loadingImg" style="width: 30px; display:none;" src="~/assets/images/spinner/loader-dark.gif" alt="loading image">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript" src="~/assets/widgets/parsley/parsley.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#mainForm').on('submit', function () {
+                var form = $(this);
+                form.parsley().validate();
+                var isValidForm = form.parsley().isValid();
+                if (isValidForm) {
+                    form.find('button[type=submit]').prop('disabled', true);
+                    $("#loadingImg").show();
+                    form.get(0).submit();
+                }
+                return false;
+            });
+        });
+    </script>
+}
