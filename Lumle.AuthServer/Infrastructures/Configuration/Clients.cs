@@ -15,7 +15,7 @@ namespace Lumle.AuthServer.Infrastructures.Configuration
                 {
                     ClientId = "lumle-mbl",
 
-                    AllowedGrantTypes = new [] {"password", "googleauth", "facebookauth"}, 
+                    AllowedGrantTypes = new [] {"password", "googleauth", "facebookauth", "googlefirebaseauth"}, 
                     AccessTokenType = AccessTokenType.Jwt,
                     AccessTokenLifetime = 3600,
                     IdentityTokenLifetime = 3600,
