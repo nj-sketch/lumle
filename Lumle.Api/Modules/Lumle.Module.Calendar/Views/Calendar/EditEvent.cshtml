@@ -1,0 +1,94 @@
+@model CalendarEventVM
+
+@{
+    ViewData["Title"] = @Localizer[LabelConstants.EditEvent];
+}
+
+@section styles{
+    <link href="~/assets/widgets/daterangepicker/daterangepicker.min.css" rel="stylesheet" />
+}
+
+
+<div id="page-title">
+    <h2>@Localizer[LabelConstants.EditEvent]</h2>
+</div>
+
+<div class="breadcrumb-section clearfix">
+    <ol class="breadcrumb">
+        <li><a asp-action="Index" asp-controller="Calendar">@Localizer[LabelConstants.Calendar]</a></li>
+        <li><a asp-action="Events" asp-controller="Calendar">@Localizer[LabelConstants.Event]</a></li>
+        <li class="active">@Localizer[LabelConstants.EditEvent]</li>
+    </ol>
+</div>
+
+@Html.Partial("_MessagePanel")
+
+<div class="panel">
+    <div class="panel-body">
+        <form id="mainForm" class="form-horizontal bordered-row" asp-action="EditEvent" role="form" method="post" data-parsley-validate novalidate>
+            @Html.HiddenFor(x => x.Id)
+            <div class="form-group" style="border-top: 0px;">
+                <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.Title] <span class="text-danger">*</span></label>
+                <div class="col-lg-6">
+                    <input asp-for="Title" required class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.EventTime] <span class="text-danger">*</span></label>
+                <div class="col-lg-6">
+                    <div class="input-prepend input-group">
+                        <span class="add-on input-group-addon">
+                            <i class="glyph-icon icon-calendar"></i>
+                        </span>
+                        <input type="text" required asp-for="EventDate" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.Remarks]</label>
+                <div class="col-lg-6">
+                    <textarea maxlength="200" asp-for="Remarks" class="form-control"></textarea>
+                </div>
+            </div>
+            <div class="bg-default content-box text-center pad20A mrg25T">
+                <a class="btn btn-default" asp-action="Events">@Localizer[LabelConstants.Cancel]</a>
+                <button type="submit" class="btn btn-success">@Localizer[LabelConstants.Save]</button>
+                <img id="loadingImg" style="width: 30px; display:none;" src="~/assets/images/spinner/loader-dark.gif" alt="loading image">
+            </div>
+        </form>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/assets/widgets/daterangepicker/moment.min.js"></script>
+    <script src="~/assets/widgets/daterangepicker/daterangepicker.min.js"></script>
+    <script type="text/javascript" src="~/assets/widgets/parsley/parsley.js"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            "use strict";
+
+            $('#EventDate').daterangepicker({
+                timePicker: true,
+                timePickerIncrement: 30,
+                format: 'MM/DD/YYYY h:mm A'
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#mainForm').on('submit', function () {
+                var form = $(this);
+                form.parsley().validate();
+                var isValidForm = form.parsley().isValid();
+                if (isValidForm) {
+                    form.find('button[type=submit]').prop('disabled', true);
+                    $("#loadingImg").show();
+                    form.get(0).submit();
+                }
+                return false;
+            });
+        });
+    </script>
+}

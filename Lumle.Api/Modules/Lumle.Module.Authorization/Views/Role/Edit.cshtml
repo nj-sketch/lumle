@@ -1,0 +1,134 @@
+@model  RoleEditVM
+
+@{
+    ViewData["Title"] = Localizer[LabelConstants.EditRole];
+}
+
+@section styles{
+    <link rel="stylesheet" type="text/css" href="~/assets/custom-widgets/rangeslider/rangeSlider.css">
+}
+
+<div class="row">
+    <div id="page-title">
+        <h2>@Localizer[LabelConstants.EditRole]</h2>
+    </div>
+
+    <div class="breadcrumb-section clearfix">
+        <ol class="breadcrumb">
+            <li class="module">@Localizer[LabelConstants.Authorization]</li>
+            <li><a asp-action="Index" asp-controller="Role">@Localizer[LabelConstants.Role]</a></li>
+            <li class="active">@Localizer[LabelConstants.Edit]</li>
+        </ol>
+    </div>
+
+    @Html.Partial("_MessagePanel")
+
+    <div class="panel">
+        <div class="panel-body">
+            <form id="mainForm" asp-action="Edit" role="form" method="post" data-parsley-validate novalidate>
+                <div class="form-horizontal bordered-row">
+                    @Html.HiddenFor(x => x.Id)
+                    <div class="form-group" style="border-top: 0px;">
+                        <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.RoleName] <span class="text-danger">*</span></label>
+                        <div class="col-lg-6">
+                            <input asp-for="RoleName"  data-parsley-pattern="^[a-zA-Z0-9\-\s]+$" required class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.Description]</label>
+                        <div class="col-lg-6">
+                            <textarea asp-for="Description" rows="3" cols="10" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group ">
+                        <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.RolePriority]</label>
+                        <div class="col-lg-6">
+                            <input asp-for="Priority" type="range" min="1" max="10" data-buffer="@Model.Priority" data-rangeSlider>
+                            <output></output>
+                        </div>
+                    </div>
+
+                    <div class="bg-default content-box text-center pad20A mrg25T">
+                        <a class="btn btn-default" asp-action="Index">@Localizer[LabelConstants.Cancel]</a>
+                        <button type="submit" class="btn btn-success">@Localizer[LabelConstants.Save]</button>
+                        <img id="loadingImg" style="width: 30px; display:none;" src="~/assets/images/spinner/loader-dark.gif" alt="loading image">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript" src="~/assets/widgets/parsley/parsley.js"></script>
+    <script type="text/javascript" src="~/assets/custom-widgets/rangeslider/rangeSlider.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#mainForm').on('submit', function () {
+                var form = $(this);
+                form.parsley().validate();
+                var isValidForm = form.parsley().isValid();
+                if (isValidForm) {
+                    form.find('button[type=submit]').prop('disabled', true);
+                    $("#loadingImg").show();
+                    form.get(0).submit();
+                }
+                return false;
+            });
+        });
+    </script>
+    
+    <script>
+        (function () {
+
+            var selector = '[data-rangeSlider]',
+                    elements = document.querySelectorAll(selector);
+
+            // Example functionality to demonstrate a value feedback
+            function valueOutput(element) {
+                var value = element.value,
+                        output = element.parentNode.getElementsByTagName('output')[0];
+                output.innerHTML = value;
+            }
+
+            for (var i = elements.length - 1; i >= 0; i--) {
+                valueOutput(elements[i]);
+            }
+
+            Array.prototype.slice.call(document.querySelectorAll('input[type="range"]')).forEach(function (el) {
+                el.addEventListener('input', function (e) {
+                    valueOutput(e.target);
+                }, false);
+            });
+
+
+
+            // Basic rangeSlider initialization
+            rangeSlider.create(elements, {
+
+                // Callback function
+                onInit: function () {
+                },
+
+                // Callback function
+                onSlideStart: function (value, percent, position) {
+                    console.info('onSlideStart', 'value: ' + value, 'percent: ' + percent, 'position: ' + position);
+                },
+
+                // Callback function
+                onSlide: function (value, percent, position) {
+                    console.log('onSlide', 'value: ' + value, 'percent: ' + percent, 'position: ' + position);
+                },
+
+                // Callback function
+                onSlideEnd: function (value, percent, position) {
+                    console.warn('onSlideEnd', 'value: ' + value, 'percent: ' + percent, 'position: ' + position);
+                }
+            });
+
+        })();
+</script>
+
+}
