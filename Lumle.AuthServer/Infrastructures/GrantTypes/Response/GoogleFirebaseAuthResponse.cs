@@ -1,6 +1,12 @@
 ﻿namespace Lumle.AuthServer.Infrastructures.GrantTypes.Response
 {
 
+    public class Firebase
+    {
+        //public Identities identities { get; set; }
+        public string Sign_in_provider { get; set; }
+    }
+
     public class GoogleFirebaseAuthResponse
     {
         public string Iss { get; set; }
