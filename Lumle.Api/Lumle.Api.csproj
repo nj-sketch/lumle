@@ -20,7 +20,6 @@
     <PackageReference Include="AutoMapper" Version="6.0.2" />
     <PackageReference Include="FluentValidation" Version="6.4.1" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="1.1.0" />
-    <PackageReference Include="JsonApiDotNetCore" Version="2.0.5" />
     <PackageReference Include="MediatR" Version="3.0.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.1" />

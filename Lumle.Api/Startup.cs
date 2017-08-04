@@ -49,15 +49,6 @@ namespace Lumle.Api
             services.AddApiVersioning();
 
             AutoMapperConfiguration.Configure();
-
-            services.AddJsonApi<BaseContext>( op => 
-            {
-                op.DefaultPageSize = 10;
-                op.IncludeTotalRecordCount = true;
-                //});
-            });
-
-            
             
             services.AddMvc()
                 .AddJsonOptions(options =>
@@ -128,7 +119,7 @@ namespace Lumle.Api
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "V1 docs");
             });
 
-            app.UseJsonApi();
+            app.UseMvc();
         }
     }
 }

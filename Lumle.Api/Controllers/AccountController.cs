@@ -1,13 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using JsonApiDotNetCore.Controllers;
-using JsonApiDotNetCore.Services;
-using Microsoft.Extensions.Logging;
 using Lumle.Api.ViewModels.Account;
 using System;
-using JsonApiDotNetCore.Internal;
-using Lumle.Api.Infrastructures.Helpers;
-using Lumle.Infrastructure.Utilities;
-using System.Threading.Tasks;
 using Lumle.Api.Data.Entities;
 using Lumle.Api.Service.Services.Abstracts;
 using Lumle.Api.Data.Abstracts;
@@ -15,9 +8,9 @@ using Lumle.Api.Data.Abstracts;
 namespace Lumle.Api.Controllers
 {
     
-    [Produces("application/json","application/vnd.api+json")]
-    [Consumes("application/json", "application/vnd.api+json")]
     [ApiVersion("1.0")]
+    [Produces("application/json")]
+    [Consumes("application/json")]
     [Route("api/v{version:apiVersion}/[controller]")]
     public class AccountController : Controller
     {
