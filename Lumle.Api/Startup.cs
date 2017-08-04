@@ -1,5 +1,4 @@
-﻿using JsonApiDotNetCore.Extensions;
-using Lumle.Api.Data.Contexts;
+﻿using Lumle.Api.Data.Contexts;
 using Lumle.Api.Data.Entities;
 using Lumle.Api.Infrastructures.Extensions;
 using Lumle.Api.Infrastructures.Mappers;

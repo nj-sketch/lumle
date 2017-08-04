@@ -10,11 +10,12 @@ namespace Lumle.Api.Infrastructures.Mappers
         {
             Mapper.Initialize(x =>
             {
-                x.AddProfile<DomainToModel>();
-                x.AddProfile<DomainToViewModel>();
+                x.AddProfile<ModelToModel>();
                 x.AddProfile<ModelToDomain>();
+                x.AddProfile<DomainToModel>();
                 x.AddProfile<ModelToViewModel>();
                 x.AddProfile<ViewModelToModel>();
+                x.AddProfile<DomainToViewModel>();
                 x.AddProfile<ViewModelToDomain>();
             });
         }

@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Lumle.Api.ViewModels.Account;
 using System;
-using Lumle.Api.Data.Entities;
-using Lumle.Api.Service.Services.Abstracts;
-using Lumle.Api.Data.Abstracts;
+using System.Net;
+using Lumle.Api.BusinessRules.Abstracts;
+using Lumle.Api.Infrastructures.Abstracts;
+using Lumle.Api.Infrastructures.Extensions;
+using Lumle.Api.Infrastructures.Handlers.ApiResponse;
+using Lumle.Api.Infrastructures.Handlers.ApiResponse.Models;
+using Lumle.Api.Infrastructures.Helpers;
 
 namespace Lumle.Api.Controllers
 {
@@ -12,15 +16,16 @@ namespace Lumle.Api.Controllers
     [Produces("application/json")]
     [Consumes("application/json")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    public class AccountController : Controller
+    public class AccountController : LumleBaseController
     {
-        private readonly IAccountService _accountService;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IAccountBusinessRule _accountBusinessRule;
+        private readonly IActionResponse _actionResponse;
 
-        public AccountController(IAccountService accountService, IUnitOfWork unitOfWork)
+        public AccountController(IAccountBusinessRule accountBusinessRule,
+            IActionResponse actionResponse) : base(actionResponse)
         {
-            _unitOfWork = unitOfWork;
-            _accountService = accountService;
+            _accountBusinessRule = accountBusinessRule;
+            _actionResponse = actionResponse;
         }
 
 
@@ -31,20 +36,39 @@ namespace Lumle.Api.Controllers
             try
             {
                 if (!ModelState.IsValid)
-                    return AppUtil.Error(new Error("400", "Bad Request.", "Please fill all required details."));
+                    return BadRequest(_actionResponse.GetResponse(null, ActionResponseHelper.GetAllErrors(ModelState.GetErrors())));
 
-                if (_accountService.IsUserAvailable(x => x.Email == model.Email))
-                    return AppUtil.Error(new Error("400", "Duplicate user.", "User with this email already exist. Please try with new one."));
+                if (_accountBusinessRule.IsUserAvailable(x => string.Equals(x.Email, model.Email, StringComparison.CurrentCultureIgnoreCase)))
+                    return BadRequest(new[]
+                    {
+                        new Message
+                        {
+                            Title = "Duplicate User",
+                            Detail = "User with this email already exist. Please try with new one."
+                        }
+                    });
 
-                var entity = AutoMapper.Mapper.Map<MobileUser>(model);
-                _accountService.CreateSignupUser(entity, model.Password);
+                _accountBusinessRule.RegisterUser(model);
 
-                return Created($"{HttpContext.Request.Host}", model);
+                return StatusCode((int)HttpStatusCode.Created,
+                    _actionResponse.GetResponse(null, null, new[]
+                    {
+                        new Message
+                        {
+                            Title = "Your account has been created. Please verify your email to login."
+                        }
+                    }));
             }
             catch (Exception)
             {
 
-                throw new JsonApiException(new Error("500", "Internal Server Error", "Internal server error. Please contact app admin. "));
+                return InternalServerError(new[]
+                {
+                    new Message
+                    {
+                        Title = "Internal server error."
+                    }
+                });
             }
         }
 

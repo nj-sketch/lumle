@@ -11,9 +11,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
+using Lumle.Api.BusinessRules;
+using Lumle.Api.BusinessRules.Abstracts;
+using Lumle.Api.Infrastructures.Handlers.ApiResponse;
 
 namespace Lumle.Api.Infrastructures.Extensions
 {
@@ -29,16 +30,26 @@ namespace Lumle.Api.Infrastructures.Extensions
         {
             services.AddSingleton(config => configuration);
 
+            #region Misc registration
+
             services.AddScoped(typeof(BaseContext));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IActionResponse, ActionResponse>();
+
+            #endregion
+            
+            #region Service registration
 
             services.AddScoped<IAccountService, AccountService>();
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+            #endregion
 
-
+            #region Businessrule registration
+            services.AddScoped<IAccountBusinessRule, AccountBusinessRule>();
+            #endregion
+            
             return services;
         }
-        
 
 
         public static IServiceProvider Build(this IServiceCollection services,
@@ -47,12 +58,6 @@ namespace Lumle.Api.Infrastructures.Extensions
             var builder = new ContainerBuilder();
             //builder.RegisterType<SomeType>().AsSelf().As<IService>();
             builder.RegisterGeneric(typeof(Repository<>)).As(typeof(IRepository<>));
-
-            //TODO: Find alternative of AppDomain. Until then resolve dependency in manual way
-            //RefLink: http://stackoverflow.com/questions/18263852/how-to-register-services-and-types-that-are-in-separate-assemblies-in-autofac
-            //builder.RegisterAssemblyTypes(AppDomain.CurrentDomain.GetAssemblies())
-            //       .Where(t => t.Name.EndsWith("Service"))
-            //       .AsImplementedInterfaces();
 
 
             builder.RegisterAssemblyTypes(typeof(IMediator).GetTypeInfo().Assembly)

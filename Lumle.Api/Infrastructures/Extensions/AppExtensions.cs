@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
+using Lumle.Api.Infrastructures.Handlers.ApiResponse.Models;
 
 namespace Lumle.Api.Infrastructures.Extensions
 {
@@ -24,12 +26,25 @@ namespace Lumle.Api.Infrastructures.Extensions
         /// </summary>
         /// <param name="modelState"></param>
         /// <returns></returns>
-        public static IEnumerable<string> GetErrors(this ModelStateDictionary modelState)
+        public static IEnumerable<ShortMessage> GetErrors(this ModelStateDictionary modelState)
         {
-            var stateValues = modelState.Values;
+            var errors = from modelstate in modelState.Where(f => f.Value.Errors.Count > 0)
+                select new ShortMessage { Source = modelstate.Key.ToLower(), Title = modelstate.Value.Errors.FirstOrDefault().ErrorMessage };
 
+            return errors;
+        }
 
-            return (from errorItem in stateValues from error in errorItem.Errors select error.ErrorMessage).ToList();
+        /// <summary>
+        /// Get subjectId of current user
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public static string GetCurrentUserSubjectId(this ClaimsPrincipal user)
+        {
+            if (user.Identity.IsAuthenticated)
+                return user.Claims.FirstOrDefault(x => x.Type == "sub").Value;
+
+            throw new System.Exception("User not authenticated.");
         }
 
 
