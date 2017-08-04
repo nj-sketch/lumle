@@ -17,16 +17,6 @@ namespace Lumle.Api.Service.Services.Abstracts
         void Update(MobileUser entity);
         void DeleteWhere(Expression<Func<MobileUser, bool>> predicate);
         #endregion
-
-
-        #region Business Layers
-
-        bool IsUserAvailable(Expression<Func<MobileUser, bool>> predicate);
-
-        void CreateSignupUser(MobileUser entity, string password);
-        #endregion
-
-
-
+        
     }
 }

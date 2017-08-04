@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Lumle.Api.Data.Entities;
 using System.Linq.Expressions;
 using Lumle.Api.Data.Abstracts;
-using Lumle.Infrastructure.Utilities;
 
 namespace Lumle.Api.Service.Services
 {
@@ -13,11 +12,9 @@ namespace Lumle.Api.Service.Services
 
 
         private readonly IRepository<MobileUser> _mobileUserRepository;
-        private readonly IUnitOfWork _unitOfWork;
 
-        public AccountService(IRepository<MobileUser> mobileUserRepository, IUnitOfWork unitOfWork)
+        public AccountService(IRepository<MobileUser> mobileUserRepository)
         {
-            _unitOfWork = unitOfWork;
             _mobileUserRepository = mobileUserRepository;
         }
 
@@ -117,54 +114,6 @@ namespace Lumle.Api.Service.Services
             }
         }
         #endregion
-
-
-        #region Business Layers
-
-        public bool IsUserAvailable(Expression<Func<MobileUser, bool>> predicate)
-        {
-            try
-            {
-                var user = GetSingle(predicate);
-
-                return user != null;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public void CreateSignupUser(MobileUser entity, string password)
-        {
-            try
-            {
-                var passwordSalt = CryptoService.GenerateSalt();
-                var passwordHash = CryptoService.ComputeHash(password, passwordSalt);
-
-                entity.SubjectId = Guid.NewGuid().ToString();
-                entity.PasswordSalt = Convert.ToBase64String(passwordSalt);
-                entity.PasswordHash = Convert.ToBase64String(passwordHash);
-                entity.IsStaff = false;
-                entity.IsBlocked = false;
-                entity.IsEmailVerified = false;
-                entity.CreatedDate = DateTime.UtcNow;
-                entity.LastUpdated = DateTime.UtcNow;
-                entity.Provider = "application";
-
-                Add(entity);
-                _unitOfWork.Save();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-            
-        }
-
-
-        #endregion
-
 
     }
 }

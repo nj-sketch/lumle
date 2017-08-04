@@ -1,5 +1,4 @@
-﻿using JsonApiDotNetCore.Extensions;
-using Lumle.Api.Data.Contexts;
+﻿using Lumle.Api.Data.Contexts;
 using Lumle.Api.Data.Entities;
 using Lumle.Api.Infrastructures.Extensions;
 using Lumle.Api.Infrastructures.Mappers;
@@ -49,15 +48,6 @@ namespace Lumle.Api
             services.AddApiVersioning();
 
             AutoMapperConfiguration.Configure();
-
-            services.AddJsonApi<BaseContext>( op => 
-            {
-                op.DefaultPageSize = 10;
-                op.IncludeTotalRecordCount = true;
-                //});
-            });
-
-            
             
             services.AddMvc()
                 .AddJsonOptions(options =>
@@ -79,7 +69,7 @@ namespace Lumle.Api
                     }
                 });
 
-                var filePath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "LumleApiDoc.xml");
+                var filePath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "LumleApiDocs.xml");
                 c.IncludeXmlComments(filePath);
             });
 
@@ -128,7 +118,7 @@ namespace Lumle.Api
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "V1 docs");
             });
 
-            app.UseJsonApi();
+            app.UseMvc();
         }
     }
 }
