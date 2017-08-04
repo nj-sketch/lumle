@@ -69,7 +69,7 @@ namespace Lumle.Api
                     }
                 });
 
-                var filePath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "LumleApiDoc.xml");
+                var filePath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "LumleApiDocs.xml");
                 c.IncludeXmlComments(filePath);
             });
 
