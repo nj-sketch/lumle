@@ -5,8 +5,9 @@ using System.Reflection;
 using Lumle.Data.Data.Abstracts;
 using Lumle.Data.Models;
 using Lumle.Infrastructure;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace Lumle.Data.Data
 {
@@ -17,7 +18,7 @@ namespace Lumle.Data.Data
         public BaseContext(DbContextOptions options)
             : base(options)
         {
-            Database.Migrate();
+            //Database.Migrate();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -37,17 +38,17 @@ namespace Lumle.Data.Data
             RegisterCustomMappings(modelBuilder, typeToRegisters);
         }
 
-        private static void RegiserConvention(ModelBuilder modelBuilder)
-        {
-            foreach (var entity in modelBuilder.Model.GetEntityTypes())
-            {
-                if (entity.ClrType.Namespace == null) continue;
+        //private static void RegiserConvention(ModelBuilder modelBuilder)
+        //{
+        //    foreach (var entity in modelBuilder.Model.GetEntityTypes())
+        //    {
+        //        if (entity.ClrType.Namespace == null) continue;
 
-                var nameParts = entity.ClrType.Namespace.Split('.');
-                var tableName = string.Concat(nameParts[2], "_", entity.ClrType.Name);
-                modelBuilder.Entity(entity.Name).ToTable(tableName);
-            }
-        }
+        //        var nameParts = entity.ClrType.Namespace.Split('.');
+        //        var tableName = string.Concat(nameParts[2], "_", entity.ClrType.Name);
+        //        modelBuilder.Entity(entity.Name).ToTable(tableName);
+        //    }
+        //}
 
         private static void RegisterEntities(ModelBuilder modelBuilder, IEnumerable<Type> typeToRegisters)
         {

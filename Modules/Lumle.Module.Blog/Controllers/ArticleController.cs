@@ -17,7 +17,6 @@ using Lumle.Module.Blog.Helpers;
 using System.Linq.Expressions;
 using System.Linq;
 using System.Threading.Tasks;
-using Hangfire;
 using Lumle.Core.Attributes;
 using Lumle.Data.Models;
 using Microsoft.AspNetCore.Identity;

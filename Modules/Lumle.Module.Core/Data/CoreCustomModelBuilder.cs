@@ -4,6 +4,7 @@ using Lumle.Data.Data.Abstracts;
 using Lumle.Data.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace Lumle.Module.Core.Data
 {
@@ -14,12 +15,32 @@ namespace Lumle.Module.Core.Data
             modelBuilder.Entity<User>(b =>
             {
                 b.ToTable("Core_User");
+                b.HasMany(e => e.Claims).WithOne().HasForeignKey(e => e.UserId).IsRequired().OnDelete(DeleteBehavior.Cascade);
+                b.HasMany(e => e.Logins).WithOne().HasForeignKey(e => e.UserId).IsRequired().OnDelete(DeleteBehavior.Cascade);
+                b.HasMany(e => e.Roles)
+                .WithOne()
+                .HasForeignKey(e => e.UserId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
                 b.HasIndex(x  =>  new { x.Email, x.NormalizedEmail }).IsUnique(true);
                 b.Property(x => x.Culture).HasDefaultValue("en-US");
             });
 
-            modelBuilder.Entity<Role>()
-                .ToTable("Core_Role");
+
+            modelBuilder.Entity<Role>(r =>
+            {
+                r.ToTable("Core_Role");
+                r.HasMany(e => e.Users)
+                 .WithOne()
+                 .HasForeignKey(e => e.RoleId)
+                 .IsRequired();
+
+                r.HasMany(e => e.Claims)
+                .WithOne()
+                .HasForeignKey(e => e.RoleId)
+                .IsRequired();
+            });
+            
 
             modelBuilder.Entity<IdentityUserClaim<string>>(b =>
             {

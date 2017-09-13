@@ -27,7 +27,6 @@ using Lumle.Data.Models;
 using Lumle.Data.Data;
 using Lumle.Data.Extensions;
 using Lumle.Module.Schedular.Services;
-using Microsoft.AspNetCore.Builder;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -36,7 +35,6 @@ using NodaTime.TimeZones;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Hangfire;
-using Hangfire.PostgreSql;
 
 namespace Lumle.Web.Infrastructures.Extensions
 {
@@ -131,11 +129,6 @@ namespace Lumle.Web.Infrastructures.Extensions
         {
             services.AddIdentity<User, Role>(op =>
                 {
-                    op.SecurityStampValidationInterval = TimeSpan.FromSeconds(0);
-                    op.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-                    op.Cookies.ApplicationCookie.SlidingExpiration = true;
-
-
                     // Password settings
                     op.Password.RequireDigit = true;
                     op.Password.RequiredLength = 6;
@@ -150,10 +143,19 @@ namespace Lumle.Web.Infrastructures.Extensions
                 .AddUserStore<LumleUserStore>()
                 .AddSignInManager<LumleSignInManager<User>>()
                 .AddDefaultTokenProviders();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.Expiration = TimeSpan.FromMinutes(30);
+                options.SlidingExpiration = true;
+            });
+
+            services.Configure<SecurityStampValidatorOptions>(options => options.ValidationInterval = TimeSpan.FromSeconds(0));
+
             return services;
         }
 
-        public static IServiceCollection AddMsSqlDataStore(this IServiceCollection services, IConfigurationRoot configuration)
+        public static IServiceCollection AddMsSqlDataStore(this IServiceCollection services, IConfiguration configuration)
         {
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
@@ -163,47 +165,44 @@ namespace Lumle.Web.Infrastructures.Extensions
             return services;
         }
 
-        public static IServiceCollection AddMySqlDataStore(this IServiceCollection services, IConfigurationRoot configuration)
-        {
-            var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
+        //public static IServiceCollection AddMySqlDataStore(this IServiceCollection services, IConfigurationRoot configuration)
+        //{
+        //    var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
-            services.AddDbContext<BaseContext>(options =>
-                options.UseMySql(configuration.GetConnectionString("MySQLConnection"),
-                    b => b.MigrationsAssembly(migrationsAssembly)));
-            return services;
-        }
+        //    services.AddDbContext<BaseContext>(options =>
+        //        options.UseMySql(configuration.GetConnectionString("MySQLConnection"),
+        //            b => b.MigrationsAssembly(migrationsAssembly)));
+        //    return services;
+        //}
 
-        public static IServiceCollection AddPostgreSqlProvider(this IServiceCollection services, IConfigurationRoot configuration)
-        {
-            var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
+        //public static IServiceCollection AddPostgreSqlProvider(this IServiceCollection services, IConfigurationRoot configuration)
+        //{
+        //    var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
-            services.AddDbContext<BaseContext>(options =>
-                options.UseNpgsql(configuration.GetConnectionString("PostGreSQLConnection"),
-                    b => b.MigrationsAssembly(migrationsAssembly)));
-            return services;
-        }
+        //    services.AddDbContext<BaseContext>(options =>
+        //        options.UseNpgsql(configuration.GetConnectionString("PostGreSQLConnection"),
+        //            b => b.MigrationsAssembly(migrationsAssembly)));
+        //    return services;
+        //}
 
-        public static IServiceCollection AddHangFireWithPostGreSql(this IServiceCollection services, IConfigurationRoot configuration)
-        {
-            services.AddHangfire(x => x.UsePostgreSqlStorage(configuration.GetConnectionString("PostGreSQLConnection")));
+        //public static IServiceCollection AddHangFireWithPostGreSql(this IServiceCollection services, IConfigurationRoot configuration)
+        //{
+        //    services.AddHangfire(x => x.UsePostgreSqlStorage(configuration.GetConnectionString("PostGreSQLConnection")));
 
-            return services;
-        }
+        //    return services;
+        //}
 
-        public static IServiceCollection AddHangFireWithMsSql(this IServiceCollection services, IConfigurationRoot configuration)
-        {
-            services.AddHangfire(x => x.UseSqlServerStorage(configuration.GetConnectionString("SQLConnection")));
+        //public static IServiceCollection AddHangFireWithMsSql(this IServiceCollection services, IConfigurationRoot configuration)
+        //{
+        //    services.AddHangfire(x => x.UseSqlServerStorage(configuration.GetConnectionString("SQLConnection")));
 
-            return services;
-        }
+        //    return services;
+        //}
 
-        public static IServiceCollection AddFrameworkServices(this IServiceCollection services, IConfigurationRoot configuration)
+        public static IServiceCollection AddFrameworkServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped(typeof(BaseContext));
             services.AddScoped<SignInManager<User>, LumleSignInManager<User>>();
-
-            services.AddSingleton<IConfiguration>(configuration);
-            services.AddSingleton(configuration);
 
             services.AddScoped<IActionContextAccessor,ActionContextAccessor>();
             services.AddScoped<IUrlHelper>(x =>
@@ -236,36 +235,33 @@ namespace Lumle.Web.Infrastructures.Extensions
 
 
 
-        public static IApplicationBuilder AddGoogleAuthentication(this IApplicationBuilder app, IConfigurationRoot configuration)
-        {
-            app.UseGoogleAuthentication(new GoogleOptions
-            {
-                ClientId = configuration["Authentication:Google:ClientId"],
-                ClientSecret = configuration["Authentication:Google:ClientSecret"]
-            });
+        //public static IApplicationBuilder AddGoogleAuthentication(this IApplicationBuilder app, IConfigurationRoot configuration)
+        //{
+        //    app.UseGoogleAuthentication(new GoogleOptions
+        //    {
+        //        ClientId = configuration["Authentication:Google:ClientId"],
+        //        ClientSecret = configuration["Authentication:Google:ClientSecret"]
+        //    });
 
-            return app;
-        }
+        //    return app;
+        //}
 
-        public static IApplicationBuilder AddFacebookAuthentication(this IApplicationBuilder app, IConfigurationRoot configuration)
-        {
-            app.UseFacebookAuthentication(new FacebookOptions
-            {
-                AppId = configuration["Authentication:Facebook:AppId"],
-                Scope = { "email" },
-                Fields = { "name", "email" },
-                AppSecret = configuration["Authentication:Facebook:AppSecret"],
-            });
-
-
-            return app;
-        }
+        //public static IApplicationBuilder AddFacebookAuthentication(this IApplicationBuilder app, IConfigurationRoot configuration)
+        //{
+        //    app.UseFacebookAuthentication(new FacebookOptions
+        //    {
+        //        AppId = configuration["Authentication:Facebook:AppId"],
+        //        Scope = { "email" },
+        //        Fields = { "name", "email" },
+        //        AppSecret = configuration["Authentication:Facebook:AppSecret"],
+        //    });
 
 
-
+        //    return app;
+        //}
 
         public static IServiceProvider Build(this IServiceCollection services,
-            IConfigurationRoot configuration, IHostingEnvironment hostingEnvironment)
+            IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
             var builder = new ContainerBuilder();
             builder.RegisterType<SendSystemHealthReportViaEmailService>().AsSelf().As<ISendSystemHealthReportViaEmailService>();

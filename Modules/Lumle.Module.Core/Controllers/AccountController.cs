@@ -36,6 +36,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Lumle.Infrastructure.Constants.Cache;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Lumle.Module.Core.Controllers
 {
@@ -115,7 +116,7 @@ namespace Lumle.Module.Core.Controllers
             _resourceRepository = resourceRepository;
             _cultureRepository = cultureRepository;
             _localizer = localizer;
-            _options = optionsAccessor?.Value?? new IdentityOptions();
+            _options = optionsAccessor?.Value ?? new IdentityOptions();
         }
 
 
@@ -301,7 +302,7 @@ namespace Lumle.Module.Core.Controllers
                     {
                         UserName = model.Username,
                         Email = model.Email,
-                        TimeZone ="Asia/Kathmandu", 
+                        TimeZone = "Asia/Kathmandu",
                         AccountStatus = (int)AccountStatus.Enable,
                         CreatedBy = model.Username,
                         CreatedDate = DateTime.UtcNow
@@ -511,7 +512,7 @@ namespace Lumle.Module.Core.Controllers
                     if (!ModelState.IsValid)
                     {
                         transaction.Rollback();
-                        await HttpContext.Authentication.SignOutAsync(_options.Cookies.ExternalCookieAuthenticationScheme);
+                        await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
                         TempData["ErrorMsg"] = _localizer[ActionMessageConstants.PleaseFillAllTheRequiredFieldErrorMessage].Value;
                         return View(model);
                     }
@@ -520,7 +521,7 @@ namespace Lumle.Module.Core.Controllers
                     var info = await _signInManager.GetExternalLoginInfoAsync();
                     if (info == null)
                     {
-                        await HttpContext.Authentication.SignOutAsync(_options.Cookies.ExternalCookieAuthenticationScheme);
+                        await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
                         return View("ExternalLoginFailure");
                     }
                     var user = new User
@@ -994,7 +995,7 @@ namespace Lumle.Module.Core.Controllers
         private async Task<IActionResult> RedirectToLoginAsync(IDbContextTransaction transaction, string message)
         {
             transaction.Rollback();
-            await HttpContext.Authentication.SignOutAsync(_options.Cookies.ExternalCookieAuthenticationScheme);
+            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
             TempData["ErrorMsg"] = _localizer[message].Value;
             return RedirectToAction("Login", "Account");
         }
