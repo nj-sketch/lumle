@@ -25,26 +25,15 @@ namespace Lumle.Web
         private readonly IHostingEnvironment _hostingEnvironment;
         private static readonly IList<ModuleInfo> Modules = new List<ModuleInfo>();
 
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             _hostingEnvironment = env;
             _hostingEnvironment.ConfigureNLog("nlog.config");
 
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
-
-            if (env.IsDevelopment())
-            {
-                builder.AddUserSecrets<Startup>();
-            }
-
-            builder.AddEnvironmentVariables();
-            Configuration = builder.Build();
+            Configuration = configuration;
         }
 
-        public IConfigurationRoot Configuration { get; }
+        public IConfiguration Configuration { get; }
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
@@ -53,7 +42,7 @@ namespace Lumle.Web
             GlobalConfiguration.ContentRootPath = _hostingEnvironment.ContentRootPath;
             services.LoadInstalledModules(Modules, _hostingEnvironment);
 
-            services.AddPostgreSqlProvider(Configuration);
+            services.AddMsSqlDataStore(Configuration);
             services.AddIdentity();
             services.AddFrameworkServices(Configuration);     
                   
@@ -85,7 +74,7 @@ namespace Lumle.Web
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            app.UseIdentity();
+            app.UseAuthentication();
 
             //var options = new DashboardOptions
             //{
@@ -116,7 +105,7 @@ namespace Lumle.Web
                 app.UseExceptionHandler("/Error");
             }
 
-            app.SeedData(context);
+            //app.SeedData(context);
 
             app.UseCustomizedRequestLocalization();
             app.UseCustomizedStaticFiles(Modules);

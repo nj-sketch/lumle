@@ -27,44 +27,44 @@ namespace Lumle.AuthServer.Infrastructures.DbproviderExtensions
             return services;
         }
 
-        public static IServiceCollection AddMySqlDataProvider(this IServiceCollection services, IConfigurationRoot configuration, string migrationsAssembly)
-        {
+        //public static IServiceCollection AddMySqlDataProvider(this IServiceCollection services, IConfigurationRoot configuration, string migrationsAssembly)
+        //{
 
-            var connectionString = configuration.GetConnectionString("MySQLConnection");
+        //    var connectionString = configuration.GetConnectionString("MySQLConnection");
 
-            services.AddIdentityServer()
-                .AddTemporarySigningCredential()
-                .AddConfigurationStore(builder =>
-                    builder.UseMySql(connectionString,
-                        options => options.MigrationsAssembly(migrationsAssembly)))
-                .AddOperationalStore(builder =>
-                    builder.UseMySql(connectionString,
-                        options => options.MigrationsAssembly(migrationsAssembly)))
-                .AddCustomUserStore(builder =>
-                    builder.UseMySql(connectionString,
-                        options => options.MigrationsAssembly(migrationsAssembly)));
+        //    services.AddIdentityServer()
+        //        .AddTemporarySigningCredential()
+        //        .AddConfigurationStore(builder =>
+        //            builder.UseMySql(connectionString,
+        //                options => options.MigrationsAssembly(migrationsAssembly)))
+        //        .AddOperationalStore(builder =>
+        //            builder.UseMySql(connectionString,
+        //                options => options.MigrationsAssembly(migrationsAssembly)))
+        //        .AddCustomUserStore(builder =>
+        //            builder.UseMySql(connectionString,
+        //                options => options.MigrationsAssembly(migrationsAssembly)));
 
-            return services;
-        }
+        //    return services;
+        //}
 
-        public static IServiceCollection AddPostgreSqlProvider(this IServiceCollection services, IConfigurationRoot configuration, string migrationsAssembly)
-        {
-            var connectionString = configuration.GetConnectionString("PostGreSQLConnection");
+        //public static IServiceCollection AddPostgreSqlProvider(this IServiceCollection services, IConfigurationRoot configuration, string migrationsAssembly)
+        //{
+        //    var connectionString = configuration.GetConnectionString("PostGreSQLConnection");
 
-            services.AddIdentityServer()
-                .AddTemporarySigningCredential()
-                .AddConfigurationStore(builder =>
-                    builder.UseNpgsql(connectionString,
-                        options => options.MigrationsAssembly(migrationsAssembly)))
-                .AddOperationalStore(builder =>
-                    builder.UseNpgsql(connectionString,
-                        options => options.MigrationsAssembly(migrationsAssembly)))
-                .AddCustomUserStore(builder =>
-                    builder.UseNpgsql(connectionString,
-                        options => options.MigrationsAssembly(migrationsAssembly)));
+        //    services.AddIdentityServer()
+        //        .AddTemporarySigningCredential()
+        //        .AddConfigurationStore(builder =>
+        //            builder.UseNpgsql(connectionString,
+        //                options => options.MigrationsAssembly(migrationsAssembly)))
+        //        .AddOperationalStore(builder =>
+        //            builder.UseNpgsql(connectionString,
+        //                options => options.MigrationsAssembly(migrationsAssembly)))
+        //        .AddCustomUserStore(builder =>
+        //            builder.UseNpgsql(connectionString,
+        //                options => options.MigrationsAssembly(migrationsAssembly)));
 
-            return services;
-        }
+        //    return services;
+        //}
 
     }
 }

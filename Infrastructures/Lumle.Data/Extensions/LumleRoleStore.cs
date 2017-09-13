@@ -1,7 +1,8 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Lumle.Data.Data;
+﻿using Lumle.Data.Data;
 using Lumle.Data.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace Lumle.Data.Extensions
 {

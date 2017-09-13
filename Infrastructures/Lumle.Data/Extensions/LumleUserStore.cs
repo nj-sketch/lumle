@@ -6,8 +6,7 @@ using Lumle.Data.Data;
 
 namespace Lumle.Data.Extensions
 {
-    public class LumleUserStore : UserStore<User, Role, BaseContext, string, IdentityUserClaim<string>, UserRole,
-        IdentityUserLogin<string>, IdentityUserToken<string>>
+    public class LumleUserStore : UserStore<User, Role, BaseContext, string, IdentityUserClaim<string>, UserRole, IdentityUserLogin<string>, IdentityUserToken<string>, IdentityRoleClaim<string> >
     {
         public LumleUserStore(BaseContext context) : base(context)
         {
