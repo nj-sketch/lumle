@@ -5,7 +5,6 @@ using Lumle.Data.Models;
 using Lumle.Module.AdminConfig.Services;
 using Lumle.Module.Authorization.ViewModels.UserViewModels;
 using Microsoft.AspNetCore.Identity;
-using System.Threading.Tasks;
 
 namespace Lumle.Module.Schedular.Services
 {
@@ -15,7 +14,8 @@ namespace Lumle.Module.Schedular.Services
         private readonly ISystemHealthService _systemHealthService;
         private readonly UserManager<User> _userManager;
 
-        public SendSystemHealthReportViaEmailService(
+        public SendSystemHealthReportViaEmailService
+        (
             IMessagingService messagingService,
             ISystemHealthService systemHealthService,
             UserManager<User> userManager
@@ -26,9 +26,9 @@ namespace Lumle.Module.Schedular.Services
             _userManager = userManager;       
         }
 
-        public async Task SendHealthReportViaMailAsync()
+        public void SendHealthReportViaMail()
         {
-            var data = await _systemHealthService.GetServiceHealthReportAsync();
+            var data =  _systemHealthService.GetServiceHealthReport();
 
             if (data == null) return;
 

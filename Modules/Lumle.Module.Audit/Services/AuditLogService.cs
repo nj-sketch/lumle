@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using KellermanSoftware.CompareNetObjects;
 using Lumle.Data.Data.Abstracts;
 using Lumle.Infrastructure.Constants.LumleLog;
-using Lumle.Infrastructure.Utilities;
 using Lumle.Module.Audit.Entities;
 using Lumle.Module.Audit.Enums;
 using Lumle.Module.Audit.Models;
@@ -24,7 +22,6 @@ namespace Lumle.Module.Audit.Services
         private readonly ITimeZoneHelper _timeZoneHelper;
 
         #region Class Variables
-
         private CompareLogic _compare;
         private readonly string _ipAddress;
         private readonly string _userAgent;
@@ -52,7 +49,7 @@ namespace Lumle.Module.Audit.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.SaveError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -114,8 +111,7 @@ namespace Lumle.Module.Audit.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.AuditLogError);
-
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -128,7 +124,7 @@ namespace Lumle.Module.Audit.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -171,7 +167,7 @@ namespace Lumle.Module.Audit.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -228,7 +224,7 @@ namespace Lumle.Module.Audit.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.StringComparisonError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -304,7 +300,7 @@ namespace Lumle.Module.Audit.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.StringComparisonError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -341,7 +337,7 @@ namespace Lumle.Module.Audit.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -399,8 +395,7 @@ namespace Lumle.Module.Audit.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.AuditLogError);
-
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -427,9 +422,9 @@ namespace Lumle.Module.Audit.Services
                         throw new NotImplementedException();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 

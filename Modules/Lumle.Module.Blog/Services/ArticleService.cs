@@ -13,6 +13,7 @@ namespace Lumle.Module.Blog.Services
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IRepository<Article> _articleRepository;
+
         public ArticleService(IRepository<Article> articleRepository)
         {
             _articleRepository = articleRepository;
@@ -28,7 +29,7 @@ namespace Lumle.Module.Blog.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -42,7 +43,7 @@ namespace Lumle.Module.Blog.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -56,7 +57,7 @@ namespace Lumle.Module.Blog.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -70,7 +71,7 @@ namespace Lumle.Module.Blog.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -97,7 +98,7 @@ namespace Lumle.Module.Blog.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.SaveError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -110,7 +111,7 @@ namespace Lumle.Module.Blog.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.UpdateError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -123,7 +124,7 @@ namespace Lumle.Module.Blog.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DeleteError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
     }

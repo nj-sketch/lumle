@@ -1,15 +1,9 @@
 @inject UserManager<User> UserManager
 @inject RoleManager<Role> RoleManager
-@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery antiforgery;
 
-@functions
-{
-    public string GetAntiXsrfRequestToken()
-    {
-        return Xsrf.GetAndStoreTokens(Context).RequestToken;
-    }
-}
 @{
+    var antiforgeryRequestToken = antiforgery.GetAndStoreTokens(Context).RequestToken;
     var hasPermissionForCreate = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.AuthorizationUserCreate), User);
     var hasPermissionForUpdate = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.AuthorizationUserUpdate), User);
     var hasPermissionForDelete = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.AuthorizationUserDelete), User);
@@ -18,7 +12,7 @@
     var loggedUser = await UserManager.FindByNameAsync(User.Identity.Name);
     var loggedUserRole = await UserManager.GetRolesAsync(loggedUser);
     var role = await RoleManager.FindByNameAsync(loggedUserRole.First());
-   
+
     ViewData["Title"] = Localizer[LabelConstants.User];
 }
 
@@ -96,13 +90,14 @@
     </div>
 </div>
 
-
 @section scripts
-    {
+{
     <script type="text/javascript">
+        var token = @Json.Serialize(antiforgeryRequestToken);
         var hasPermissionForUpdate = @hasPermissionForUpdate.ToString().ToLower();
-        var hasPermissionForDelete = @hasPermissionForDelete.ToString().ToLower();        
+        var hasPermissionForDelete = @hasPermissionForDelete.ToString().ToLower();
     </script>
+
     <script src="~/lib/toastr/toastr.min.js"></script>
     <script src="~/js/jquery.dataTables.min.js"></script>
     <script src="~/js/dataTables.bootstrap.min.js"></script>

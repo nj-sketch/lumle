@@ -246,7 +246,6 @@ namespace Lumle.Module.Authorization.Controllers
                     return RedirectToAction("Index");
                 }
             }
-
         }
 
         [HttpGet("edit/{id}")]
@@ -1030,23 +1029,23 @@ namespace Lumle.Module.Authorization.Controllers
         private static List<SelectListItem> GetAllAccountStatus()
         {
             var availableStatus = new List<SelectListItem>
-                    {
-                        new SelectListItem
-                        {
-                            Text = "-- Select Status --",
-                            Value = ""
-                        },
-                        new SelectListItem
-                        {
-                            Text = "Enable",
-                            Value = "1"
-                        },
-                        new SelectListItem
-                        {
-                            Text = "Disable",
-                            Value = "0"
-                        }
-                    };
+            {
+                new SelectListItem
+                {
+                    Text = "-- Select Status --",
+                    Value = ""
+                },
+                new SelectListItem
+                {
+                    Text = "Enable",
+                    Value = "1"
+                },
+                new SelectListItem
+                {
+                    Text = "Disable",
+                    Value = "0"
+                }
+            };
 
             return availableStatus;
         }

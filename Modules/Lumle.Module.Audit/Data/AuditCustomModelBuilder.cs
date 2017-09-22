@@ -14,8 +14,8 @@ namespace Lumle.Module.Audit.Data
             builder.Entity<CustomLog>(b =>
             {
                 b.ToTable("Audit_CustomLog");
-                b.Property(x => x.CreatedDate).HasDefaultValueSql("now()");
-                b.Property(x => x.LastUpdated).HasDefaultValueSql("now()");
+                b.Property(x => x.CreatedDate);
+                b.Property(x => x.LastUpdated);
             });
         }
     }

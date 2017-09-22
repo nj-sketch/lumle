@@ -68,6 +68,7 @@ $(function () {
                 "type": "POST",
                 "url": rootDir + "authorization/User/DataHandler",
                 "contentType": "application/json; charset=utf-8",
+                "headers": { "RequestVerificationToken": token },
                 "data": function (data) {
                     return data = JSON.stringify(data);
                 },
