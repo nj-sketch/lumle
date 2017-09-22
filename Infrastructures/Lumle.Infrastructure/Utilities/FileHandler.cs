@@ -5,9 +5,8 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using NLog;
 using Lumle.Infrastructure.Constants.LumleLog;
-using System.Text.RegularExpressions;
-using ImageSharp;
-using ImageSharp.PixelFormats;
+using SixLabors.ImageSharp;
+using SixLabors.Primitives;
 
 namespace Lumle.Infrastructure.Utilities
 {
@@ -26,6 +25,8 @@ namespace Lumle.Infrastructure.Utilities
         {
             try
             {
+                int resizeWidth, resizeHeight, sourceX, sourceY, size;
+
                 var directory = Path.Combine(_environment.WebRootPath, "uploadedimages");
 
                 if (!Directory.Exists(directory))
@@ -33,20 +34,37 @@ namespace Lumle.Infrastructure.Utilities
                     Directory.CreateDirectory(directory);
                 }
 
-                var imageName = $"{ Guid.NewGuid()}_{width}X{height}_{RemoveSpace(sourceImage.FileName)}";
+                var imageName = $"{ Guid.NewGuid()}_{width}X{height}_{sourceImage.FileName}";
                 var imagePath = Path.Combine(directory, imageName);
 
 
                 var stream = sourceImage.OpenReadStream();
                 var image = Image.Load(stream);
 
-                var destinationImage = Crop(image, width, height);
-                using (var fileStream = new FileStream(imagePath, FileMode.Create))
+                if (image.Width > image.Height)
                 {
-                    destinationImage.Save(fileStream);
+                    size = height;
+                    resizeWidth = Convert.ToInt32(image.Width * size / (double)image.Height);
+                    resizeHeight = size;
+                }
+                else
+                {
+                    size = width;
+                    resizeWidth = size;
+                    resizeHeight = Convert.ToInt32(image.Height * size / (double)image.Width);
 
                 }
 
+                sourceX = Convert.ToInt32((resizeWidth / (double)2) - (width / (double)2));
+                sourceY = Convert.ToInt32((resizeHeight / (double)2) - (height / (double)2));
+
+                var destinationImage = CropImage(image, sourceX, sourceY, width, height, resizeWidth, resizeHeight);
+
+                using (var fileStream = new FileStream(imagePath, FileMode.Create))
+                {
+                    destinationImage.SaveAsPng(fileStream);
+
+                }
                 return imageName;
             }
             catch (Exception ex)
@@ -55,36 +73,43 @@ namespace Lumle.Infrastructure.Utilities
                 throw new Exception(ex.Message);
             }
         }
+        //private string UploadOriginalImage(IFormFile sourceImage)
+        //{
+        //    try
+        //    {
+        //        var directory = Path.Combine(_environment.WebRootPath, "uploadedimages");
+        //        var imagePath = Path.Combine(directory, $"{Guid.NewGuid()}_original_{sourceImage.FileName}");
 
-        private Image<Rgba32> Crop(Image sourceImage, int width, int height)
+        //        Image image = null;
+        //        var stream = sourceImage.OpenReadStream();
+        //        image = Image.Load(stream);
+
+        //        var destinationImage = CropImage(image, 0, 0, image.Width, image.Height, image.Width, image.Height);
+
+        //        using (var fileStream = new FileStream(imagePath, FileMode.Create))
+        //        {
+        //            destinationImage.Save(fileStream);
+
+        //        }
+        //        return imagePath;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return null;
+        //    }
+        //}
+
+        private Image<Rgba32> CropImage(Image<Rgba32> sourceImage, int sourceX, int sourceY, int sourceWidth, int sourceHeight, int destinationWidth, int destinationHeight)
         {
-            var options = new ImageSharp.Processing.ResizeOptions
-            {
-                Size = new Size(width, height)
-            };
+            sourceImage.Mutate(x => x.Resize(destinationWidth, destinationHeight)
+                        .Crop(new Rectangle(sourceX, sourceY, sourceWidth, sourceHeight)));
 
-            return sourceImage.Resize(options);
+            return sourceImage;
 
+            //return sourceImage
+            //     .ReSize(destinationWidth, destinationHeight)
+            //     .Crop(new Rectangle(sourceX, sourceY, sourceWidth, sourceHeight));
         }
 
-        private string RemoveSpace(string userInput)
-        {
-            var finalValue = "";
-            try
-            {
-                string[] Split = userInput.Split(new Char[] { ' ' });
-                //SHOW RESULT
-                for (int i = 0; i < Split.Length; i++)
-                {
-                    finalValue += Convert.ToString(Split[i]);
-                }
-                finalValue = Regex.Replace(finalValue, @"[^a-zA-Z\d]+(?!(?<=\.)\w+$)", "-");
-                return finalValue;
-            }
-            catch (Exception)
-            {
-                return finalValue;
-            }
-        }
     }
 }

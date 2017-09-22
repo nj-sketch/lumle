@@ -14,6 +14,7 @@ using Lumle.AuthServer.Services.Account;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
+using System.Collections.Generic;
 
 namespace Lumle.AuthServer.Controllers
 {
@@ -26,17 +27,20 @@ namespace Lumle.AuthServer.Controllers
     public class AccountController : Controller
     {
         private readonly IIdentityServerInteractionService _interaction;
+        private readonly IAuthenticationSchemeProvider _authenticationSchemeProvider;
         private readonly AccountService _account;
         private readonly IUserStore _userStore;
 
         public AccountController(
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
+            IAuthenticationSchemeProvider authenticationSchemeProvider,
             IHttpContextAccessor httpContextAccessor,
             IUserStore userStore)
         {
             _interaction = interaction;
-            _account = new AccountService(interaction, httpContextAccessor, clientStore);
+            _authenticationSchemeProvider = authenticationSchemeProvider;
+            _account = new AccountService(interaction, httpContextAccessor, _authenticationSchemeProvider, clientStore);
             _userStore = userStore;
         }
 
@@ -69,12 +73,12 @@ namespace Lumle.AuthServer.Controllers
                 // validate username/password against in-memory store
                 if (_userStore.ValidateCredentials(model.Username, model.Password))
                 {
-                    Microsoft.AspNetCore.Authentication.AuthenticationProperties props = null;
+                    AuthenticationProperties props = null;
                     // only set explicit expiration here if persistent. 
                     // otherwise we reply upon expiration configured in cookie middleware.
                     if (AccountOptions.AllowRememberLogin && model.RememberLogin)
                     {
-                        props = new Microsoft.AspNetCore.Authentication.AuthenticationProperties
+                        props = new AuthenticationProperties
                         {
                             IsPersistent = true,
                             ExpiresUtc = DateTimeOffset.UtcNow.Add(AccountOptions.RememberMeLoginDuration)
@@ -83,7 +87,17 @@ namespace Lumle.AuthServer.Controllers
 
                     // issue authentication cookie with subject ID and username
                     var user = _userStore.FindByUsername(model.Username);
-                    await HttpContext.SignInAsync(user.SubjectId, user.UserName, props);
+                    //await HttpContext.SignInAsync(user.SubjectId, user.UserName, props);
+
+
+                    //TODO: Test needed
+                    var claims = new List<Claim> {
+                                                new Claim("subId", user.SubjectId),
+                                                new Claim("username", user.UserName)
+                                                };
+
+                    var userIdentity = new ClaimsIdentity(claims);
+                    await HttpContext.SignInAsync(new ClaimsPrincipal(userIdentity), props);
 
                     // make sure the returnUrl is still valid, and if yes - redirect back to authorize endpoint
                     if (_interaction.IsValidReturnUrl(model.ReturnUrl))
@@ -191,6 +205,6 @@ namespace Lumle.AuthServer.Controllers
                 return new ChallengeResult(provider, props);
             }
         }
-        
+
     }
 }

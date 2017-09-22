@@ -1,6 +1,8 @@
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery antiforgery;
 @model Lumle.Module.Audit.Models.AuditLogFilter
 
 @{
+    var antiforgeryRequestToken = antiforgery.GetAndStoreTokens(Context).RequestToken;
     ViewData["Title"] = Localizer[LabelConstants.AuditLog];
 }
 
@@ -95,6 +97,9 @@
 </div>
 
 @section Scripts {
+    <script type="text/javascript">
+        var token = @Json.Serialize(antiforgeryRequestToken);
+    </script>
     <script src="~/assets/widgets/datepicker/bootstrap-datepicker.js"></script>
     <script src="~/js/jquery.dataTables.min.js"></script>
     <script src="~/js/dataTables.bootstrap.min.js"></script>

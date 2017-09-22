@@ -7,7 +7,6 @@
     <OutputType>Exe</OutputType>
     <PackageId>Lumle.AuthServer</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-wp8+netcore45+net45+wp81+wpa81</AssetTargetFallback>
-    <UserSecretsId>b855374b-a240-44c9-a49d-5230042c2ddb</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
