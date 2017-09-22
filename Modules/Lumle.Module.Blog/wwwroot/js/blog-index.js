@@ -9,6 +9,7 @@
             "type": "POST",
             "url": rootDir + "blog/article/DataHandler",
             "contentType": "application/json; charset=utf-8",
+            "headers": { "RequestVerificationToken": token },
             "data": function (data) {
                 return JSON.stringify(data);
             },

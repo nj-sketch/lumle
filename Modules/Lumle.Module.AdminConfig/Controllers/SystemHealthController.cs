@@ -18,7 +18,8 @@ namespace Lumle.Module.AdminConfig.Controllers
         private readonly ISystemHealthService _systemHealthService;
         private readonly ITimeZoneHelper _timeZoneHelper;
 
-        public SystemHealthController(
+        public SystemHealthController
+        (
             ICredentialCategoryService credentialCategoryService,
             UserManager<User> userManager,
             ISystemHealthService systemHealthService,
@@ -55,7 +56,7 @@ namespace Lumle.Module.AdminConfig.Controllers
             try
             {
                 var loggedUser = await GetCurrentUserAsync(); // Get current logged user info
-                var data = await _systemHealthService.GetSystemHealthReportAsync(loggedUser.Email);
+                var data =  _systemHealthService.GetSystemHealthReport(loggedUser.Email);
                 return Json(data);
             }
 

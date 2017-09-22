@@ -19,6 +19,7 @@ namespace Lumle.Module.AdminConfig.Services
         {
             _emailTemplateRepository = emailTemplateRepository;
         }
+
         public void Add(EmailTemplate entity)
         {
             try
@@ -28,7 +29,7 @@ namespace Lumle.Module.AdminConfig.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.SaveError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -42,7 +43,7 @@ namespace Lumle.Module.AdminConfig.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -55,7 +56,7 @@ namespace Lumle.Module.AdminConfig.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -78,7 +79,7 @@ namespace Lumle.Module.AdminConfig.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -91,7 +92,7 @@ namespace Lumle.Module.AdminConfig.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -104,7 +105,7 @@ namespace Lumle.Module.AdminConfig.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.UpdateError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
     }

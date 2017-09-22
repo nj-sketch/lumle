@@ -26,8 +26,6 @@ namespace Lumle.Infrastructure.Utilities
         {
             try
             {
-                int resizeWidth, resizeHeight, sourceX, sourceY, size;
-
                 var directory = Path.Combine(_environment.WebRootPath, "uploadedimages");
 
                 if (!Directory.Exists(directory))
@@ -35,36 +33,20 @@ namespace Lumle.Infrastructure.Utilities
                     Directory.CreateDirectory(directory);
                 }
 
-                var imageName = $"{ Guid.NewGuid()}_{width}X{height}_{sourceImage.FileName}";
+                var imageName = $"{ Guid.NewGuid()}_{width}X{height}_{RemoveSpace(sourceImage.FileName)}";
                 var imagePath = Path.Combine(directory, imageName);
+
 
                 var stream = sourceImage.OpenReadStream();
                 var image = Image.Load(stream);
 
-                if (image.Width > image.Height)
-                {
-                    size = height;
-                    resizeWidth = Convert.ToInt32(image.Width * size / (double)image.Height);
-                    resizeHeight = size;
-                }
-                else
-                {
-                    size = width;
-                    resizeWidth = size;
-                    resizeHeight = Convert.ToInt32(image.Height * size / (double)image.Width);
-
-                }
-
-                sourceX = Convert.ToInt32((resizeWidth / (double)2) - (width / (double)2));
-                sourceY = Convert.ToInt32((resizeHeight / (double)2) - (height / (double)2));
-
                 var destinationImage = Crop(image, width, height);
-
                 using (var fileStream = new FileStream(imagePath, FileMode.Create))
                 {
                     destinationImage.Save(fileStream);
 
                 }
+
                 return imageName;
             }
             catch (Exception ex)

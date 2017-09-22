@@ -11,5 +11,6 @@ namespace Lumle.Module.AdminConfig.Services
         Task SendLoginCredentialMailAsync(string to, string username, string role, string email, string password);
         Task SendSmsAsync(string to, string message);
         Task SendEmailWithBody(Dictionary<string, string> emailReceiverList, Dictionary<string, string> mailBodyDictionary);
+        void VerifySMTPStatus();
     }
 }

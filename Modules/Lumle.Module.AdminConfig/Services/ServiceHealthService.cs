@@ -27,7 +27,7 @@ namespace Lumle.Module.AdminConfig.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.SaveError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 

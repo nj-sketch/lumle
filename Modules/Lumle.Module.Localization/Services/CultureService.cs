@@ -4,13 +4,11 @@ using System.Linq;
 using System.Linq.Expressions;
 using Lumle.Data.Data.Abstracts;
 using Lumle.Module.Localization.Models;
-using System.Globalization;
 using Lumle.Core.Models;
 using Lumle.Infrastructure.Constants.LumleLog;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Caching.Memory;
 using NLog;
-using Microsoft.AspNetCore.Http;
 using Lumle.Infrastructure.Constants.Cache;
 
 namespace Lumle.Module.Localization.Services
@@ -21,7 +19,11 @@ namespace Lumle.Module.Localization.Services
         private readonly IRepository<Culture> _cultureRepository;
         private readonly IMemoryCache _memoryCache;
 
-        public CultureService(IRepository<Culture> cultureRepository, IMemoryCache memoryCache)
+        public CultureService
+        (
+            IRepository<Culture> cultureRepository,
+            IMemoryCache memoryCache
+        )
         {
             _cultureRepository = cultureRepository;
             _memoryCache = memoryCache;
@@ -35,7 +37,7 @@ namespace Lumle.Module.Localization.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.SaveError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -48,7 +50,7 @@ namespace Lumle.Module.Localization.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DeleteError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -61,7 +63,7 @@ namespace Lumle.Module.Localization.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -74,7 +76,7 @@ namespace Lumle.Module.Localization.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -97,7 +99,7 @@ namespace Lumle.Module.Localization.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -106,8 +108,7 @@ namespace Lumle.Module.Localization.Services
         {
             try
             {
-                List<SelectListItem> cultureList;
-                if (_memoryCache.TryGetValue(CacheConstants.LocalizationCultureCache, out cultureList)) return cultureList;
+                if (_memoryCache.TryGetValue(CacheConstants.LocalizationCultureCache, out List<SelectListItem> cultureList)) return cultureList;
 
                 var data = (from e in _cultureRepository.GetAll(x => x.IsEnable && x.IsActive)
                             select new SelectListItem
@@ -129,7 +130,7 @@ namespace Lumle.Module.Localization.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -142,7 +143,7 @@ namespace Lumle.Module.Localization.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -155,7 +156,7 @@ namespace Lumle.Module.Localization.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.UpdateError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
     }
