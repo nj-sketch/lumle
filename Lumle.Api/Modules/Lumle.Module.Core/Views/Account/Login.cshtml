@@ -66,7 +66,7 @@
                                 </form>
                                 <div class="panel-body" style="text-align:center;">
                                     @{
-                                        var loginProviders = SignInManager.GetExternalAuthenticationSchemes().ToList();
+                                        var loginProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList();
                                         if (loginProviders.Any())
                                         {
                                             <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
@@ -74,12 +74,12 @@
                                                     <p>
                                                         @foreach (var provider in loginProviders)
                                                         {
-                                                            <button class="btn bg-@provider.AuthenticationScheme.ToLower()" name="provider" value="@provider.AuthenticationScheme" title="Log in using your @provider.DisplayName account">
+                                                            <button class="btn bg-@provider.Name.ToLower()" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">
                                                                 <span class="glyph-icon icon-separator">
-                                                                    <i class="glyph-icon icon-@provider.AuthenticationScheme.ToLower()"></i>
+                                                                    <i class="glyph-icon icon-@provider.Name.ToLower()"></i>
                                                                 </span>
                                                                 <span class="button-content">
-                                                                    @provider.AuthenticationScheme
+                                                                    @provider.Name
                                                                 </span>
                                                             </button>
                                                         }

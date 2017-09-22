@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Lumle.Data.Extensions
 {
@@ -15,10 +15,11 @@ namespace Lumle.Data.Extensions
             IHttpContextAccessor contextAccessor,
             IUserClaimsPrincipalFactory<TUser> claimsFactory,
             IOptions<IdentityOptions> optionsAccessor,
-            ILogger<SignInManager<TUser>> logger
+            ILogger<SignInManager<TUser>> logger,
+            IAuthenticationSchemeProvider schemaProvider
             //IMediator mediator
             )
-            : base(userManager, contextAccessor, claimsFactory, optionsAccessor, logger)
+            : base(userManager, contextAccessor, claimsFactory, optionsAccessor, logger, schemaProvider)
         {
             //_mediator = mediator;
         }

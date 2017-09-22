@@ -1,10 +1,11 @@
-﻿﻿using System;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 
 namespace Lumle.Data.Models
 {
-    public class User: IdentityUser<string, IdentityUserClaim<string>, UserRole, IdentityUserLogin<string>>
+    public class User: IdentityUser
     {
         [Required]
         public int AccountStatus { get; set; } //0->Disable, 1-> Enable
@@ -22,6 +23,21 @@ namespace Lumle.Data.Models
         [Required]
         [DataType(DataType.DateTime)]
         public DateTime CreatedDate { get; set; }
+
+        /// <summary>
+        /// Navigation property for the roles this user belongs to.
+        /// </summary>
+        public virtual ICollection<UserRole> Roles { get; } = new List<UserRole>();
+
+        /// <summary>
+        /// Navigation property for the claims this user possesses.
+        /// </summary>
+        public virtual ICollection<IdentityUserClaim<string>> Claims { get; } = new List<IdentityUserClaim<string>>();
+
+        /// <summary>
+        /// Navigation property for this users login accounts.
+        /// </summary>
+        public virtual ICollection<IdentityUserLogin<string>> Logins { get; } = new List<IdentityUserLogin<string>>();
 
     }
 }

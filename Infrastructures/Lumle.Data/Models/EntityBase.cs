@@ -7,7 +7,6 @@ namespace Lumle.Data.Models
     public abstract class EntityBase
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column(TypeName = "bigserial ")]
         public int Id { get; set; }
 
         [Required]

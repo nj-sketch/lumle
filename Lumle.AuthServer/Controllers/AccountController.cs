@@ -12,8 +12,8 @@ using Lumle.AuthServer.Infrastructures.Options;
 using Lumle.AuthServer.Models.Account;
 using Lumle.AuthServer.Services.Account;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Lumle.AuthServer.Controllers
 {
@@ -69,12 +69,12 @@ namespace Lumle.AuthServer.Controllers
                 // validate username/password against in-memory store
                 if (_userStore.ValidateCredentials(model.Username, model.Password))
                 {
-                    AuthenticationProperties props = null;
+                    Microsoft.AspNetCore.Authentication.AuthenticationProperties props = null;
                     // only set explicit expiration here if persistent. 
                     // otherwise we reply upon expiration configured in cookie middleware.
                     if (AccountOptions.AllowRememberLogin && model.RememberLogin)
                     {
-                        props = new AuthenticationProperties
+                        props = new Microsoft.AspNetCore.Authentication.AuthenticationProperties
                         {
                             IsPersistent = true,
                             ExpiresUtc = DateTimeOffset.UtcNow.Add(AccountOptions.RememberMeLoginDuration)
@@ -83,7 +83,7 @@ namespace Lumle.AuthServer.Controllers
 
                     // issue authentication cookie with subject ID and username
                     var user = _userStore.FindByUsername(model.Username);
-                    await HttpContext.Authentication.SignInAsync(user.SubjectId, user.UserName, props);
+                    await HttpContext.SignInAsync(user.SubjectId, user.UserName, props);
 
                     // make sure the returnUrl is still valid, and if yes - redirect back to authorize endpoint
                     if (_interaction.IsValidReturnUrl(model.ReturnUrl))
@@ -133,8 +133,8 @@ namespace Lumle.AuthServer.Controllers
                 try
                 {
                     // hack: try/catch to handle social providers that throw
-                    await HttpContext.Authentication.SignOutAsync(vm.ExternalAuthenticationScheme,
-                        new AuthenticationProperties { RedirectUri = url });
+                    await HttpContext.SignOutAsync(vm.ExternalAuthenticationScheme,
+                        new Microsoft.AspNetCore.Authentication.AuthenticationProperties { RedirectUri = url });
                 }
                 catch (NotSupportedException) // this is for the external providers that don't have signout
                 {
@@ -145,7 +145,7 @@ namespace Lumle.AuthServer.Controllers
             }
 
             // delete local authentication cookie
-            await HttpContext.Authentication.SignOutAsync();
+            await HttpContext.SignOutAsync();
 
             return View("LoggedOut", vm);
         }
@@ -164,14 +164,14 @@ namespace Lumle.AuthServer.Controllers
                 // but they don't support the redirect uri, so this URL is re-triggered when we call challenge
                 if (HttpContext.User is WindowsPrincipal)
                 {
-                    var props = new AuthenticationProperties();
+                    var props = new Microsoft.AspNetCore.Authentication.AuthenticationProperties();
                     props.Items.Add("scheme", HttpContext.User.Identity.AuthenticationType);
 
                     var id = new ClaimsIdentity(provider);
                     id.AddClaim(new Claim(ClaimTypes.NameIdentifier, HttpContext.User.Identity.Name));
                     id.AddClaim(new Claim(ClaimTypes.Name, HttpContext.User.Identity.Name));
 
-                    await HttpContext.Authentication.SignInAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme, new ClaimsPrincipal(id), props);
+                    await HttpContext.SignInAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme, new ClaimsPrincipal(id), props);
                     return Redirect(returnUrl);
                 }
                 else
@@ -183,7 +183,7 @@ namespace Lumle.AuthServer.Controllers
             else
             {
                 // start challenge and roundtrip the return URL
-                var props = new AuthenticationProperties
+                var props = new Microsoft.AspNetCore.Authentication.AuthenticationProperties
                 {
                     RedirectUri = returnUrl,
                     Items = { { "scheme", provider } }

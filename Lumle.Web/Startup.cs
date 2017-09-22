@@ -25,26 +25,13 @@ namespace Lumle.Web
         private readonly IHostingEnvironment _hostingEnvironment;
         private static readonly IList<ModuleInfo> Modules = new List<ModuleInfo>();
 
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
-            _hostingEnvironment = env;
-            _hostingEnvironment.ConfigureNLog("nlog.config");
-
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
-
-            if (env.IsDevelopment())
-            {
-                builder.AddUserSecrets<Startup>();
-            }
-
-            builder.AddEnvironmentVariables();
-            Configuration = builder.Build();
+            Configuration = configuration;
+            _hostingEnvironment = hostingEnvironment;
         }
 
-        public IConfigurationRoot Configuration { get; }
+        public IConfiguration Configuration { get; }
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
@@ -53,13 +40,10 @@ namespace Lumle.Web
             GlobalConfiguration.ContentRootPath = _hostingEnvironment.ContentRootPath;
             services.LoadInstalledModules(Modules, _hostingEnvironment);
 
-            services.AddPostgreSqlProvider(Configuration);
+            services.AddMsSqlDataStore(Configuration);
             services.AddIdentity();
             services.AddFrameworkServices(Configuration);     
                   
-            // Add Hangfire services.  
-            //services.AddHangFireWithPostGreSql(Configuration);
-
             //call this in case you need aspnet-user-authtype/aspnet-user-identity
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -77,33 +61,11 @@ namespace Lumle.Web
             services.AddMemoryCache();
           
             return services.Build(Configuration, _hostingEnvironment);
-
         }
        
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, BaseContext context)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, BaseContext context)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-
-            app.UseIdentity();
-
-            //var options = new DashboardOptions
-            //{
-            //    Authorization = new[] { new HangfireAuthorizationFilter() }
-            //};
-            //app.UseHangfireDashboard("/jobs", options);
-
-            //app.UseHangfireServer();
-
-           // For Linux Deployment
-            //app.UseForwardedHeaders(new ForwardedHeadersOptions
-            //{
-            //    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-            //});
-
-            //add NLog to ASP.NET Core
-            //loggerFactory.AddNLog();
-            //app.AddNLogWeb();
+            app.UseAuthentication();
 
             if (env.IsDevelopment())
             {
@@ -121,14 +83,12 @@ namespace Lumle.Web
             app.UseCustomizedRequestLocalization();
             app.UseCustomizedStaticFiles(Modules);
 
-            //app.AddFacebookAuthentication(Configuration);
-            //app.AddGoogleAuthentication(Configuration);
-
             // Checking System maintenance mode 
             app.UseAppSystemMiddleware();
 
             // Use only while using scheduler
            // app.UseSchedularMiddleware();
+
             app.UseStatusCodePagesWithRedirects("~/{0}");
 
             app.UseMvc(routes =>

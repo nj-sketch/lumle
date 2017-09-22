@@ -74,6 +74,7 @@ function CustomLogReport() {
             "type": "POST",
             "url": rootDir + "audit/CustomLog/DataHandler",
             "contentType": "application/json; charset=utf-8",
+            "headers": { "RequestVerificationToken": token },
             "data": function (data) {
                 data.StartDate = startDate;
                 data.EndDate = endDate;

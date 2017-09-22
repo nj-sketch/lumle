@@ -16,11 +16,16 @@ namespace Lumle.Module.Localization.Services
         private readonly IRepository<Culture> _cultureRespository;
         private readonly IRepository<Resource> _resourceRepository;
 
-        public ResourceService(IRepository<Resource> resourceRepository, IRepository<Culture> cultureRespository)
+        public ResourceService
+        (
+            IRepository<Resource> resourceRepository,
+            IRepository<Culture> cultureRespository
+        )
         {
             _resourceRepository = resourceRepository;
             _cultureRespository = cultureRespository;
         }
+
         public void Add(Resource entity)
         {
             try
@@ -30,7 +35,7 @@ namespace Lumle.Module.Localization.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.SaveError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -43,7 +48,7 @@ namespace Lumle.Module.Localization.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DeleteError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -56,7 +61,7 @@ namespace Lumle.Module.Localization.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -69,7 +74,7 @@ namespace Lumle.Module.Localization.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -95,7 +100,7 @@ namespace Lumle.Module.Localization.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -121,7 +126,7 @@ namespace Lumle.Module.Localization.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -134,7 +139,7 @@ namespace Lumle.Module.Localization.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -147,7 +152,7 @@ namespace Lumle.Module.Localization.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.UpdateError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -165,7 +170,7 @@ namespace Lumle.Module.Localization.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
     }

@@ -17,7 +17,6 @@ using Lumle.Module.Blog.Helpers;
 using System.Linq.Expressions;
 using System.Linq;
 using System.Threading.Tasks;
-using Hangfire;
 using Lumle.Core.Attributes;
 using Lumle.Data.Models;
 using Microsoft.AspNetCore.Identity;
@@ -197,8 +196,6 @@ namespace Lumle.Module.Blog.Controllers
             return RedirectToAction("Index");
         }
 
-
-#pragma warning disable SG0016 // Controller method is vulnerable to CSRF
         [HttpPost("DataHandler")]
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.BlogArticleView)]
         public async Task<JsonResult> DataHandler([FromBody] BlogDTParameters parameters)
@@ -253,7 +250,6 @@ namespace Lumle.Module.Blog.Controllers
                 return Json(new {error = ex.Message});
             }
         }
-#pragma warning restore SG0016 // Controller method is vulnerable to CSRF
 
 
         #region Helpers

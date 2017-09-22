@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Lumle.Module.Authorization.ViewModels.RoleViewModels
 {
-    [Serializable]
+    //[Serializable]
     public class RoleClaimVM
     {
         [Required]

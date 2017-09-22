@@ -1,43 +1,43 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+VisualStudioVersion = 15.0.26730.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lumle.Web", "Lumle.Web\Lumle.Web.csproj", "{485AB48D-8231-4BF4-A21B-A16E88F9056E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lumle.Web", "Lumle.Web\Lumle.Web.csproj", "{485AB48D-8231-4BF4-A21B-A16E88F9056E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lumle.AuthServer", "Lumle.AuthServer\Lumle.AuthServer.csproj", "{E6986A18-6F98-43F5-955F-0108D3986591}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lumle.AuthServer", "Lumle.AuthServer\Lumle.AuthServer.csproj", "{E6986A18-6F98-43F5-955F-0108D3986591}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructures", "Infrastructures", "{1441C064-3533-49C9-B04E-4AED7835B073}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lumle.Core", "Infrastructures\Lumle.Core\Lumle.Core.csproj", "{51D3D450-A672-4D08-8A95-55A0D2C97776}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lumle.Core", "Infrastructures\Lumle.Core\Lumle.Core.csproj", "{51D3D450-A672-4D08-8A95-55A0D2C97776}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lumle.Data", "Infrastructures\Lumle.Data\Lumle.Data.csproj", "{0D400B5E-7E16-417B-ABD1-640BCB92FD32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lumle.Data", "Infrastructures\Lumle.Data\Lumle.Data.csproj", "{0D400B5E-7E16-417B-ABD1-640BCB92FD32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lumle.Infrastructure", "Infrastructures\Lumle.Infrastructure\Lumle.Infrastructure.csproj", "{A7227569-F3B7-4EAB-A4C8-C399FA7DF537}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lumle.Infrastructure", "Infrastructures\Lumle.Infrastructure\Lumle.Infrastructure.csproj", "{A7227569-F3B7-4EAB-A4C8-C399FA7DF537}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{74E9DEA7-C56E-486E-AE75-7BB0E404E57D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lumle.Module.AdminConfig", "Modules\Lumle.Module.AdminConfig\Lumle.Module.AdminConfig.csproj", "{50C92185-FBC3-4AF6-830E-3F1FD8ECC2AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lumle.Module.AdminConfig", "Modules\Lumle.Module.AdminConfig\Lumle.Module.AdminConfig.csproj", "{50C92185-FBC3-4AF6-830E-3F1FD8ECC2AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lumle.Module.Audit", "Modules\Lumle.Module.Audit\Lumle.Module.Audit.csproj", "{077CC852-93A1-49AA-9B9A-836FA3EB42BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lumle.Module.Audit", "Modules\Lumle.Module.Audit\Lumle.Module.Audit.csproj", "{077CC852-93A1-49AA-9B9A-836FA3EB42BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lumle.Module.Authorization", "Modules\Lumle.Module.Authorization\Lumle.Module.Authorization.csproj", "{EAFC24D8-A782-4846-925B-569548AAE9B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lumle.Module.Authorization", "Modules\Lumle.Module.Authorization\Lumle.Module.Authorization.csproj", "{EAFC24D8-A782-4846-925B-569548AAE9B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lumle.Module.Blog", "Modules\Lumle.Module.Blog\Lumle.Module.Blog.csproj", "{B344F889-2B5F-4F58-946E-A251D47132D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lumle.Module.Blog", "Modules\Lumle.Module.Blog\Lumle.Module.Blog.csproj", "{B344F889-2B5F-4F58-946E-A251D47132D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lumle.Module.Calendar", "Modules\Lumle.Module.Calendar\Lumle.Module.Calendar.csproj", "{89D1382F-DF23-4609-842F-A53204592CF1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lumle.Module.Calendar", "Modules\Lumle.Module.Calendar\Lumle.Module.Calendar.csproj", "{89D1382F-DF23-4609-842F-A53204592CF1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lumle.Module.CMS", "Modules\Lumle.Module.CMS\Lumle.Module.CMS.csproj", "{9F69BE27-D141-4E75-AD9B-5CDC6E78C10B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lumle.Module.CMS", "Modules\Lumle.Module.CMS\Lumle.Module.CMS.csproj", "{9F69BE27-D141-4E75-AD9B-5CDC6E78C10B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lumle.Module.Core", "Modules\Lumle.Module.Core\Lumle.Module.Core.csproj", "{2E727C7A-2086-4150-98A6-DE1E6CE04623}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lumle.Module.Core", "Modules\Lumle.Module.Core\Lumle.Module.Core.csproj", "{2E727C7A-2086-4150-98A6-DE1E6CE04623}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lumle.Module.Error", "Modules\Lumle.Module.Error\Lumle.Module.Error.csproj", "{5B76C547-8C00-4CFC-BDCD-67BFBAD846DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lumle.Module.Error", "Modules\Lumle.Module.Error\Lumle.Module.Error.csproj", "{5B76C547-8C00-4CFC-BDCD-67BFBAD846DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lumle.Module.Localization", "Modules\Lumle.Module.Localization\Lumle.Module.Localization.csproj", "{CDAF9CE1-AC7C-40B6-BC72-F7D2BF758BC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lumle.Module.Localization", "Modules\Lumle.Module.Localization\Lumle.Module.Localization.csproj", "{CDAF9CE1-AC7C-40B6-BC72-F7D2BF758BC9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lumle.Module.PublicUser", "Modules\Lumle.Module.PublicUser\Lumle.Module.PublicUser.csproj", "{8669F8F3-CB39-4B79-AA6B-D89FD76D81EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lumle.Module.PublicUser", "Modules\Lumle.Module.PublicUser\Lumle.Module.PublicUser.csproj", "{8669F8F3-CB39-4B79-AA6B-D89FD76D81EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lumle.Module.Schedular", "Modules\Lumle.Module.Schedular\Lumle.Module.Schedular.csproj", "{5323BF4F-1814-487E-97E4-9C304580BA26}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lumle.Module.Schedular", "Modules\Lumle.Module.Schedular\Lumle.Module.Schedular.csproj", "{5323BF4F-1814-487E-97E4-9C304580BA26}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Databases", "Databases", "{2CF77165-3EC9-4F86-B2F8-07CA320377CB}"
 	ProjectSection(SolutionItems) = preProject
@@ -46,15 +46,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Databases", "Databases", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiInfrastructures", "ApiInfrastructures", "{7CB42B1F-197B-4161-B384-96BB6F57C753}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lumle.Api.Core", "ApiInfrastructures\Lumle.Api.Core\Lumle.Api.Core.csproj", "{9651D123-EA70-4B46-9234-FE21529E602C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lumle.Api.Core", "ApiInfrastructures\Lumle.Api.Core\Lumle.Api.Core.csproj", "{9651D123-EA70-4B46-9234-FE21529E602C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lumle.Api.Data", "ApiInfrastructures\Lumle.Api.Data\Lumle.Api.Data.csproj", "{9FDFBDBD-0633-4B86-8E5B-E88B59ED9FA5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lumle.Api.Data", "ApiInfrastructures\Lumle.Api.Data\Lumle.Api.Data.csproj", "{9FDFBDBD-0633-4B86-8E5B-E88B59ED9FA5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lumle.Api.Model", "ApiInfrastructures\Lumle.Api.Model\Lumle.Api.Model.csproj", "{EC76C6CF-F1C2-4B16-935B-76490AE87A66}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lumle.Api.Model", "ApiInfrastructures\Lumle.Api.Model\Lumle.Api.Model.csproj", "{EC76C6CF-F1C2-4B16-935B-76490AE87A66}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lumle.Api.Service", "ApiInfrastructures\Lumle.Api.Service\Lumle.Api.Service.csproj", "{155123CF-1D1C-4B62-B5FB-8FE780299159}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lumle.Api.Service", "ApiInfrastructures\Lumle.Api.Service\Lumle.Api.Service.csproj", "{155123CF-1D1C-4B62-B5FB-8FE780299159}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lumle.Api", "Lumle.Api\Lumle.Api.csproj", "{08887CC5-09A4-4DE5-87E9-CDB30BE5EB4D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lumle.Api", "Lumle.Api\Lumle.Api.csproj", "{08887CC5-09A4-4DE5-87E9-CDB30BE5EB4D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,11 +67,9 @@ Global
 		{485AB48D-8231-4BF4-A21B-A16E88F9056E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{485AB48D-8231-4BF4-A21B-A16E88F9056E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E6986A18-6F98-43F5-955F-0108D3986591}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E6986A18-6F98-43F5-955F-0108D3986591}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6986A18-6F98-43F5-955F-0108D3986591}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6986A18-6F98-43F5-955F-0108D3986591}.Release|Any CPU.Build.0 = Release|Any CPU
 		{51D3D450-A672-4D08-8A95-55A0D2C97776}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{51D3D450-A672-4D08-8A95-55A0D2C97776}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51D3D450-A672-4D08-8A95-55A0D2C97776}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51D3D450-A672-4D08-8A95-55A0D2C97776}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0D400B5E-7E16-417B-ABD1-640BCB92FD32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -127,23 +125,18 @@ Global
 		{5323BF4F-1814-487E-97E4-9C304580BA26}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5323BF4F-1814-487E-97E4-9C304580BA26}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9651D123-EA70-4B46-9234-FE21529E602C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9651D123-EA70-4B46-9234-FE21529E602C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9651D123-EA70-4B46-9234-FE21529E602C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9651D123-EA70-4B46-9234-FE21529E602C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9FDFBDBD-0633-4B86-8E5B-E88B59ED9FA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9FDFBDBD-0633-4B86-8E5B-E88B59ED9FA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9FDFBDBD-0633-4B86-8E5B-E88B59ED9FA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9FDFBDBD-0633-4B86-8E5B-E88B59ED9FA5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EC76C6CF-F1C2-4B16-935B-76490AE87A66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EC76C6CF-F1C2-4B16-935B-76490AE87A66}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC76C6CF-F1C2-4B16-935B-76490AE87A66}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC76C6CF-F1C2-4B16-935B-76490AE87A66}.Release|Any CPU.Build.0 = Release|Any CPU
 		{155123CF-1D1C-4B62-B5FB-8FE780299159}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{155123CF-1D1C-4B62-B5FB-8FE780299159}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{155123CF-1D1C-4B62-B5FB-8FE780299159}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{155123CF-1D1C-4B62-B5FB-8FE780299159}.Release|Any CPU.Build.0 = Release|Any CPU
 		{08887CC5-09A4-4DE5-87E9-CDB30BE5EB4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{08887CC5-09A4-4DE5-87E9-CDB30BE5EB4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08887CC5-09A4-4DE5-87E9-CDB30BE5EB4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08887CC5-09A4-4DE5-87E9-CDB30BE5EB4D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
@@ -169,5 +162,8 @@ Global
 		{9FDFBDBD-0633-4B86-8E5B-E88B59ED9FA5} = {7CB42B1F-197B-4161-B384-96BB6F57C753}
 		{EC76C6CF-F1C2-4B16-935B-76490AE87A66} = {7CB42B1F-197B-4161-B384-96BB6F57C753}
 		{155123CF-1D1C-4B62-B5FB-8FE780299159} = {7CB42B1F-197B-4161-B384-96BB6F57C753}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {77C340EA-2BE0-4890-9ED9-CA150BCDB4EF}
 	EndGlobalSection
 EndGlobal
