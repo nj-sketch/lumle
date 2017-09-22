@@ -27,7 +27,7 @@ namespace Lumle.Module.PublicUser.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.SaveError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -40,7 +40,7 @@ namespace Lumle.Module.PublicUser.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DeleteError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -54,7 +54,7 @@ namespace Lumle.Module.PublicUser.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -68,7 +68,7 @@ namespace Lumle.Module.PublicUser.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -82,7 +82,7 @@ namespace Lumle.Module.PublicUser.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -95,7 +95,7 @@ namespace Lumle.Module.PublicUser.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.UpdateError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
     }

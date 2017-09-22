@@ -30,7 +30,7 @@ namespace Lumle.Module.AdminConfig.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -43,7 +43,7 @@ namespace Lumle.Module.AdminConfig.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -65,7 +65,7 @@ namespace Lumle.Module.AdminConfig.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -78,7 +78,7 @@ namespace Lumle.Module.AdminConfig.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 

@@ -29,7 +29,9 @@ namespace Lumle.Module.Authorization.Services
         private readonly RoleManager<Role> _roleManager;
         private readonly IMemoryCache _memoryCache;
 
-        public PermissionService(UserManager<User> userManager,
+        public PermissionService
+        (
+            UserManager<User> userManager,
             RoleManager<Role> roleManager,
             IRepository<Permission> permissionRepository,
             IBaseRoleClaimService baseRoleClaimService,
@@ -55,7 +57,7 @@ namespace Lumle.Module.Authorization.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -69,7 +71,7 @@ namespace Lumle.Module.Authorization.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -83,7 +85,7 @@ namespace Lumle.Module.Authorization.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -97,7 +99,7 @@ namespace Lumle.Module.Authorization.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -111,7 +113,7 @@ namespace Lumle.Module.Authorization.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -124,7 +126,7 @@ namespace Lumle.Module.Authorization.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.SaveError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -137,7 +139,7 @@ namespace Lumle.Module.Authorization.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.UpdateError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -150,14 +152,12 @@ namespace Lumle.Module.Authorization.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DeleteError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
         public async Task<List<SidebarMenuModel>> GetSideBarMenuAsync(User user)
         {
-
-            if (_memoryCache.TryGetValue(CacheConstants.AuthorizationSidebarMenuCache, out List<SidebarMenuModel> orderedMenuList)) return orderedMenuList;
 
             if (user == null) return null;
 
@@ -165,28 +165,32 @@ namespace Lumle.Module.Authorization.Services
 
             if (!role.Any()) return null;
 
+            // Get role associated with the user
             var roleModel = await _roleManager.FindByNameAsync(role.FirstOrDefault());
+
+            if (_memoryCache.TryGetValue(CacheConstants.AuthorizationSidebarMenuCache + roleModel, out List<SidebarMenuModel> orderedMenuList)) return orderedMenuList;
+
             var roleClaims = _baseRoleClaimService.GetAll(x => x.RoleId == roleModel.Id).ToList();
             //var roleClaims = await _roleManager.GetClaimsAsync(roleModel) as List<Claim>; //Use this if default roleclaim table is used
             if (!roleClaims.Any()) return null;
 
             var filteredPermissions = (from e in roleClaims
-                join f in _permissionRepository.GetAll() on e.ClaimValue equals f.Slug
-                orderby f.Id
-                group f by f.Menu
-                into g
-                select new
-                {
-                    Menu = g.Key,
-                    SubMenu = (from h in g
-                        where !string.IsNullOrEmpty(h.SubMenu)
-                        group h by h.SubMenu
-                        into i
-                        select new { subMenu = i.Key }).ToList()
-                }).ToList();
+                                       join f in _permissionRepository.GetAll() on e.ClaimValue equals f.Slug
+                                       orderby f.Id
+                                       group f by f.Menu
+                                       into g
+                                       select new
+                                       {
+                                           Menu = g.Key,
+                                           SubMenu = (from h in g
+                                                      where !string.IsNullOrEmpty(h.SubMenu)
+                                                      group h by h.SubMenu
+                                               into i
+                                                      select new { subMenu = i.Key }).ToList()
+                                       }).ToList();
 
             var defaultMenuList = GetSideBarMenuDetails();
-
+            orderedMenuList = new List<SidebarMenuModel>();
             var menuList = new List<SidebarMenuModel>();
 
             foreach (var filteredMenu in filteredPermissions)
@@ -213,7 +217,6 @@ namespace Lumle.Module.Authorization.Services
                     });
 
                 menu.SubMenu = subMenuList.OrderBy(x => x.Sequence).ToList();
-
                 menuList.Add(menu);
             }
 
@@ -224,7 +227,7 @@ namespace Lumle.Module.Authorization.Services
                 Priority = CacheItemPriority.High
             };
 
-            _memoryCache.Set(CacheConstants.AuthorizationSidebarMenuCache, orderedMenuList, cacheOption);
+            _memoryCache.Set(CacheConstants.AuthorizationSidebarMenuCache + roleModel, orderedMenuList, cacheOption);
 
             return orderedMenuList;
         }
@@ -351,9 +354,9 @@ namespace Lumle.Module.Authorization.Services
                 var users = _context.UserRoles.Where(x => x.RoleId == roleId).Select(x => x.User).ToList();
                 return users;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new Exception(ex.Message);
+                throw;
             }
         }
     }

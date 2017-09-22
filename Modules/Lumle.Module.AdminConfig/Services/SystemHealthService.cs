@@ -48,7 +48,7 @@ namespace Lumle.Module.AdminConfig.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.SaveError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -61,7 +61,7 @@ namespace Lumle.Module.AdminConfig.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -74,11 +74,11 @@ namespace Lumle.Module.AdminConfig.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
-        public async Task<ICollection<ServiceHealth>> GetSystemHealthReportAsync(string loggedInUserEmail)
+        public ICollection<ServiceHealth> GetSystemHealthReport(string loggedInUserEmail)
         {
             try
             {
@@ -93,25 +93,25 @@ namespace Lumle.Module.AdminConfig.Services
                 Add(systemHealth);
                 _unitOfWork.Save();
 
-                var serviceHealths = await GetServiceHealthReportAsync();
+                var serviceHealths = GetServiceHealthReport();
                 foreach (var item in serviceHealths)
                 {
                     item.SystemHealth = systemHealth;
                     _serviceHealthService.Add(item);
                     _unitOfWork.Save();
                 }
-         
+
                 var data = systemHealth.ServiceHealths;
                 return data;
             }
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.Undefinederror);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
-        public async Task<ICollection<ServiceHealth>> GetServiceHealthReportAsync()
+        public ICollection<ServiceHealth> GetServiceHealthReport()
         {
             try
             {
@@ -131,7 +131,7 @@ namespace Lumle.Module.AdminConfig.Services
                             serviceHealth.ServiceName = "EmailService";
                             try
                             {
-                              await  _messagingService.SendMailAsync(emailTemplate.Slug, "niraj@ekbana.com");
+                                _messagingService.VerifySMTPStatus();
                                 serviceHealth.Status = true;
                                 serviceHealth.Message = "Operational";
                             }
@@ -161,7 +161,7 @@ namespace Lumle.Module.AdminConfig.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.Undefinederror);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
     }

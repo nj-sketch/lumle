@@ -22,10 +22,11 @@ namespace Lumle.Api
 {
     public class Startup
     {
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private IHostingEnvironment _hostingEnvironment;
 
         public Startup(IHostingEnvironment env, IConfiguration configuration)
         {
+            _hostingEnvironment = env;
             Configuration = configuration;
         }
 

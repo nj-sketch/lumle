@@ -6,6 +6,8 @@ using System.Linq;
 using Lumle.Infrastructure.Constants.LumleLog;
 using NLog;
 using System.Threading.Tasks;
+using MimeKit;
+using MailKit.Net.Smtp;
 
 namespace Lumle.Module.AdminConfig.Services
 {
@@ -17,7 +19,13 @@ namespace Lumle.Module.AdminConfig.Services
         private readonly IEmailTemplateService _emailTemplateService;
         private readonly ITwilioSmsService _twilioSmsService;
 
-        public MessagingService(IEmailTemplateService emailTemplateService, ICredentialService credentialService, IEmailService emailService, ITwilioSmsService twilioSmsService)
+        public MessagingService
+        (
+            IEmailTemplateService emailTemplateService,
+            ICredentialService credentialService,
+            IEmailService emailService,
+            ITwilioSmsService twilioSmsService
+        )
         {
             _emailTemplateService = emailTemplateService;
             _credentialService = credentialService;
@@ -65,11 +73,11 @@ namespace Lumle.Module.AdminConfig.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.LoginCredentialMailTemplate);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
-        public async Task SendForgotPasswordMailAsync(string to, string username,string url)
+        public async Task SendForgotPasswordMailAsync(string to, string username, string url)
         {
 
             try
@@ -100,7 +108,7 @@ namespace Lumle.Module.AdminConfig.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.ForgetPasswordMailTemplate);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -137,8 +145,8 @@ namespace Lumle.Module.AdminConfig.Services
             }
             catch (Exception ex)
             {
-                //Logger.Error(ex, ErrorLog.LoginCredentialMailTemplate);
-                throw new Exception(ex.Message);
+                Logger.Error(ex, ErrorLog.LoginCredentialMailTemplate);
+                throw;
             }
         }
 
@@ -171,7 +179,7 @@ namespace Lumle.Module.AdminConfig.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.MailError);
-                throw new Exception(ex.Message);
+                throw;
             }
 
         }
@@ -202,7 +210,7 @@ namespace Lumle.Module.AdminConfig.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.TwilioSms);
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -223,7 +231,7 @@ namespace Lumle.Module.AdminConfig.Services
                     emailTemplate.Body = emailTemplate.Body.Replace("%serviceStatus" + count + "%", item.Value);
                     count++;
                 }
-              
+
                 var emailServiceCredentials = _credentialService.GetAll(x => x.Slug == "smtpmailserver"
                                                                              || x.Slug == "smtpusername"
                                                                              || x.Slug == "smtpnoreplyemail"
@@ -244,13 +252,56 @@ namespace Lumle.Module.AdminConfig.Services
                     emailTemplate.Body = emailTemplate.Body.Replace("%username%", emailReceiverItem.Key);
                     await _emailService.SendEmailAsync(smtpOption, emailReceiverItem.Value, smtpOption.DefaultEmailFromAddress, emailTemplate.Subject, null, emailTemplate.Body);
                 }
-                
+
 
             }
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.MailError);
-                throw new Exception(ex.Message);
+                throw;
+            }
+        }
+
+        public void VerifySMTPStatus()
+        {
+            // Get Credentials from the email template
+            var emailServiceCredntials = _credentialService.GetAll(
+                                            x => x.Slug == "smtpmailserver" || x.Slug == "smtpusername" || x.Slug == "smtpnoreplyemail" || x.Slug == "smtpuserpassword").ToList();
+
+            var smtpOption = new SmtpOptions()
+            {
+                Server = emailServiceCredntials.FirstOrDefault(x => x.Slug == "smtpmailserver")?.Value,
+                User = emailServiceCredntials.FirstOrDefault(x => x.Slug == "smtpusername")?.Value,
+                DefaultEmailFromAddress = emailServiceCredntials.FirstOrDefault(x => x.Slug == "smtpnoreplyemail")?.Value,
+                Password = emailServiceCredntials.FirstOrDefault(x => x.Slug == "smtpuserpassword")?.Value,
+                RequiresAuthentication = true
+            };
+
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress("supernarwen", "supernarwen@gmail.com"));
+            message.To.Add(new MailboxAddress("Ekbana", "niraj@ekbana.com"));
+
+            message.Subject = "Is this mail workin";
+
+            var bodyBuilder = new BodyBuilder { HtmlBody = @"<b>Just ignore this mail</b>" };
+            message.Body = bodyBuilder.ToMessageBody();
+
+            using (var client = new SmtpClient())
+            {
+                // For demo-purposes, accept all SSL certificates (in case the server supports STARTTLS)
+                client.ServerCertificateValidationCallback = (s, c, h, e) => true;
+
+                client.Connect(smtpOption.Server, 587, false);
+
+                // Note: since we don't have an OAuth2 token, disable
+                // the XOAUTH2 authentication mechanism.
+                client.AuthenticationMechanisms.Remove("XOAUTH2");
+
+                // Note: only needed if the SMTP server requires authentication
+                client.Authenticate(smtpOption.User, smtpOption.Password);
+
+                client.Send(message);
+                client.Disconnect(true);
             }
         }
     }

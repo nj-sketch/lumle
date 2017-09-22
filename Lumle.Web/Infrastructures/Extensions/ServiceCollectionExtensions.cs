@@ -98,6 +98,7 @@ namespace Lumle.Web.Infrastructures.Extensions
                     }
                 })
                 .AddViewLocalization()
+                .AddMvcOptions(o => o.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()))
                 .AddDataAnnotationsLocalization()
                 .AddJsonOptions(options => {
                     options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
@@ -160,44 +161,10 @@ namespace Lumle.Web.Infrastructures.Extensions
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
             services.AddDbContext<BaseContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("SQLConnection"),
+                options.UseSqlServer(configuration.GetConnectionString("LocalConnection"),
                     b => b.MigrationsAssembly(migrationsAssembly)));
             return services;
         }
-
-        //public static IServiceCollection AddMySqlDataStore(this IServiceCollection services, IConfigurationRoot configuration)
-        //{
-        //    var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
-
-        //    services.AddDbContext<BaseContext>(options =>
-        //        options.UseMySql(configuration.GetConnectionString("MySQLConnection"),
-        //            b => b.MigrationsAssembly(migrationsAssembly)));
-        //    return services;
-        //}
-
-        //public static IServiceCollection AddPostgreSqlProvider(this IServiceCollection services, IConfigurationRoot configuration)
-        //{
-        //    var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
-
-        //    services.AddDbContext<BaseContext>(options =>
-        //        options.UseNpgsql(configuration.GetConnectionString("PostGreSQLConnection"),
-        //            b => b.MigrationsAssembly(migrationsAssembly)));
-        //    return services;
-        //}
-
-        //public static IServiceCollection AddHangFireWithPostGreSql(this IServiceCollection services, IConfigurationRoot configuration)
-        //{
-        //    services.AddHangfire(x => x.UsePostgreSqlStorage(configuration.GetConnectionString("PostGreSQLConnection")));
-
-        //    return services;
-        //}
-
-        //public static IServiceCollection AddHangFireWithMsSql(this IServiceCollection services, IConfigurationRoot configuration)
-        //{
-        //    services.AddHangfire(x => x.UseSqlServerStorage(configuration.GetConnectionString("SQLConnection")));
-
-        //    return services;
-        //}
 
         public static IServiceCollection AddFrameworkServices(this IServiceCollection services, IConfiguration configuration)
         {
@@ -232,33 +199,6 @@ namespace Lumle.Web.Infrastructures.Extensions
 
             return services;
         }
-
-
-
-        //public static IApplicationBuilder AddGoogleAuthentication(this IApplicationBuilder app, IConfigurationRoot configuration)
-        //{
-        //    app.UseGoogleAuthentication(new GoogleOptions
-        //    {
-        //        ClientId = configuration["Authentication:Google:ClientId"],
-        //        ClientSecret = configuration["Authentication:Google:ClientSecret"]
-        //    });
-
-        //    return app;
-        //}
-
-        //public static IApplicationBuilder AddFacebookAuthentication(this IApplicationBuilder app, IConfigurationRoot configuration)
-        //{
-        //    app.UseFacebookAuthentication(new FacebookOptions
-        //    {
-        //        AppId = configuration["Authentication:Facebook:AppId"],
-        //        Scope = { "email" },
-        //        Fields = { "name", "email" },
-        //        AppSecret = configuration["Authentication:Facebook:AppSecret"],
-        //    });
-
-
-        //    return app;
-        //}
 
         public static IServiceProvider Build(this IServiceCollection services,
             IConfiguration configuration, IHostingEnvironment hostingEnvironment)
