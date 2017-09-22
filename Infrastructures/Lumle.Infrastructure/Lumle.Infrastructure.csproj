@@ -11,13 +11,13 @@
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.0" />
     <PackageReference Include="EPPlus.Core" Version="1.5.2" />
-    <PackageReference Include="ImageSharp" Version="1.0.0-alpha8-00061" />
     <PackageReference Include="MailKit" Version="1.18.1.1" />
     <PackageReference Include="MediatR" Version="3.0.1" />
     <PackageReference Include="MimeKit" Version="1.18.1" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.4.1" />
     <PackageReference Include="NodaTime" Version="2.2.0" />
     <PackageReference Include="PdfRpt.Core" Version="1.1.1" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0001" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.0" />
     <PackageReference Include="System.Linq" Version="4.3.0" />
     <PackageReference Include="System.Text.RegularExpressions" Version="4.3.0" />

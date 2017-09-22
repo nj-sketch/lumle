@@ -15,6 +15,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.PlatformAbstractions;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace Lumle.Api
 {
@@ -22,22 +24,14 @@ namespace Lumle.Api
     {
         private readonly IHostingEnvironment _hostingEnvironment;
 
-        public Startup(IHostingEnvironment env)
+        public Startup(IHostingEnvironment env, IConfiguration configuration)
         {
-
-            _hostingEnvironment = env;
-
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
-            Configuration = builder.Build();
+            Configuration = configuration;
         }
 
-        private IConfigurationRoot Configuration { get; }
+        private IConfiguration Configuration { get; }
 
-        
+
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             var migrationAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
@@ -48,7 +42,25 @@ namespace Lumle.Api
             services.AddApiVersioning();
 
             AutoMapperConfiguration.Configure();
-            
+
+            services.AddAuthentication()
+              .AddJwtBearer(cfg =>
+              {
+                  cfg.RequireHttpsMetadata = false;
+                  cfg.SaveToken = false;
+
+                  cfg.TokenValidationParameters = new TokenValidationParameters()
+                  {
+                      ValidIssuer = Configuration["Tokens:Issuer"],
+                      ValidAudience = Configuration["Tokens:Audience"],
+                      IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Tokens:Key"])),
+                      ValidateIssuerSigningKey = true
+                  };
+
+              });
+
+
+
             services.AddMvc()
                 .AddJsonOptions(options =>
                 {
@@ -77,28 +89,9 @@ namespace Lumle.Api
             return services.Build(Configuration, _hostingEnvironment);
         }
 
-        
+
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, BaseContext context)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-
-            #region Authentication Handler
-            //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            //var identityServerValidationOptions = new IdentityServerAuthenticationOptions
-            //{
-            //    Authority = "http://localhost:30193/",
-            //    AllowedScopes = new List<string> { "LumleApi.full_access" },
-            //    ApiSecret = "secret",
-            //    ApiName = "LumleApi",
-            //    AutomaticAuthenticate = true,
-            //    SupportedTokens = SupportedTokens.Jwt,
-            //    AutomaticChallenge = true,
-            //};
-
-            //app.UseIdentityServerAuthentication(identityServerValidationOptions);
-            #endregion
-            
             context.Database.EnsureCreated();
             if (!context.Places.Any())
             {
@@ -107,7 +100,7 @@ namespace Lumle.Api
                     Name = "Pokhara",
                     CreatedDate = DateTime.UtcNow,
                     LastUpdated = DateTime.UtcNow,
-                    Location = "WSD" 
+                    Location = "WSD"
                 });
                 context.SaveChanges();
             }
@@ -117,6 +110,8 @@ namespace Lumle.Api
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "V1 docs");
             });
+
+            app.UseAuthentication();
 
             app.UseMvc();
         }
