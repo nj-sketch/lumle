@@ -26,7 +26,7 @@ namespace Lumle.Api.Infrastructures.Extensions
         /// <param name="services"></param>
         /// <param name="configuration"></param>
         /// <returns></returns>
-        public static IServiceCollection AddServices(this IServiceCollection services, IConfigurationRoot configuration)
+        public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSingleton(config => configuration);
 
@@ -53,7 +53,7 @@ namespace Lumle.Api.Infrastructures.Extensions
 
 
         public static IServiceProvider Build(this IServiceCollection services,
-            IConfigurationRoot configuration, IHostingEnvironment hostingEnvironment)
+            IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
             var builder = new ContainerBuilder();
             //builder.RegisterType<SomeType>().AsSelf().As<IService>();
