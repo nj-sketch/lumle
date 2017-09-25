@@ -167,7 +167,7 @@ var actionButton = function (data, type, full, meta) {
         }
         if (hasPermissionForDelete) {
             if (loggedUser !== full.name.trim()) {
-                actionBtn += '&nbsp;&nbsp;<button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#' + modalId +
+                actionBtn += '&nbsp;&nbsp;<button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#' + modalId +
                                         '"><i class="glyph-icon icon-trash-o"></i> ' + deleteButtonDisplayName + '</button>';
                 actionBtn += deleteModalSection(modalId, data, full.name);
             }
@@ -175,7 +175,7 @@ var actionButton = function (data, type, full, meta) {
     }
 
     if (!full.emailConfirmed) {
-        actionBtn += '&nbsp;&nbsp<button class="btn btn-info btn-sm btn-resend"><i class="glyph-icon icon-refresh"></i> ' + resendButtonDisplayName + '</button><img style="width: 30px;display:none" src="' + rootDir + 'assets/images/spinner/loader-dark.gif" alt="Sending..." display="none">';
+        actionBtn += '&nbsp;&nbsp<button class="btn btn-info btn-xs btn-resend"><i class="glyph-icon icon-refresh"></i> ' + resendButtonDisplayName + '</button><img style="width: 30px;display:none" src="' + rootDir + 'assets/images/spinner/loader-dark.gif" alt="Sending..." display="none">';
     }
     return actionBtn;
 }
