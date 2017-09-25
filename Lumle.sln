@@ -25,8 +25,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lumle.Module.Authorization"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lumle.Module.Blog", "Modules\Lumle.Module.Blog\Lumle.Module.Blog.csproj", "{B344F889-2B5F-4F58-946E-A251D47132D3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lumle.Module.Calendar", "Modules\Lumle.Module.Calendar\Lumle.Module.Calendar.csproj", "{89D1382F-DF23-4609-842F-A53204592CF1}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lumle.Module.CMS", "Modules\Lumle.Module.CMS\Lumle.Module.CMS.csproj", "{9F69BE27-D141-4E75-AD9B-5CDC6E78C10B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lumle.Module.Core", "Modules\Lumle.Module.Core\Lumle.Module.Core.csproj", "{2E727C7A-2086-4150-98A6-DE1E6CE04623}"
@@ -38,11 +36,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lumle.Module.PublicUser", "Modules\Lumle.Module.PublicUser\Lumle.Module.PublicUser.csproj", "{8669F8F3-CB39-4B79-AA6B-D89FD76D81EB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lumle.Module.Schedular", "Modules\Lumle.Module.Schedular\Lumle.Module.Schedular.csproj", "{5323BF4F-1814-487E-97E4-9C304580BA26}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Databases", "Databases", "{2CF77165-3EC9-4F86-B2F8-07CA320377CB}"
-	ProjectSection(SolutionItems) = preProject
-		..\..\lumle\lumle\StaticData.sql = ..\..\lumle\lumle\StaticData.sql
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiInfrastructures", "ApiInfrastructures", "{7CB42B1F-197B-4161-B384-96BB6F57C753}"
 EndProject
