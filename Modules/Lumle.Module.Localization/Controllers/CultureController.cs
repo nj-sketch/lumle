@@ -70,9 +70,8 @@ namespace Lumle.Module.Localization.Controllers
             _resourceRepository = resourceRepository;
         }
 
-#pragma warning disable SG0016 // Controller method is vulnerable to CSRF
         [HttpPost("setlanguage")]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> SetLanguage(string culture, string returnUrl)
         {
             try
@@ -103,7 +102,6 @@ namespace Lumle.Module.Localization.Controllers
             }
 
         }
-#pragma warning restore SG0016 // Controller method is vulnerable to CSRF
 
         [HttpGet]
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.LocalizationCultureView)]

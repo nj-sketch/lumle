@@ -1,6 +1,16 @@
-﻿@model IEnumerable<CultureModel>
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery antiforgery;
+
+@model IEnumerable<CultureModel>
+
+@{
+    ViewData["Title"] = Localizer[LabelConstants.Culture];
+    var antiforgeryRequestToken = antiforgery.GetAndStoreTokens(Context).RequestToken;
+    var hasPermissionForAddNewCulture = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.LocalizationCultureCreate), User);
+    var inActiveCultureCount = Model.AsQueryable().Count(x => !x.IsEnable);
+}
+
 @section styles
-{
+    {
     <link href="~/assets/widgets/datatable/datatable.min.css" rel="stylesheet" />
     <link href="~/assets/widgets/input-switch/inputswitch-alt.min.css" rel="stylesheet" />
     <link href="~/lib/toastr/toastr.css" rel="stylesheet" />
@@ -9,12 +19,6 @@
             left: 110px;
         }
     </style>
-}
-
-@{
-    ViewData["Title"] = Localizer[LabelConstants.Culture];
-    var hasPermissionForAddNewCulture = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.LocalizationCultureCreate), User);
-    var inActiveCultureCount = Model.AsQueryable().Count(x => !x.IsEnable);
 }
 
 <div id="page-title">
@@ -121,6 +125,10 @@
 
 @section scripts
 {
+    <script type="text/javascript">
+        var token = @Json.Serialize(antiforgeryRequestToken);
+    </script>
+
     <script src="~/lib/toastr/toastr.min.js"></script>
     <script type="text/javascript" src="~/assets/widgets/datatable/datatable.min.js"></script>
     <script type="text/javascript" src="~/assets/widgets/datatable/datatable-bootstrap.min.js"></script>
