@@ -7,16 +7,17 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Lumle.Web.Infrastructures.Extensions;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.ResponseCompression;
-using NLog.Extensions.Logging;
-using NLog.Web;
 using Microsoft.AspNetCore.Http;
 using Lumle.Data.Data;
 using GlobalConfiguration = Lumle.Infrastructure.GlobalConfiguration;
 using Lumle.Web.DataSeed;
+using NLog.Web;
+using Microsoft.Extensions.Logging;
+using NLog.Extensions.Logging;
+using NLog;
 
 namespace Lumle.Web
 {
@@ -63,8 +64,9 @@ namespace Lumle.Web
             return services.Build(Configuration, _hostingEnvironment);
         }
        
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, BaseContext context)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, BaseContext context)
         {
+            env.ConfigureNLog("nlog.config");
             app.UseAuthentication();
 
             if (env.IsDevelopment())
@@ -87,7 +89,10 @@ namespace Lumle.Web
             app.UseAppSystemMiddleware();
 
             // Use only while using scheduler
-           // app.UseSchedularMiddleware();
+            // app.UseSchedularMiddleware();
+
+            loggerFactory.AddNLog();
+            app.AddNLogWeb();
 
             app.UseStatusCodePagesWithRedirects("~/{0}");
 
