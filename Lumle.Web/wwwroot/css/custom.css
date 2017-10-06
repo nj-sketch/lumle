@@ -1,12 +1,106 @@
-﻿.module{
-    color:#8da0aa;
-}
+﻿.module{color:#8da0aa;}
 
 .login_error{
     width:91%;
     margin:0 auto;
 }
 
-.alert{
-    border-radius:4px;
+.alert{ border-radius:4px;}
+
+.title-setting {
+    color: #3A3D49;
+    opacity: 1;
+    font-size: 21px;
+    font-weight: 600;
+    text-transform: capitalize;
+    letter-spacing: 1px;
+    border-bottom: 1px solid #ddd;
+    padding: 0px 15px 15px 15px;
+    margin-bottom: 0;
 }
+
+.form-horizontal .custom-label {
+    text-align: left;
+    font-size: 18px;
+    font-weight: 400;
+    padding-left: 15px;
+}
+
+.custom-input { margin-bottom: 15px; }
+
+.form-horizontal .custom-input p { padding-top: 7px; }
+
+.custom-panel { padding: 15px; }
+
+.form-section {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 15px;
+}
+
+.custom-label label {
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.custom-label p {
+    color: #a0a0a0;
+    font-size: 12px;
+    font-style: italic;
+}
+
+.main-section .form-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.custom-btn { background-color: #1a9edf; }
+
+.custom-btn:hover {
+    background-color: #33bcff;
+    border: 1px solid #33bcff;
+}
+
+.btn-cancel {
+    border: none;
+    font-weight: bold;
+}
+
+.table.dataTable thead > tr > th {
+    font-weight: bold;
+    vertical-align: bottom;
+    border-top: 1px solid #e6e6e6 !important;
+    padding: 15px;
+    text-transform: uppercase;
+    border-bottom: 1px solid #e6e6e6;
+    background-color: #f7f7f7;
+    color: #000;
+    font-weight: 400;
+}
+
+.data-table .table > thead > tr > th:nth-child(4) { text-align: right; }
+
+.data-table .table > tbody > tr > td:nth-child(4) { text-align: right; }
+
+.data-table .table > tbody > tr > td:nth-child(5) { text-align: right; }
+
+.table.dataTable > tbody > tr > td {
+    padding: 15px;
+    border-top-width: 0px;
+    border-top-style: solid;
+    text-align: left;
+    border-bottom: 1px solid #e6e6e6;
+    font-size: 14px;
+    color: #3A3D49;
+    white-space: nowrap;
+}
+
+.table.dataTable tr:hover { background-color: #f5f8fc; }
+
+.table.dataTable .table > tbody > tr a:hover {
+    background-color: #f5f8fc;
+    color: #0954ab;
+    text-decoration: none;
+}
+
+.table { width: 100% !important; }
