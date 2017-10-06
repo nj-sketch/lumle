@@ -50,7 +50,7 @@
         <div class="panel-body">
             <div class="pull-right">
                 <div class="user-account-btn dropdown">
-                    <a href="#" title="Download" class="user-profile clearfix" data-toggle="dropdown"  style="text-decoration: none;">
+                    <a href="#" title="Download" class="user-profile clearfix" data-toggle="dropdown" style="text-decoration: none;">
                         <i class="glyph-icon icon-arrow-circle-down"></i>
                         <span>@Localizer[LabelConstants.Download]</span>
                         <i class="glyph-icon icon-angle-down"></i>
@@ -59,7 +59,7 @@
                         <div class="box-sm">
                             <ul class="reset-ul mrg5B">
                                 <li>
-                                    <a asp-action="ExportExcel"  asp-controller="User" id="exportExcel" style="text-decoration: none;">@Localizer[LabelConstants.ExportasExcel]</a>
+                                    <a asp-action="ExportExcel" asp-controller="User" id="exportExcel" style="text-decoration: none;">@Localizer[LabelConstants.ExportasExcel]</a>
                                 </li>
                                 <li>
                                     <a asp-action="ExportPdf" asp-controller="User" id="exportPdf" style="text-decoration: none;">@Localizer[LabelConstants.ExportasPdf]</a>
@@ -69,29 +69,30 @@
                     </div>
                 </div>
             </div>
-            <br /><br />
 
-            <table class="table table-hover table-responsive table-bordered" id="userDataTable" style="width:100% !important;">
-                <thead>
-                    <tr>
-                        <th>@Localizer[LabelConstants.SN]</th>
-                        <th></th>
-                        <th>@Localizer[LabelConstants.UserName]</th>
-                        <th>@Localizer[LabelConstants.Email]</th>
-                        <th>@Localizer[LabelConstants.Role]</th>
-                        <th>@Localizer[LabelConstants.Status]</th>
-                        <th>@Localizer[LabelConstants.EmailConfirmed]</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+            <div class="dataTable">
+                <table class="table" id="userDataTable">
+                    <thead>
+                        <tr>
+                            <th>@Localizer[LabelConstants.SN]</th>
+                            <th></th>
+                            <th>@Localizer[LabelConstants.UserName]</th>
+                            <th>@Localizer[LabelConstants.Email]</th>
+                            <th>@Localizer[LabelConstants.Role]</th>
+                            <th>@Localizer[LabelConstants.Status]</th>
+                            <th>@Localizer[LabelConstants.EmailConfirmed]</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
 
 @section scripts
-{
+    {
     <script type="text/javascript">
         var token = @Json.Serialize(antiforgeryRequestToken);
         var hasPermissionForUpdate = @hasPermissionForUpdate.ToString().ToLower();
@@ -101,5 +102,5 @@
     <script src="~/lib/toastr/toastr.min.js"></script>
     <script src="~/js/jquery.dataTables.min.js"></script>
     <script src="~/js/dataTables.bootstrap.min.js"></script>
-    <script src="~/authorization/js/authorization-user-index.js" ></script>
+    <script src="~/authorization/js/authorization-user-index.js"></script>
 }
