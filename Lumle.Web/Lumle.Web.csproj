@@ -4,11 +4,18 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <AssemblyName>Lumle.Web</AssemblyName>
+    <MVCRazorCompileOnPublish>false</MVCRazorCompileOnPublish>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
     <OutputType>Exe</OutputType>
     <PackageId>Lumle.Web</PackageId>
     <UserSecretsId>aspnet-Lumle.Web-f3425a41-0a66-4455-a803-b3f0e8c3fb3d</UserSecretsId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-wp8+netcore45+net45+wp81+wpa81</AssetTargetFallback>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Remove="Properties\PublishProfiles\lumle-staging - Web Deploy.pubxml" />
+  </ItemGroup>
   
   <ItemGroup>
     <None Update="wwwroot\**\*;Modules\**\*;Views\**\*;nlog.config;appsettings.json;bower.json;package.json">
@@ -38,6 +45,10 @@
   <ItemGroup>
     <ProjectReference Include="..\Infrastructures\Lumle.Core\Lumle.Core.csproj" />
     <ProjectReference Include="..\Modules\Lumle.Module.Schedular\Lumle.Module.Schedular.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 
 </Project>

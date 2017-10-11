@@ -1,25 +1,20 @@
 @using System.Globalization;
-@model ImportResourceModel
-@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery antiforgery;
 
-@functions
-{
-    public string GetAntiXsrfRequestToken()
-    {
-        return Xsrf.GetAndStoreTokens(Context).RequestToken;
-    }
-}
-@section styles
-{
-    <link href="~/css/dataTables.bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" type="text/css" href="~/assets/widgets/datatable/datatable.min.css">
-    <link href="~/lib/toastr/toastr.css" rel="stylesheet" />
-}
+@model ImportResourceModel
 
 @{
     ViewData["Title"] = Localizer[LabelConstants.Resource];
+    var antiforgeryRequestToken = antiforgery.GetAndStoreTokens(Context).RequestToken;
     var hasPermissionForUpdateResource = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.LocalizationCultureUpdate), User);
     var cultureName = new CultureInfo(Model.Culture).DisplayName;
+}
+
+@section styles
+    {
+    <link href="~/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="~/assets/widgets/datatable/datatable.min.css">
+    <link href="~/lib/toastr/toastr.css" rel="stylesheet" />
 }
 
 <div id="page-title">
@@ -112,7 +107,8 @@
 @section scripts
 {
     <script type="text/javascript">
-        var $hasPermissionForUpdateResource=@hasPermissionForUpdateResource.ToString().ToLower();
+        var token = @Json.Serialize(antiforgeryRequestToken);
+        var hasPermissionForUpdateResource=@hasPermissionForUpdateResource.ToString().ToLower();
     </script>
     <script src="~/lib/toastr/toastr.min.js"></script>
     <script src="~/js/jquery.dataTables.min.js"></script>

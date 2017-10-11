@@ -73,7 +73,7 @@ namespace Lumle.Api
             {
                 c.SwaggerDoc("v1", new Info
                 {
-                    Title = "Sipradi Mobile API",
+                    Title = "Lumle API Endpoint",
                     Version = "v1",
                     Contact = new Contact
                     {
@@ -93,19 +93,6 @@ namespace Lumle.Api
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, BaseContext context)
         {
-            context.Database.EnsureCreated();
-            if (!context.Places.Any())
-            {
-                context.Places.Add(new Place
-                {
-                    Name = "Pokhara",
-                    CreatedDate = DateTime.UtcNow,
-                    LastUpdated = DateTime.UtcNow,
-                    Location = "WSD"
-                });
-                context.SaveChanges();
-            }
-
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {

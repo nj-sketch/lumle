@@ -84,6 +84,7 @@ function Resource () {
             "type": "POST",
             "url": rootDir + "localization/culture/DataHandler",
             "contentType": "application/json; charset=utf-8",
+            "headers": { "RequestVerificationToken": token },
             "data": function (data) {
                 data.Culture = culture;
                 data.ResourceCategoryId = resourceFilterBy
@@ -123,7 +124,7 @@ function Resource () {
                 "data": "cultureId", "render": actionButton,
                 "searchable": false,
                 "orderable": false,
-                "visible": $hasPermissionForUpdateResource==true?true:false
+                "visible": hasPermissionForUpdateResource==true?true:false
             }
         ],
         "order": [1, "asc"],
@@ -133,7 +134,7 @@ function Resource () {
 
 
 var renderInput = function (data) {
-    if ($hasPermissionForUpdateResource) {
+    if (hasPermissionForUpdateResource) {
         return '<input value="' + data + '"class="form-control" style="width:100%" />';
     }
     else {
@@ -189,25 +190,5 @@ function displayError(message, messageTitle) {
     }
 }
 
-
-
-
-//$(document).ready(function () {
-//    var cultureInfo = $("#currentCultureName").val();
-//    var languageFileUrl="";
-//    switch (cultureInfo) {
-//        case "ne":
-//            languageFileUrl= rootDir + "datatablelanguages/nepali.json";
-//            break;
-//        default:
-//            languageFileUrl = "";
-//            break;
-//    }
-
-//    var table = $("#resourceDataTable").DataTable({
-//        "language":{
-//            "url": languageFileUrl
-//        }
-//    });
 
 
