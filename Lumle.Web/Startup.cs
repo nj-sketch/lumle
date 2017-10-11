@@ -43,8 +43,8 @@ namespace Lumle.Web
 
             services.AddMsSqlDataStore(Configuration);
             services.AddIdentity();
-            services.AddFrameworkServices(Configuration);     
-                  
+            services.AddFrameworkServices(Configuration);
+
             //call this in case you need aspnet-user-authtype/aspnet-user-identity
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -60,14 +60,15 @@ namespace Lumle.Web
 
             services.AddCustomizedMvc(GlobalConfiguration.Modules);
             services.AddMemoryCache();
-          
+
             return services.Build(Configuration, _hostingEnvironment);
         }
-       
+
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, BaseContext context)
         {
             env.ConfigureNLog("nlog.config");
-            app.UseAuthentication();
+            loggerFactory.AddNLog();
+            app.AddNLogWeb();
 
             if (env.IsDevelopment())
             {
@@ -80,6 +81,7 @@ namespace Lumle.Web
                 app.UseExceptionHandler("/Error");
             }
 
+            app.UseAuthentication();
             app.SeedData(context);
 
             app.UseCustomizedRequestLocalization();
@@ -91,9 +93,6 @@ namespace Lumle.Web
             // Use only while using scheduler
             // app.UseSchedularMiddleware();
 
-            loggerFactory.AddNLog();
-            app.AddNLogWeb();
-
             app.UseStatusCodePagesWithRedirects("~/{0}");
 
             app.UseMvc(routes =>
@@ -102,7 +101,7 @@ namespace Lumle.Web
                     "default",
                     "{controller=Account}/{action=Index}/{id?}");
             });
-        }        
+        }
     }
 }
 

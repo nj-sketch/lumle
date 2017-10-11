@@ -12,6 +12,7 @@ using Lumle.Api.Infrastructures.Helpers;
 namespace Lumle.Api.Controllers
 {
     
+    [NonController]
     [ApiVersion("1.0")]
     [Produces("application/json")]
     [Consumes("application/json")]

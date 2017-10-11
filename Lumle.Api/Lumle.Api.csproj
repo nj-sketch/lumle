@@ -3,12 +3,19 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <UserSecretsId>dec7bd12-165c-4e5a-8404-166b31056f52</UserSecretsId>
+    <MVCRazorCompileOnPublish>false</MVCRazorCompileOnPublish>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>bin\Debug\netcoreapp2.0\LumleApiDocs.xml</DocumentationFile>
     <NoWarn>1701;1702;1705;1591</NoWarn>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Remove="Properties\PublishProfiles\lumleapi - Web Deploy.pubxml" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Update="Modules\**\*;wwwroot\**\*">
@@ -34,6 +41,10 @@
   
   <ItemGroup>
     <ProjectReference Include="..\ApiInfrastructures\Lumle.Api.Service\Lumle.Api.Service.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 
 
