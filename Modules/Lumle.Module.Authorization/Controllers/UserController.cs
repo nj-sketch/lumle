@@ -37,6 +37,7 @@ using Lumle.Core.Services.Abstracts;
 using Microsoft.AspNetCore.Hosting;
 using Lumle.Infrastructure.Constants.Localization;
 using Lumle.Infrastructure.Utilities.Abstracts;
+using Lumle.Infrastructure.Enums;
 
 namespace Lumle.Module.Authorization.Controllers
 {
@@ -180,6 +181,11 @@ namespace Lumle.Module.Authorization.Controllers
                                     UserName = user.UserName,
                                     FirstName = model.FirstName,
                                     LastName = model.LastName,
+                                    StreetAddress = model.StreetAddress,
+                                    PostalCode = model.PostalCode,
+                                    City = model.City,
+                                    State = Convert.ToInt32(model.EnumState),
+                                    Country = Convert.ToInt32(model.EnumCountry),
                                     CreatedDate = DateTime.UtcNow
                                 };
                                 _profileService.Add(userProfile);
@@ -357,7 +363,6 @@ namespace Lumle.Module.Authorization.Controllers
                         TimeZone = user.TimeZone,
                         AccountStatus = user.AccountStatus
                     };
-
 
                     //Update user in Identity
                     user.UserName = model.UserName;
@@ -604,8 +609,6 @@ namespace Lumle.Module.Authorization.Controllers
                         FirstName = requestedDeletedUser.FirstName,
                         LastName = requestedDeletedUser.LastName,
                         Phone = requestedDeletedUser.Phone,
-                        Website = requestedDeletedUser.Website,
-                        AboutMe = requestedDeletedUser.AboutMe,
                         IsDeleted = requestedDeletedUser.IsDeleted,
                         DeletedDate = requestedDeletedUser.DeletedDate
                     };
@@ -663,8 +666,6 @@ namespace Lumle.Module.Authorization.Controllers
                 profileVm.FirstName = profileVm.FirstName ?? "";
                 profileVm.LastName = profileVm.LastName ?? "";
                 profileVm.Phone = profileVm.Phone ?? "";
-                profileVm.AboutMe = profileVm.AboutMe ?? "";
-                profileVm.Website = profileVm.Website ?? "";
                 profileVm.TimeZone = user.TimeZone;
                 profileVm.Email = user.Email;
                 profileVm.UserName = user.UserName;

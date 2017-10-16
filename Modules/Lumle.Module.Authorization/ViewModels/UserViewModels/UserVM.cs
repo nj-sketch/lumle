@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Lumle.Infrastructure.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace Lumle.Module.Authorization.ViewModels.UserViewModels
 {
@@ -15,16 +16,6 @@ namespace Lumle.Module.Authorization.ViewModels.UserViewModels
         [Required]
         public string LastName { get; set; }
 
-        //[Required]
-        //[DataType(DataType.Password)]
-        //public string Password { get; set; }
-
-        //[Display(Name = "Confirm Password")]
-        //[DataType(DataType.Password)]
-        //[Required]
-        //[Compare("Password",ErrorMessage ="Password doesnot match")]
-        //public string ConfirmPassword { get; set; }
-
         [Required(ErrorMessage = "Please select time zone")]
         public string TimeZone { get; set; }
 
@@ -35,5 +26,18 @@ namespace Lumle.Module.Authorization.ViewModels.UserViewModels
         [Required(ErrorMessage ="Please select role")]
         public string RoleId { get; set; }
 
+        public string StreetAddress { get; set; }
+
+        public string City { get; set; }
+
+        public string State { get; set; }
+
+        public string PostalCode { get; set; }
+
+        public string Country { get; set; }
+
+        public CountryEnum EnumCountry { get; set; }
+
+        public StateEnum EnumState { get; set; }
     }
 }

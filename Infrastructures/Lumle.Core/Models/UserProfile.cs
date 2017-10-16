@@ -24,10 +24,15 @@ namespace Lumle.Core.Models
         [Phone]
         public string Phone { get; set; }
 
-        [MaxLength(500)]
-        public string Website { get; set; }
+        public string StreetAddress { get; set; }
 
-        public string AboutMe { get; set; }
+        public string City { get; set; }
+
+        public int? State { get; set; }
+
+        public string PostalCode { get; set; }
+
+        public int? Country { get; set; }
 
         [Required]
         public bool IsDeleted { get; set; } = false;

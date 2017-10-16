@@ -144,7 +144,7 @@ var renderInput = function (data) {
 }
 
 var actionButton = function () {
-    return '<button class="btn btn-success btn-sm ">' + saveButtonDisplayName + '</button><img style="width: 30px;display:none" src="' + rootDir + 'assets/images/spinner/loader-dark.gif" alt="saving..." display="none">';
+    return '<button class="btn btn-success btn-xs">' + saveButtonDisplayName + '</button><img style="width: 30px;display:none" src="' + rootDir + 'assets/images/spinner/loader-dark.gif" alt="saving..." display="none">';
 }
 
 
