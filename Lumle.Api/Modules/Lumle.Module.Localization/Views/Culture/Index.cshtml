@@ -84,8 +84,8 @@
         <h3 class="title-hero">
             Culture
         </h3>
-        <div class="example-box-wrapper">
-            <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="cultureDataTable">
+        <div class="dataTable">
+            <table cellpadding="0" cellspacing="0" border="0" class="table" id="cultureDataTable">
                 <thead>
                     <tr>
                         <th>@Localizer[LabelConstants.SN]</th>
@@ -101,7 +101,7 @@
                             <td>@culture.DisplayName</td>
                             <td>
                                 <div class="form-group ">
-                                    <a class="btn btn-info btn-sm display-inline" style="float:left;" href="~/localization/culture/@culture.Name"><i class="glyph-icon icon-cog"></i> @Localizer[LabelConstants.Manage]</a>
+                                    <a class="btn btn-info btn-xs display-inline" style="float:left;" href="~/localization/culture/@culture.Name"><i class="glyph-icon icon-cog"></i> @Localizer[LabelConstants.Manage]</a>
                                     @if (culture.Name != "en-US")
                                     {
                                         if (culture.IsActive)

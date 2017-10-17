@@ -3,23 +3,12 @@
 
 @{
     var hasPermissionForEmailTemplateUpdate = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.AdminConfigCredentialUpdate), User);
-    ViewData["Title"] =Localizer[LabelConstants.ManageEmailTemplate];
+    ViewData["Title"] = Localizer[LabelConstants.ManageEmailTemplate];
 }
 
 @section styles{
     <link href="~/assets/widgets/summernote-wysiwyg/summernote-wysiwyg.min.css" rel="stylesheet" />
 }
-
-<div id="page-title">
-    <h2 class="display-inline">@Localizer[LabelConstants.EmailTemplate]</h2>
-    @if (hasPermissionForEmailTemplateUpdate)
-    {
-        <div class="pull-right">
-            <a class="btn btn-primary btn-sm" href="~/adminconfig/emailtemplate/last/@Model.Id">@Localizer[LabelConstants.LoadLastTemplate]</a>
-            <a class="btn btn-primary btn-sm" href="~/adminconfig/emailtemplate/default/@Model.Id">@Localizer[LabelConstants.LoadDefaultTemplate]</a>
-        </div>
-    }
-</div>
 
 <div class="breadcrumb-section clearfix">
     <ol class="breadcrumb">
@@ -31,81 +20,98 @@
 
 @Html.Partial("_MessagePanel")
 
+<div class="page-title">
+    @if (hasPermissionForEmailTemplateUpdate)
+    {
+        <div class="pull-right" style="margin:15px 15px 0 0;">
+            <a class="btn btn-info btn-xs" href="~/adminconfig/emailtemplate/last/@Model.Id">@Localizer[LabelConstants.LoadLastTemplate]</a>
+            <a class="btn btn-info btn-xs" href="~/adminconfig/emailtemplate/default/@Model.Id">@Localizer[LabelConstants.LoadDefaultTemplate]</a>
+        </div>
+    }
+</div>
 <div class="panel">
-    <div class="panel-body">
-        <form id="mainForm"class="form-horizontal bordered-row" asp-action="EditEmailTemplate" role="form" method="post" data-parsley-validate novalidate>
-            @Html.HiddenFor(x => x.Id)
-           @if (hasPermissionForEmailTemplateUpdate)
-           {
-            <div class="form-group" style="border-top: 0px;">
-                <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.Title]<span class="text-danger"> *</span></label>
-                <div class="col-lg-6">
-                    <input asp-for="SlugDisplayName" class="form-control" required />
-                </div>
-                @*<span asp-validation-for="SlugDisplayName" class="text-danger"></span>*@
-            </div>
+    <h3 class="title-hero title-setting">@Localizer[LabelConstants.EmailTemplate]</h3>
+    <div class="panel-body custom-panel">
+        <div class="example-box-wrapper">
+            <form id="mainForm" class="form-horizontal bordered-row" asp-action="EditEmailTemplate" role="form" method="post" data-parsley-validate novalidate>
+                <div class="row">
+                    <div class="col-md-12 main-section">
+                        @Html.HiddenFor(x => x.Id)
+                        @if (hasPermissionForEmailTemplateUpdate)
+                        {
+                            <div class="form-group">
+                                <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.Title]<span class="text-danger"> *</span></label>
+                                <div class="col-lg-6">
+                                    <input asp-for="SlugDisplayName" class="form-control" required />
+                                </div>
+                            </div>
 
-            <div class="form-group">
-                <label asp-for="Subject" class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.EmailSubject]<span class="text-danger"> *</span></label>
-                <div class="col-lg-6">
-                    <input asp-for="Subject" class="form-control" required  />
-                </div>
-                @*<span asp-validation-for="Subject" class="text-danger"></span>*@
-            </div>
+                            <div class="form-group">
+                                <label asp-for="Subject" class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.EmailSubject]<span class="text-danger"> *</span></label>
+                                <div class="col-lg-6">
+                                    <input asp-for="Subject" class="form-control" required />
+                                </div>
+                            </div>
 
-            <div class="form-group">
-                <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.EmailBody]<span class="text-danger"> *</span></label>
-                <div class="col-lg-6">
-                    <div class="example-box-wrapper">
-                        <textarea asp-for="Body" row="10" class="wysiwyg-editor" required ></textarea>
+                            <div class="form-group form-section">
+                                <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.EmailBody]<span class="text-danger"> *</span></label>
+                                <div class="col-lg-6">
+                                    <div class="example-box-wrapper">
+                                        <textarea asp-for="Body" row="10" class="wysiwyg-editor" required></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group form-section">
+                                <div class="col-sm-9">
+                                    <div class="pull-right">
+                                        <a class="btn btn-default btn-cancel btn-sm" asp-action="Index">@Localizer[LabelConstants.Cancel]</a>
+                                        <button type="submit" class="btn btn-success custom-btn btn-sm">Save Changes</button>
+                                        <img id="loadingImg" style="width: 30px; display:none;" src="~/assets/images/spinner/loader-dark.gif" alt="loading image">
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-group">
+                                <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.Title]<span class="text-danger"> *</span></label>
+                                <div class="col-lg-6">
+                                    <input asp-for="SlugDisplayName" class="form-control" required readonly />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="Subject" class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.EmailSubject]<span class="text-danger"> *</span></label>
+                                <div class="col-lg-6">
+                                    <input asp-for="Subject" class="form-control" required readonly />
+                                </div>
+                            </div>
+
+                            <div class="form-group form-section">
+                                <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.EmailBody]<span class="text-danger"> *</span></label>
+                                <div class="col-lg-6">
+                                    <div class="example-box-wrapper">
+                                        <textarea asp-for="Body" row="10" class="wysiwyg-editor" required readonly></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group form-section">
+                                <div class="col-sm-9">
+                                    <div class="pull-right">
+                                        <a class="btn btn-default btn-cancel btn-sm" asp-action="Index">@Localizer[LabelConstants.Back]</a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
                     </div>
                 </div>
-                @*<span asp-validation-for="Body" class="text-danger"></span>*@
-            </div>
-
-
-            <div class="bg-default content-box text-center pad20A mrg25T">
-                <a class="btn btn-default" asp-action="Index">@Localizer[LabelConstants.Cancel]</a>
-                <button class="btn btn-success">@Localizer[LabelConstants.Save]</button>
-                <img id="loadingImg" style="width: 30px; display:none;" src="~/assets/images/spinner/loader-dark.gif" alt="loading image">
-            </div>
-           }
-           else
-           {
-            <div class="form-group" style="border-top: 0px;">
-                <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.Title]<span class="text-danger"> *</span></label>
-                <div class="col-lg-6">
-                    <input asp-for="SlugDisplayName" class="form-control" required  readonly/>
-                </div>
-                @*<span asp-validation-for="SlugDisplayName" class="text-danger"></span>*@
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Subject" class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.EmailSubject]<span class="text-danger"> *</span></label>
-                <div class="col-lg-6">
-                    <input asp-for="Subject" class="form-control" required readonly/>
-                </div>
-                @*<span asp-validation-for="Subject" class="text-danger"></span>*@
-            </div>
-
-            <div class="form-group">
-                <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.EmailBody]<span class="text-danger"> *</span></label>
-                <div class="col-lg-6">
-                    <div class="example-box-wrapper">
-                        <textarea asp-for="Body" row="10" class="wysiwyg-editor" required readonly></textarea>
-                    </div>
-                </div>
-                @*<span asp-validation-for="Body" class="text-danger"></span>*@
-            </div>
-
-
-            <div class="bg-default content-box text-center pad20A mrg25T">
-                <a class="btn btn-default" asp-action="Index">@Localizer[LabelConstants.Back]</a>
-            </div>
-           }
-        </form>
+            </form>
+        </div>
     </div>
 </div>
+
 @section scripts{
     <script type="text/javascript" src="~/assets/widgets/parsley/parsley.js"></script>
     <script src="~/assets/widgets/summernote-wysiwyg/summernote-wysiwyg.min.js"></script>

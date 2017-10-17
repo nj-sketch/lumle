@@ -18,7 +18,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <None Update="wwwroot\**\*;Modules\**\*;Views\**\*;nlog.config;appsettings.json;bower.json;package.json">
+    <None Update="wwwroot\**\*;Views\**\*;nlog.config;appsettings.json;bower.json;package.json">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
   </ItemGroup>
