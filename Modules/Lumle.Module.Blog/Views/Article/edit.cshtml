@@ -1,4 +1,3 @@
-@using System.Threading.Tasks
 @using Lumle.Module.Blog.ViewModels
 @model ArticleVM
 
@@ -7,12 +6,8 @@
 }
 
 @section styles{
-    <link href="~/assets/widgets/summernote-wysiwyg/summernote-wysiwyg.css" rel="stylesheet" />
+    <link href="~/assets/widgets/summernote-wysiwyg/summernote-wysiwyg.min.css" rel="stylesheet" />
 }
-
-<div id="page-title">
-    <h2>@Localizer[LabelConstants.EditArticle]</h2>
-</div>
 
 <div class="breadcrumb-section clearfix">
     <ol class="breadcrumb">
@@ -22,63 +17,70 @@
     </ol>
 </div>
 
+@Html.Partial("_MessagePanel")
+
 <div class="panel">
-    <div class="panel-body">
-        <style>
-            .font-fix {
-                padding: 6px 12px;
-            }
-        </style>
+    <h3 class="title-hero title-setting"> Edit Blog </h3>
+    <div class="panel-body custom-panel">
+        <div class="example-box-wrapper">
+            <form id="mainForm" enctype="multipart/form-data" class="form-horizontal bordered-row" asp-action="edit" method="post" data-parsley-validate novalidate>
+                <div class="row">
+                    <div class="col-md-12 main-section">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">@Localizer[LabelConstants.Title] <span class="text-danger">*</span></label>
+                            <div class="col-sm-6">
+                                <input asp-for="Title" type="text" class="form-control" required>
+                            </div>
+                        </div>
 
-        @Html.Partial("_MessagePanel")
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">@Localizer[LabelConstants.Content]</label>
+                            <div class="col-sm-6">
+                                <div class="example-box-wrapper">
+                                    <textarea asp-for="Content" row="10" class="wysiwyg-editor"></textarea>
+                                </div>
+                            </div>
+                        </div>
 
-        <form id="mainForm" class="form-horizontal bordered-row" asp-action="edit" method="post" enctype="multipart/form-data" data-parsley-validate novalidate>
-            @Html.HiddenFor(x => x.Id)
-            <div class="form-group" style="border-top: 0px;">
-                <label class="col-sm-3 control-label">@Localizer[LabelConstants.Title] <span class="text-danger">*</span></label>
-                <div class="col-sm-6">
-                    <input asp-for="Title" type="text" required class="form-control">
-                </div>
-            </div>
+                        <div class="form-group form-section">
+                            <label class="col-sm-3 control-label">Featured Image<span class="text-danger"></span></label>
+                            @if (!string.IsNullOrEmpty(@Model.FeaturedImageUrl))
+                            {
+                                <div class="col-sm-2">
+                                    <img src="@Model.FeaturedImageUrl" class="img-responsive" alt="Featured Image" />
+                                </div>
 
-            <div class="form-group">
-                <label class="col-sm-3 control-label">@Localizer[LabelConstants.Content]</label>
-                <div class="col-sm-6">
-                    <div class="example-box-wrapper">
-                        <textarea asp-for="Content" row="10" class="wysiwyg-editor"></textarea>
+                                <div class="col-sm-offset-1 col-sm-3">
+                                    <label class="col-sm-offset-1 col-sm-4 control-label" style="text-align:left; margin-bottom:2%;">Update Feature Image</label>
+                                    <input type="file" class="form-control" data-parsley-pattern="/\.(jpg|jpeg|png)$/i" data-parsley-error-message="Only jpeg, jpg, png supported." asp-for="FeaturedImage" accept="image/png,image/jpg,image/jpeg">
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-sm-2">
+                                    <input type="file" class="form-control" data-parsley-pattern="/\.(jpg|jpeg|png)$/i" data-parsley-error-message="Only jpeg, jpg, png supported." asp-for="FeaturedImage">
+                                </div>
+                            }
+                        </div>
+
+                        <div class="form-group form-section">
+                            <div class="col-sm-9">
+                                <div class="pull-right">
+                                    <a class="btn btn-default btn-cancel btn-sm" href="~/blog/article">@Localizer[LabelConstants.Cancel]</a>
+                                    <button type="submit" class="btn btn-success custom-btn btn-sm">Save Changes</button>
+                                    <img id="loadingImg" style="width: 30px; display:none;" src="~/assets/images/spinner/loader-dark.gif" alt="loading image">
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label class="col-sm-3 control-label">Featured Image<span class="text-danger"></span></label>
-                @if (!string.IsNullOrEmpty(@Model.FeaturedImageUrl))
-                {
-                    <div class="col-sm-2">
-                        <img src="@Model.FeaturedImageUrl" class="img-responsive" alt="Featured Image" />
-                    </div>
-
-                    <div class="col-sm-offset-1 col-sm-3">
-                        <label class="col-sm-offset-1 col-sm-4 control-label" style="text-align:left; margin-bottom:2%;">Update Feature Image</label>
-                        <input type="file" class="form-control" data-parsley-pattern="/\.(jpg|jpeg|png)$/i" data-parsley-error-message="Only jpeg, jpg, png supported." asp-for="FeaturedImage" accept="image/png,image/jpg,image/jpeg">
-                    </div>
-                }
-                else
-                {
-                    <div class="col-sm-2">
-                        <input type="file" class="form-control" data-parsley-pattern="/\.(jpg|jpeg|png)$/i" data-parsley-error-message="Only jpeg, jpg, png supported." asp-for="FeaturedImage">
-                    </div>
-                }
-            </div>
-
-            <div class="bg-default content-box text-center pad20A mrg25T">
-                <a class="btn btn-default" href="~/blog/article">@Localizer[LabelConstants.Cancel]</a>
-                <button class="btn btn-success" type="submit">@Localizer[LabelConstants.Save]</button>
-                <img id="loadingImg" style="width: 30px; display:none;" src="~/assets/images/spinner/loader-dark.gif" alt="loading image">
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>
+
 
 @section scripts {
     <script src="~/assets/widgets/summernote-wysiwyg/summernote-wysiwyg.min.js"></script>
