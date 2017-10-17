@@ -87,10 +87,11 @@ namespace Lumle.Module.Core.Controllers
             IHttpContextAccessor contextAccessor,
             ISystemSettingService systemSettingService,
             IUtilities utilities,
-             IRepository<Resource> resourceRepository,
-             IRepository<Culture> cultureRepository,
-             IStringLocalizer<ResourceString> localizer,
-             IOptions<IdentityOptions> optionsAccessor)
+            IRepository<Resource> resourceRepository,
+            IRepository<Culture> cultureRepository,
+            IStringLocalizer<ResourceString> localizer,
+            IOptions<IdentityOptions> optionsAccessor
+        )
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -153,13 +154,10 @@ namespace Lumle.Module.Core.Controllers
         {
             ViewData["ReturnUrl"] = returnUrl;
             if (!ModelState.IsValid) return View(model);
-            _memoryCache.Remove(CacheConstants.AuthorizationSidebarMenuCache);
+           // _memoryCache.Remove(CacheConstants.AuthorizationSidebarMenuCache);
             _memoryCache.Remove(CacheConstants.LocalizationCultureCache);
             _memoryCache.Remove(CacheConstants.LocalizationResourceCache);
             _memoryCache.Remove(CacheConstants.AuthorizationApplicationClaimsCache);
-
-
-
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, set lockoutOnFailure: true
@@ -285,7 +283,6 @@ namespace Lumle.Module.Core.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterVM model, string returnUrl = null)
         {
-
             using (var transaction = _context.Database.BeginTransaction())
             {
                 try

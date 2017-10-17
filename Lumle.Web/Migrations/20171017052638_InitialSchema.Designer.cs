@@ -11,8 +11,8 @@ using System;
 namespace Lumle.Web.Migrations
 {
     [DbContext(typeof(BaseContext))]
-    [Migration("20171016091242_UserProfileUpdateSchema")]
-    partial class UserProfileUpdateSchema
+    [Migration("20171017052638_InitialSchema")]
+    partial class InitialSchema
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -182,7 +182,7 @@ namespace Lumle.Web.Migrations
 
                     b.Property<string>("City");
 
-                    b.Property<string>("Country");
+                    b.Property<int>("Country");
 
                     b.Property<DateTime>("CreatedDate");
 
@@ -205,7 +205,7 @@ namespace Lumle.Web.Migrations
 
                     b.Property<string>("PostalCode");
 
-                    b.Property<string>("State");
+                    b.Property<int>("State");
 
                     b.Property<string>("StreetAddress");
 

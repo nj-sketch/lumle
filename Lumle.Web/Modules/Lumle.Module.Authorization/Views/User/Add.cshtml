@@ -56,7 +56,7 @@
                             <label class="col-sm-3 control-label custom-label">Account Setting</label>
                             <div class="col-sm-5 custom-input">
                                 <p>@Localizer[LabelConstants.Role] <span class="text-danger">*</span></p>
-                                <select asp-for="RoleId" asp-items="ViewBag.AvailableRoles" class="form-control" required=""></select>
+                                <select asp-for="RoleId" asp-items="Model.RoleList" class="form-control" required=""></select>
                             </div>
 
                         </div>
@@ -74,8 +74,8 @@
                             </div>
 
                             <div class="col-sm-4  custom-input">
-                                <p>State / Province</p>
-                                <select class="form-control" asp-for="EnumCountry"
+                                <p>State / Province <span class="text-danger">*</span></p>
+                                <select class="form-control" required asp-for="EnumState"
                                         asp-items="Html.GetEnumSelectList<StateEnum>()"></select> 
                             </div>
 
@@ -85,8 +85,8 @@
                             </div>
 
                             <div class="col-sm-4  custom-input">
-                                <p>Country</p>
-                                <select class="form-control" asp-for="EnumCountry"
+                                <p>Country <span class="text-danger">*</span></p>
+                                <select class="form-control" required asp-for="EnumCountry"
                                         asp-items="Html.GetEnumSelectList<CountryEnum>()">
                                 </select> 
                             </div>
@@ -94,7 +94,7 @@
                             <label class="col-sm-3 control-label custom-label"></label>
                             <div class="col-sm-5 custom-input">
                                 <p>@Localizer[LabelConstants.TimeZone] <span class="text-danger">*</span></p>
-                                <select asp-for="TimeZone" asp-items="ViewBag.TimeZoneList" class="chosen-select" required style="display: none;"></select>
+                                <select asp-for="TimeZone" asp-items="Model.TimeZoneList" class="chosen-select" required style="display: none;"></select>
                             </div>
                         </div>
 

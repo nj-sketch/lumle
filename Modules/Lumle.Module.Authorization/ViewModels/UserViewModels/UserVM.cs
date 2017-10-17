@@ -1,4 +1,6 @@
 ﻿using Lumle.Infrastructure.Enums;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Lumle.Module.Authorization.ViewModels.UserViewModels
@@ -30,14 +32,23 @@ namespace Lumle.Module.Authorization.ViewModels.UserViewModels
 
         public string City { get; set; }
 
-        public string State { get; set; }
-
         public string PostalCode { get; set; }
-
-        public string Country { get; set; }
 
         public CountryEnum EnumCountry { get; set; }
 
         public StateEnum EnumState { get; set; }
+
+        public int AccountStatus { get; set; }
+
+        public List<SelectListItem> StatusList { get; } = new List<SelectListItem>
+        {
+            new SelectListItem { Value = "", Text = "-- Select Status --" },
+            new SelectListItem { Value = "1", Text = "Enable" },
+            new SelectListItem { Value = "0", Text = "Disable"  },
+        };
+
+        public List<SelectListItem> TimeZoneList { get; set; }
+
+        public List<SelectListItem> RoleList { get; set; }
     }
 }

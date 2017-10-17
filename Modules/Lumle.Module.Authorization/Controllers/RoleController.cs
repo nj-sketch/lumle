@@ -22,6 +22,8 @@ using Lumle.Module.Audit.Models;
 using NLog;
 using Microsoft.Extensions.Localization;
 using Lumle.Infrastructure.Constants.Localization;
+using Microsoft.Extensions.Caching.Memory;
+using Lumle.Infrastructure.Constants.Cache;
 
 namespace Lumle.Module.Authorization.Controllers
 {
@@ -37,6 +39,7 @@ namespace Lumle.Module.Authorization.Controllers
         private readonly IAuditLogService _auditLogService;
         private readonly IBaseRoleClaimService _baseRoleClaimService;
         private readonly IStringLocalizer<ResourceString> _localizer;
+        private readonly IMemoryCache _memoryCache;
 
         public RoleController(
             RoleManager<Role> roleManager,
@@ -45,8 +48,9 @@ namespace Lumle.Module.Authorization.Controllers
             IAuditLogService auditLogService,
             IPermissionService permissionService,
             IBaseRoleClaimService baseRoleClaimService,
-             IStringLocalizer<ResourceString> localizer
-            )
+            IStringLocalizer<ResourceString> localizer,
+            IMemoryCache memoryCache
+        )
         {
             _roleManager = roleManager;
             _userManager = userManager;
@@ -55,6 +59,7 @@ namespace Lumle.Module.Authorization.Controllers
             _auditLogService = auditLogService;
             _baseRoleClaimService = baseRoleClaimService;
             _localizer = localizer;
+            _memoryCache = memoryCache;
         }
 
 
@@ -408,7 +413,10 @@ namespace Lumle.Module.Authorization.Controllers
                 #endregion
 
                 await UpdateSecurityStampOfRoleUser(role);
-               
+
+                // remove the sidebar menu cache for that role
+                _memoryCache.Remove(CacheConstants.AuthorizationSidebarMenuCache + role);
+
                 return Json(new { success = true, message = _localizer[ActionMessageConstants.UpdatedSuccessfully].Value });
 
             }

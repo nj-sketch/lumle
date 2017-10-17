@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using Lumle.Data.Models;
+using Lumle.Infrastructure.Enums;
 
 namespace Lumle.Core.Models
 {
@@ -28,11 +29,11 @@ namespace Lumle.Core.Models
 
         public string City { get; set; }
 
-        public int? State { get; set; }
+        public int State { get; set; }
 
         public string PostalCode { get; set; }
 
-        public int? Country { get; set; }
+        public int Country { get; set; }
 
         [Required]
         public bool IsDeleted { get; set; } = false;

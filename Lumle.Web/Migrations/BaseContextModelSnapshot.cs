@@ -181,7 +181,7 @@ namespace Lumle.Web.Migrations
 
                     b.Property<string>("City");
 
-                    b.Property<int?>("Country");
+                    b.Property<int>("Country");
 
                     b.Property<DateTime>("CreatedDate");
 
@@ -204,7 +204,7 @@ namespace Lumle.Web.Migrations
 
                     b.Property<string>("PostalCode");
 
-                    b.Property<int?>("State");
+                    b.Property<int>("State");
 
                     b.Property<string>("StreetAddress");
 

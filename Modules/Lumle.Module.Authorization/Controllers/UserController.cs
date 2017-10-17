@@ -21,7 +21,6 @@ using NLog;
 using Lumle.Data.Data;
 using static Lumle.Infrastructure.Helpers.DataTableHelper;
 using System.Linq.Expressions;
-using System.Security.Claims;
 using Lumle.Module.Authorization.Helpers;
 using Lumle.Infrastructure.Constants.Token;
 using Lumle.Module.Audit.Models;
@@ -38,6 +37,7 @@ using Microsoft.AspNetCore.Hosting;
 using Lumle.Infrastructure.Constants.Localization;
 using Lumle.Infrastructure.Utilities.Abstracts;
 using Lumle.Infrastructure.Enums;
+using System.Security.Claims;
 
 namespace Lumle.Module.Authorization.Controllers
 {
@@ -70,8 +70,8 @@ namespace Lumle.Module.Authorization.Controllers
             IApplicationTokenService applicationTokenService,
             IStringLocalizer<ResourceString> localizer,
             IHostingEnvironment env,
-            ITimeZoneHelper timeZoneHelper)
-
+            ITimeZoneHelper timeZoneHelper
+        )
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -91,15 +91,19 @@ namespace Lumle.Module.Authorization.Controllers
         public IActionResult Index()
         {
             return View();
-
         }
 
         [HttpGet("add")]
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.AuthorizationUserCreate)]
         public async Task<IActionResult> AddUser()
         {
-            await InitializeRolesAndTimeZonesAsync();
-            return View("Add");
+            var userVm = new UserVM
+            {
+                TimeZoneList = GetAllSupportedTimeZones(),
+                RoleList = await GetAllSupportedRolesAsync()
+            };
+
+            return View("Add", userVm);
         }
 
         [HttpPost("add")]
@@ -115,7 +119,6 @@ namespace Lumle.Module.Authorization.Controllers
 
                     if (!ModelState.IsValid)
                     {
-                        await InitializeRolesAndTimeZonesAsync();
                         TempData["ErrorMsg"] = _localizer[ActionMessageConstants.PleaseFillAllTheRequiredFieldErrorMessage].Value;
                         return View("Add");
                     }
@@ -184,8 +187,8 @@ namespace Lumle.Module.Authorization.Controllers
                                     StreetAddress = model.StreetAddress,
                                     PostalCode = model.PostalCode,
                                     City = model.City,
-                                    State = Convert.ToInt32(model.EnumState),
-                                    Country = Convert.ToInt32(model.EnumCountry),
+                                    State = (int)(model.EnumState),
+                                    Country = (int)(model.EnumCountry),
                                     CreatedDate = DateTime.UtcNow
                                 };
                                 _profileService.Add(userProfile);
@@ -227,7 +230,6 @@ namespace Lumle.Module.Authorization.Controllers
                                 _unitOfWork.Save();
                                 #endregion
 
-
                                 TempData["SuccessMsg"] = _localizer[ActionMessageConstants.AddedSuccessfully].Value;
                                 return RedirectToAction("Index");
                             }
@@ -240,7 +242,6 @@ namespace Lumle.Module.Authorization.Controllers
                         return RedirectToAction("Index");
                     }
                     transaction.Rollback();
-                    await InitializeRolesAndTimeZonesAsync();
                     TempData["ErrorMsg"] = $"{_localizer[ActionMessageConstants.ErrorOccured].Value}. {result.Errors.FirstOrDefault()?.Description}";
                     return View("Add", model);
                 }
@@ -282,7 +283,8 @@ namespace Lumle.Module.Authorization.Controllers
             #endregion
 
             var requestedUserRoles = await _userManager.GetRolesAsync(user);
-            var model = new EditUserVM
+
+            var model = new UserVM
             {
                 UserName = user.UserName,
                 Email = user.Email,
@@ -290,14 +292,19 @@ namespace Lumle.Module.Authorization.Controllers
                 AccountStatus = user.AccountStatus,
                 FirstName = requestedUser.FirstName,
                 LastName = requestedUser.LastName,
+                EnumCountry = (CountryEnum)requestedUser.Country,
+                EnumState = (StateEnum)requestedUser.State,
+                RoleList = await GetAllSupportedRolesAsync(),
+                TimeZoneList = GetAllSupportedTimeZones(),
+                StreetAddress = requestedUser.StreetAddress,
+                City = requestedUser.City,
+                PostalCode = requestedUser.PostalCode,
                 RoleId = requestedUserRoles.Any()
-                    ? _roleManager.Roles
-                        .FirstOrDefault(r => string.Equals(r.Name, requestedUserRoles.FirstOrDefault(),
-                            StringComparison.CurrentCultureIgnoreCase)).Id
-                    : ""
+                 ? _roleManager.Roles
+                     .FirstOrDefault(r => string.Equals(r.Name, requestedUserRoles.FirstOrDefault(),
+                         StringComparison.CurrentCultureIgnoreCase)).Id
+                 : ""
             };
-
-            await InitializeRolesAndTimeZonesAsync();
 
             return View("Edit", model);
         }
@@ -305,7 +312,7 @@ namespace Lumle.Module.Authorization.Controllers
         [HttpPost("edit/{id}")]
         [ValidateAntiForgeryToken]
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.AuthorizationUserUpdate)]
-        public async Task<IActionResult> EditUser(EditUserVM model)
+        public async Task<IActionResult> EditUser(UserVM model)
         {
             using (var transaction = _context.Database.BeginTransaction())
             {
@@ -315,7 +322,6 @@ namespace Lumle.Module.Authorization.Controllers
 
                     if (!ModelState.IsValid)
                     {
-                        await InitializeRolesAndTimeZonesAsync();
                         TempData["ErrorMsg"] = _localizer[ActionMessageConstants.PleaseFillAllTheRequiredFieldErrorMessage].Value;
                         return View("Edit", model);
                     }
@@ -373,7 +379,6 @@ namespace Lumle.Module.Authorization.Controllers
                     var result = await _userManager.UpdateAsync(user);
                     if (!result.Succeeded)
                     {
-                        await InitializeRolesAndTimeZonesAsync();
                         TempData["ErrorMsg"] = $"{_localizer[ActionMessageConstants.ErrorOccured]}. {result.Errors.FirstOrDefault().Description}";
                         return View("Edit", model);
                     }
@@ -408,12 +413,19 @@ namespace Lumle.Module.Authorization.Controllers
                         LastName = requestedUser.LastName,
                         UserId = requestedUser.UserId,
                         Email = requestedUser.Email,
-                        UserName = requestedUser.UserName
+                        UserName = requestedUser.UserName,
+                        Country = requestedUser.Country,
+                        State = requestedUser.State,
+                        StreetAddress = requestedUser.StreetAddress,
+                        City = requestedUser.City,
+                        PostalCode = requestedUser.PostalCode
                     };
 
                     //Update user in UserProfile
                     requestedUser.FirstName = model.FirstName;
                     requestedUser.LastName = model.LastName;
+                    requestedUser.Country = (int)(model.EnumCountry);
+                    requestedUser.State = (int)(model.EnumState);
 
                     _profileService.Update(requestedUser);
 
@@ -440,8 +452,6 @@ namespace Lumle.Module.Authorization.Controllers
                         var roleUpdateResult = await _userManager.RemoveFromRoleAsync(user, currentRole);
                         if (!roleUpdateResult.Succeeded)
                         {
-
-                            await InitializeRolesAndTimeZonesAsync();
                             TempData["ErrorMsg"] = _localizer[ActionMessageConstants.UnableToManageUserRoleErrorMessage].Value;
                             return View("Edit", model);
                         }
@@ -801,7 +811,6 @@ namespace Lumle.Module.Authorization.Controllers
                     users = users.Where(search);
                     users = SortByColumnWithOrder(parameters.Order[0].Column, parameters.Order[0].Dir.ToString(), users);
                     filteredUser = users.Skip(parameters.Start).Take(parameters.Length).ToList();
-
                 }
                 else
                 {
@@ -824,7 +833,6 @@ namespace Lumle.Module.Authorization.Controllers
                     selectedUserLists.Add(userListVm);
                 }
                 #endregion
-
 
                 var user = new DTResult<UserListVM>
                 {
@@ -989,13 +997,13 @@ namespace Lumle.Module.Authorization.Controllers
         private async Task<List<SelectListItem>> GetAllSupportedRolesAsync()
         {
             var availableRoles = new List<SelectListItem>
-                    {
-                        new SelectListItem
-                        {
-                            Text = "Select Role",
-                            Value = ""
-                        }
-                    };
+            {
+                new SelectListItem
+                {
+                    Text = "Select Role",
+                    Value = ""
+                }
+            };
 
             var currentUserRole = await _roleManager.FindByNameAsync(User.Claims.
                                 FirstOrDefault(x => x.Type == ClaimTypes.Role).Value);
@@ -1049,13 +1057,6 @@ namespace Lumle.Module.Authorization.Controllers
             };
 
             return availableStatus;
-        }
-
-        private async Task InitializeRolesAndTimeZonesAsync()
-        {
-            ViewBag.AvailableRoles = await GetAllSupportedRolesAsync(); //Role Init
-            ViewBag.TimeZoneList = GetAllSupportedTimeZones(); //Timezone Init
-            ViewBag.AccountStatus = GetAllAccountStatus(); //Account Status Init
         }
 
         private async Task<int> GetRolePriorityByIdAsync(string roleId)
