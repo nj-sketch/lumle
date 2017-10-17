@@ -13,38 +13,37 @@
 <div class="scroll-sidebar">
     <ul id="sidebar-menu">
         @if (sidebarMenuList != null)
+        {
+            for (var i = 0; i < sidebarMenuList.Count; i++)
             {
-            foreach (var sidebarMenu in sidebarMenuList)
-                {
                 <li>
-                    @if (sidebarMenu.SubMenu.Count == 0)
+                    @if (sidebarMenuList[i].SubMenu.Count == 0)
                     {
-                        <a href="~/@sidebarMenu.Menu" title="@Localizer[sidebarMenu.MenuDisplayName]">
-                            <i class="@sidebarMenu.Icon"></i>
-                            <span>@Localizer[sidebarMenu.MenuDisplayName]</span>
+                        <a href="~/@sidebarMenuList[i].Menu" title="@Localizer[sidebarMenuList[i].MenuDisplayName]">
+                            <i class="@sidebarMenuList[i].Icon"></i>
+                            <span>@Localizer[sidebarMenuList[i].MenuDisplayName]</span>
                         </a>
                     }
                     else
                     {
-                        <a href="#" title="@Localizer[sidebarMenu.MenuDisplayName]">
-                            <i class="@sidebarMenu.Icon"></i>
-                            <span>@Localizer[sidebarMenu.MenuDisplayName]</span>
+                        <a href="#" title="@Localizer[sidebarMenuList[i].MenuDisplayName]">
+                            <i class="@sidebarMenuList[i].Icon"></i>
+                            <span>@Localizer[sidebarMenuList[i].MenuDisplayName]</span>
                         </a>
                         <div class="sidebar-submenu">
                             <ul>
-                                @foreach (var subMenu in sidebarMenu.SubMenu)
+                                @for (var x = 0; x < sidebarMenuList[i].SubMenu.Count; x++)
                                 {
                                     <li>
-                                        <a href="~/@sidebarMenu.Menu/@subMenu.SubMenu" title="@Localizer[subMenu.SubMenuDisplayName]">
-                                            <span>@Localizer[subMenu.SubMenuDisplayName]</span>
+                                        <a href="~/@sidebarMenuList[i].Menu/@sidebarMenuList[i].SubMenu[x].SubMenu" title="@Localizer[sidebarMenuList[i].SubMenu[x].SubMenuDisplayName]">
+                                            <span>@Localizer[sidebarMenuList[i].SubMenu[x].SubMenuDisplayName]</span>
                                         </a>
                                     </li>
+
                                 }
                             </ul>
                         </div>
                     }
-
-
                 </li>
                 <li class="divider"></li>
             }
