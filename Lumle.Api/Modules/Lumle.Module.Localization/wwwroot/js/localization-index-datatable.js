@@ -28,6 +28,7 @@ $(document).ready(function () {
                 type: "POST",
                 data: JSON.stringify(cultureViewModel),
                 contentType: "application/json",
+                headers: { "RequestVerificationToken": token },
                 success: function (response) {
                     if (response != null && response.success) {
                         displaySuccess(response.message, response.messageTitle);
@@ -49,6 +50,7 @@ $(document).ready(function () {
                 type: "POST",
                 data: JSON.stringify(cultureViewModel),
                 contentType: "application/json",
+                headers: { "RequestVerificationToken": token },
                 success: function (response) {
                     if (response != null && response.success) {
                         displaySuccess(response.message, response.messageTitle);

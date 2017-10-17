@@ -63,7 +63,7 @@ namespace Lumle.Api.Infrastructures.Abstracts
         /// <returns></returns>
         public ObjectResult SuccessNotificationWithData(object data, IEnumerable<Message> messages)
         {
-            return Ok(_actionResponse.GetResponse(data, messages));
+            return Ok(_actionResponse.GetResponse(data, null, messages));
         }
 
         /// <summary>

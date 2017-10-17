@@ -8,9 +8,6 @@
     <link rel="stylesheet" type="text/css" href="~/assets/widgets/chosen/chosen.css">
 }
 
-<div id="page-title">
-    <h2>@Localizer[LabelConstants.EditUser]</h2>
-</div>
 <div class="breadcrumb-section clearfix">
     <ol class="breadcrumb">
         <li class="module">@Localizer[LabelConstants.Authorization]</li>
@@ -22,58 +19,111 @@
 @Html.Partial("_MessagePanel")
 
 <div class="panel">
-    <div class="panel-body">
-        <form id="mainForm" class="form-horizontal bordered-row" asp-action="EditUser" role="form" method="post" data-parsley-validate novalidate>
-            @Html.HiddenFor(x => x.Id)
-            <div class="form-group" style="border-top: 0px;">
-                <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.UserName] <span class="text-danger">*</span></label>
-                <div class="col-lg-6">
-                    <input asp-for="UserName" type="text" required class="form-control" />
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.Email] <span class="text-danger">*</span></label>
-                <div class="col-lg-6">
-                    <input asp-for="Email" type="email" required class="form-control" />
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.FirstName] <span class="text-danger">*</span></label>
-                <div class="col-lg-6">
-                    <input asp-for="FirstName" type="text" required class="form-control" />
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.LastName] <span class="text-danger">*</span></label>
-                <div class="col-lg-6">
-                    <input asp-for="LastName" type="text" required class="form-control" />
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.Role] <span class="text-danger">*</span></label>
-                <div class="col-lg-6">
-                    <select asp-for="RoleId" asp-items="ViewBag.AvailableRoles" class="form-control" required=""></select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.AccountStatus] <span class="text-danger">*</span></label>
-                <div class="col-lg-6">
-                    <select asp-for="AccountStatus" asp-items="ViewBag.AccountStatus" class="form-control" required=""></select>
-                </div>
-            </div>
+    <h3 class="title-hero title-setting"> @Localizer[LabelConstants.EditUser] </h3>
+    <div class="panel-body custom-panel">
+        <div class="example-box-wrapper">
+            <form id="mainForm" class="form-horizontal bordered-row" asp-action="EditUser" role="form" method="post" data-parsley-validate novalidate>
+                <div class="row">
+                    <div class="col-md-12 main-section">
+                        <div class="form-group form-section">
+                            @Html.HiddenFor(x => x.Id)
 
-            <div class="form-group">
-                <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.TimeZone]<span class="text-danger">*</span></label>
-                <div class="col-sm-6">
-                    <select asp-for="TimeZone" asp-items="ViewBag.TimeZoneList" class="chosen-select" required style="display: none;"></select>
+                            <label class="col-sm-3 control-label custom-label">Personal Information</label>
+                            <div class="col-sm-4 custom-input">
+                                <p>@Localizer[LabelConstants.FirstName] <span class="text-danger">*</span></p>
+                                <input asp-for="FirstName" type="text" required class="form-control" />
+                            </div>
+
+                            <div class="col-sm-4 custom-input">
+                                <p>@Localizer[LabelConstants.LastName] <span class="text-danger">*</span></p>
+                                <input asp-for="LastName" type="text" required class="form-control" />
+                            </div>
+
+                            <label class="col-sm-3 control-label custom-label"></label>
+                            <div class="col-sm-4 custom-input">
+                                <p>@Localizer[LabelConstants.UserName] <span class="text-danger">*</span></p>
+                                <input asp-for="UserName" type="text" required class="form-control" />
+                            </div>
+
+                            <div class="col-sm-4 custom-input">
+                                <p>@Localizer[LabelConstants.Email] <span class="text-danger">*</span></p>
+                                <input asp-for="Email" type="email" required class="form-control" />
+                            </div>
+
+                        </div>
+
+                        <div class="form-group form-section">
+                            <label class="col-sm-3 control-label custom-label">Account Setting</label>
+                            <div class="col-sm-5 custom-input">
+                                <p>@Localizer[LabelConstants.Role] <span class="text-danger">*</span></p>
+                                <select asp-for="RoleId" asp-items="ViewBag.AvailableRoles" class="form-control" required=""></select>
+                            </div>
+
+                            <div class="col-md-offset-3 col-sm-5 custom-input">
+                                <p>@Localizer[LabelConstants.AccountStatus] <span class="text-danger">*</span></p>
+                                <select asp-for="AccountStatus" asp-items="ViewBag.AccountStatus" class="form-control" required=""></select>
+                            </div>
+                        </div>
+
+                        <div class="form-group form-section">
+                            <label class="col-sm-3 control-label custom-label">Business Address</label>
+                            <div class="col-md-4 custom-input">
+                                <p>Street Address</p>
+                                <input type="text" placeholder="Required Field" required class="form-control">
+                            </div>
+
+                            <div class="col-md-4 col-md-offset-3 custom-input">
+                                <p>City</p>
+                                <input type="text" placeholder="Required Field" required class="form-control">
+                            </div>
+
+                            <div class="col-sm-4  custom-input">
+                                <p>State / Province</p>
+                                <select class="form-control">
+                                    <option>Monthly</option>
+                                    <option>Yearly</option>
+                                    <option>Semi Yearly</option>
+                                    <option>Quartly</option>
+                                    <option>Half Year</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4 col-md-offset-3 custom-input">
+                                <p>ZIP/ Postal Code</p>
+                                <input type="text" placeholder="Required Field" required class="form-control">
+                            </div>
+
+                            <div class="col-sm-4  custom-input">
+                                <p>Country</p>
+                                <select class="form-control">
+                                    <option>Canada</option>
+                                    <option>US</option>
+                                    <option>UK</option>
+                                    <option>Spain</option>
+                                    <option>Portugal</option>
+                                </select>
+                            </div>
+
+                            <label class="col-sm-3 control-label custom-label"></label>
+                            <div class="col-sm-5 custom-input">
+                                <p>@Localizer[LabelConstants.TimeZone] <span class="text-danger">*</span></p>
+                                <select asp-for="TimeZone" asp-items="ViewBag.TimeZoneList" class="chosen-select" required style="display: none;"></select>
+                            </div>
+                        </div>
+
+                        <div class="form-group form-section">
+                            <div class="col-sm-11">
+                                <div class="pull-right">
+                                    <a class="btn btn-default btn-cancel btn-sm" asp-action="Index">@Localizer[LabelConstants.Cancel]</a>
+                                    <button type="submit" class="btn btn-success custom-btn btn-sm">Save Changes</button>
+                                    <img id="loadingImg" style="width: 30px; display:none;" src="~/assets/images/spinner/loader-dark.gif" alt="loading image">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="bg-default content-box text-center pad20A mrg25T">
-                <a class="btn btn-default" asp-action="Index">@Localizer[LabelConstants.Cancel]</a>
-                <button type="submit" class="btn btn-success">@Localizer[LabelConstants.Save]</button>
-                <img id="loadingImg" style="width: 30px; display:none;" src="~/assets/images/spinner/loader-dark.gif" alt="loading image">
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>
 

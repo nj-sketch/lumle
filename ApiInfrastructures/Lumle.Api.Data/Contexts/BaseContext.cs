@@ -11,9 +11,6 @@ namespace Lumle.Api.Data.Contexts
         {
 
         }
-
-
-        public DbSet<Place> Places { get; set; }
         public DbSet<MobileUser> MobileUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -21,7 +18,7 @@ namespace Lumle.Api.Data.Contexts
 
             base.OnModelCreating(builder);
 
-            builder.PlaceConfiguration();
+            //builder.PlaceConfiguration();
             builder.MobileUserConfiguration();
 
         }

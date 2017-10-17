@@ -34,7 +34,6 @@ using NodaTime;
 using NodaTime.TimeZones;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
-using Hangfire;
 
 namespace Lumle.Web.Infrastructures.Extensions
 {
@@ -161,7 +160,7 @@ namespace Lumle.Web.Infrastructures.Extensions
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
             services.AddDbContext<BaseContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("LocalConnection"),
+                options.UseSqlServer(configuration.GetConnectionString("SQLConnection"),
                     b => b.MigrationsAssembly(migrationsAssembly)));
             return services;
         }
