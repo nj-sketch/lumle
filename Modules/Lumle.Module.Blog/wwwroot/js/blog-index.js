@@ -66,10 +66,10 @@ var actionButton = function (data, type, full, meta) {
     var modalId = "deletdModel" + data;
     var actionBtn = "";
     if (hasPermissionForUpdate) {
-        actionBtn = '<a href="' + rootDir + 'blog/article/edit/' + data + '"class="btn btn-info btn-sm"><i class="glyph-icon icon-pencil"></i> '  + editButtonDisplayName + '</a>';
+        actionBtn = '<a href="' + rootDir + 'blog/article/edit/' + data + '"class="btn btn-info btn-xs"><i class="glyph-icon icon-pencil"></i> '  + editButtonDisplayName + '</a>';
     }
     if (hasPermissionForDelete) {
-            actionBtn += '&nbsp;&nbsp;<button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#' + modalId +
+            actionBtn += '&nbsp;&nbsp;<button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#' + modalId +
                                     '"><i class="glyph-icon icon-trash-o"></i> ' + deleteButtonDisplayName + '</button>';
             actionBtn += deleteModalSection(modalId, data, full.title);
     }
@@ -79,7 +79,8 @@ var actionButton = function (data, type, full, meta) {
 var deleteModalSection = function (modalId, articleId, title) {
     var modal = '<div id="' + modalId + '"class="modal fade in"><div class="modal-dialog" style="width:40% !important; margin-top:10% !important;">' +
                 '<div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>' +
-                '<h3 class="modal-title">Delete User</h3></div><form action="' + rootDir + 'blog/article/delete/' + articleId + '" role="form" method="post">' +
+                '<h3 class="modal-title">Delete Article</h3></div><form action="' + rootDir + 'blog/article/delete/' + articleId + '" role="form" method="post">' +
+                '<input name="__RequestVerificationToken" type="hidden" value="' + token + '">' +
                 '<div class="modal-body">Are you sure you want to delete this record ?</div>' +
                 '<div class="modal-footer"><button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>' +
                 '<button class="btn btn-success" type="submit">Delete</button></div></form></div></div></div>';

@@ -43,6 +43,7 @@ namespace Lumle.Module.Blog.Controllers
         private readonly IFileHandler _fileHandler;
         private IHostingEnvironment _environment;
         private IUrlHelper _urlHelper;
+        private string _imageUrl;
 
         public ArticleController(
             UserManager<User> userManager,
@@ -85,7 +86,10 @@ namespace Lumle.Module.Blog.Controllers
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.BlogArticleCreate)]
         public async Task<IActionResult> New(ArticleVM model)
         {
-            var image=   _fileHandler.UploadImage(model.FeaturedImage,300,300);
+            if(model.FeaturedImage != null)
+            {
+                _imageUrl = _fileHandler.UploadImage(model.FeaturedImage, 300, 300);
+            }
 
             if (!ModelState.IsValid)
             {
@@ -98,10 +102,11 @@ namespace Lumle.Module.Blog.Controllers
             articleModel.CreatedDate = DateTime.UtcNow;
             articleModel.LastUpdated = DateTime.UtcNow;
             articleModel.Slug = "Test slug";
-            articleModel.FeaturedImageUrl = image;
+            articleModel.FeaturedImageUrl = _imageUrl;
             var articleEntity = Mapper.Map<Article>(articleModel);
             _articleService.Add(articleEntity);
             _unitOfWork.Save();
+
             #region AuditLog
             var newArticle = new Article(); // Storage of this null object shows data before creation = nothing!
             var auditLogModel = new AuditLogModel
@@ -128,7 +133,10 @@ namespace Lumle.Module.Blog.Controllers
         {
             var article = _articleService.GetSingle(x => x.Id == articleId);
             var articleVm = Mapper.Map<ArticleVM>(article);
-            articleVm.FeaturedImageUrl = $"{Request.Scheme}://{Request.Host}{_urlHelper.Content("~/")}uploadedimages/{articleVm.FeaturedImageUrl}";
+            _imageUrl = !string.IsNullOrEmpty(articleVm.FeaturedImageUrl) ? $"{Request.Scheme}://{Request.Host}{_urlHelper.Content("~/")}uploadedimages/{articleVm.FeaturedImageUrl}"
+              : string.Empty;
+            articleVm.FeaturedImageUrl = _imageUrl;
+
             return View(articleVm);
         }
 
@@ -141,6 +149,13 @@ namespace Lumle.Module.Blog.Controllers
             {
                 HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             }
+
+            // Save images if any
+            if (model.FeaturedImage != null)
+            {
+                _imageUrl = _fileHandler.UploadImage(model.FeaturedImage, 720, 360);
+            }
+
             var article = _articleService.GetSingle(x => x.Id == model.Id);
             if (article == null) return RedirectToAction("Index");
 
@@ -152,11 +167,15 @@ namespace Lumle.Module.Blog.Controllers
                 Author = article.Author,
                 Title = article.Title,
                 Content = article.Content,
+                FeaturedImageUrl = article.FeaturedImageUrl,
                 Slug = article.Slug
             };
+
             // update in database
             article.Title = model.Title;
             article.Content = model.Content;
+            article.FeaturedImageUrl = _imageUrl ?? article.FeaturedImageUrl;
+
             _articleService.Update(article);
             // For audit log
             #region AuditLog

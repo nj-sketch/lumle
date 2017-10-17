@@ -20,12 +20,13 @@ namespace Lumle.Module.Authorization.Controllers
         private readonly IPermissionService _permissionService;
         private readonly IUnitOfWork _unitOfWork;
 
-        public PermissionController(IPermissionService permissionService,
-            IUnitOfWork unitOfWork)
+        public PermissionController(
+            IPermissionService permissionService,
+            IUnitOfWork unitOfWork
+        )
         {
             _unitOfWork = unitOfWork;
             _permissionService = permissionService;
-
         }
 
         [HttpGet]
@@ -89,7 +90,6 @@ namespace Lumle.Module.Authorization.Controllers
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.AuthorizationPermissionUpdate)]
         public IActionResult Edit(int id)
         {
-
             if (id <= 0)
             {
                 TempData["ErrorMsg"] = "Permission not found.";
@@ -113,7 +113,6 @@ namespace Lumle.Module.Authorization.Controllers
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.AuthorizationPermissionUpdate)]
         public IActionResult Edit(PermissionVM model)
         {
-
             try
             {
                 if (!ModelState.IsValid)
@@ -152,7 +151,6 @@ namespace Lumle.Module.Authorization.Controllers
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.AuthorizationPermissionDelete)]
         public IActionResult Delete(int id)
         {
-
             try
             {
                 if (id <= 0)

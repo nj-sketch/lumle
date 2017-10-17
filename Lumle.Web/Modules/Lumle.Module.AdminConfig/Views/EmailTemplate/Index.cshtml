@@ -27,8 +27,8 @@
 
 <div class="panel">
     <div class="panel-body">
-        <div class="example-box-wrapper">
-            <table class="table table-bordered table-striped table-condensed" id="emailTemplateDataTable">
+        <div class="dataTable">
+            <table class="table" id="emailTemplateDataTable">
                 <thead>
                     <tr>
                         <th>@Localizer[LabelConstants.SN]</th>
@@ -44,7 +44,7 @@
                             <td>@emailTemplate.Sn</td>
                             <td>@emailTemplate.SlugDisplayName</td>
                             <td>@emailTemplate.Subject</td>
-                            <td><a class="btn btn-info btn-sm" href="~/adminconfig/emailtemplate/edit/@emailTemplate.Id"><i class="glyph-icon icon-cog"></i> @Localizer[LabelConstants.Manage]</a></td>
+                            <td><a class="btn btn-info btn-xs" href="~/adminconfig/emailtemplate/edit/@emailTemplate.Id"><i class="glyph-icon icon-cog"></i> @Localizer[LabelConstants.Manage]</a></td>
                         </tr>
                     }
                 </tbody>

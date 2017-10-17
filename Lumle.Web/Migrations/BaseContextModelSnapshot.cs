@@ -179,7 +179,9 @@ namespace Lumle.Web.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("AboutMe");
+                    b.Property<string>("City");
+
+                    b.Property<int>("Country");
 
                     b.Property<DateTime>("CreatedDate");
 
@@ -200,14 +202,17 @@ namespace Lumle.Web.Migrations
 
                     b.Property<string>("Phone");
 
+                    b.Property<string>("PostalCode");
+
+                    b.Property<int>("State");
+
+                    b.Property<string>("StreetAddress");
+
                     b.Property<string>("UserId")
                         .IsRequired();
 
                     b.Property<string>("UserName")
                         .IsRequired();
-
-                    b.Property<string>("Website")
-                        .HasMaxLength(500);
 
                     b.HasKey("Id");
 
@@ -609,58 +614,6 @@ namespace Lumle.Web.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Blog_Article");
-                });
-
-            modelBuilder.Entity("Lumle.Module.Calendar.Entities.CalendarEvent", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("CreatedBy");
-
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<DateTime>("End");
-
-                    b.Property<DateTime>("LastUpdated");
-
-                    b.Property<string>("Remarks")
-                        .HasMaxLength(250);
-
-                    b.Property<DateTime>("Start");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(100);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Calendar_Event");
-                });
-
-            modelBuilder.Entity("Lumle.Module.Calendar.Entities.CalendarHoliday", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("CreatedBy");
-
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<DateTime>("Date");
-
-                    b.Property<DateTime>("LastUpdated");
-
-                    b.Property<string>("Remarks")
-                        .HasMaxLength(250);
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(100);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Calendar_Holiday");
                 });
 
             modelBuilder.Entity("Lumle.Module.PublicUser.Entities.CustomUser", b =>

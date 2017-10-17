@@ -1,4 +1,5 @@
-@model EditUserVM
+@using Lumle.Infrastructure.Enums;
+@model UserVM
 
 @{
     ViewData["Title"] = Localizer[LabelConstants.EditUser];
@@ -56,12 +57,12 @@
                             <label class="col-sm-3 control-label custom-label">Account Setting</label>
                             <div class="col-sm-5 custom-input">
                                 <p>@Localizer[LabelConstants.Role] <span class="text-danger">*</span></p>
-                                <select asp-for="RoleId" asp-items="ViewBag.AvailableRoles" class="form-control" required=""></select>
+                                <select asp-for="RoleId" asp-items="Model.RoleList" class="form-control" required></select>
                             </div>
 
                             <div class="col-md-offset-3 col-sm-5 custom-input">
                                 <p>@Localizer[LabelConstants.AccountStatus] <span class="text-danger">*</span></p>
-                                <select asp-for="AccountStatus" asp-items="ViewBag.AccountStatus" class="form-control" required=""></select>
+                                <select asp-for="AccountStatus" asp-items="Model.StatusList" class="form-control" required=""></select>
                             </div>
                         </div>
 
@@ -69,45 +70,35 @@
                             <label class="col-sm-3 control-label custom-label">Business Address</label>
                             <div class="col-md-4 custom-input">
                                 <p>Street Address</p>
-                                <input type="text" placeholder="Required Field" required class="form-control">
+                                <input type="text" class="form-control" asp-for="StreetAddress">
                             </div>
 
                             <div class="col-md-4 col-md-offset-3 custom-input">
                                 <p>City</p>
-                                <input type="text" placeholder="Required Field" required class="form-control">
+                                <input type="text" class="form-control" asp-for="City">
                             </div>
 
                             <div class="col-sm-4  custom-input">
                                 <p>State / Province</p>
-                                <select class="form-control">
-                                    <option>Monthly</option>
-                                    <option>Yearly</option>
-                                    <option>Semi Yearly</option>
-                                    <option>Quartly</option>
-                                    <option>Half Year</option>
-                                </select>
+                                <select class="form-control" asp-for="EnumState"
+                                        asp-items="Html.GetEnumSelectList<StateEnum>()"></select> 
                             </div>
 
                             <div class="col-md-4 col-md-offset-3 custom-input">
                                 <p>ZIP/ Postal Code</p>
-                                <input type="text" placeholder="Required Field" required class="form-control">
+                                <input type="text" class="form-control" asp-for="PostalCode">
                             </div>
 
                             <div class="col-sm-4  custom-input">
                                 <p>Country</p>
-                                <select class="form-control">
-                                    <option>Canada</option>
-                                    <option>US</option>
-                                    <option>UK</option>
-                                    <option>Spain</option>
-                                    <option>Portugal</option>
-                                </select>
+                                <select class="form-control" asp-for="EnumCountry"
+                                        asp-items="Html.GetEnumSelectList<CountryEnum>()"></select> 
                             </div>
 
                             <label class="col-sm-3 control-label custom-label"></label>
                             <div class="col-sm-5 custom-input">
                                 <p>@Localizer[LabelConstants.TimeZone] <span class="text-danger">*</span></p>
-                                <select asp-for="TimeZone" asp-items="ViewBag.TimeZoneList" class="chosen-select" required style="display: none;"></select>
+                                <select asp-for="TimeZone" asp-items="Model.TimeZoneList" class="chosen-select" required style="display: none;"></select>
                             </div>
                         </div>
 
