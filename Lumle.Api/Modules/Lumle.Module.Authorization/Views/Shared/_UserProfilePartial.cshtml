@@ -1,13 +1,3 @@
-@using Lumle.Data.Models;
-@using Microsoft.AspNetCore.Identity;
-@using System.Security.Claims;
-
-@inject UserManager<User> UserManager;
-
-@{
-    var timeZone1 = ((ClaimsIdentity)User.Identity).FindFirst("TimeZone");
-}
-
 <style>
     .custom_user a {
         min-width: 165px;

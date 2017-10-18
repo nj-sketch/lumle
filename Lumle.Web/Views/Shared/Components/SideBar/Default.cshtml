@@ -1,0 +1,42 @@
+﻿@model List<Lumle.Module.Authorization.ViewModels.SideBarViewModels.SideBarMenuVM>
+
+<div class="scroll-sidebar">
+    <ul id="sidebar-menu">
+        @if (Model != null)
+        {
+            for (var i = 0; i < Model.Count; i++)
+            {
+                <li>
+                    @if (Model[i].SubMenu.Count == 0)
+                    {
+                        <a href="~/@Model[i].Menu" title="@Localizer[Model[i].MenuDisplayName]">
+                            <i class="@Model[i].Icon"></i>
+                            <span>@Localizer[Model[i].MenuDisplayName]</span>
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="#" title="@Localizer[Model[i].MenuDisplayName]">
+                            <i class="@Model[i].Icon"></i>
+                            <span>@Localizer[Model[i].MenuDisplayName]</span>
+                        </a>
+                        <div class="sidebar-submenu">
+                            <ul>
+                                @for (var x = 0; x < Model[i].SubMenu.Count; x++)
+                                {
+                                    <li>
+                                        <a href="~/@Model[i].Menu/@Model[i].SubMenu[x].SubMenu" title="@Localizer[Model[i].SubMenu[x].SubMenuDisplayName]">
+                                            <span>@Localizer[Model[i].SubMenu[x].SubMenuDisplayName]</span>
+                                        </a>
+                                    </li>
+
+                                }
+                            </ul>
+                        </div>
+                    }
+                </li>
+                <li class="divider"></li>
+            }
+        }
+    </ul>
+</div>

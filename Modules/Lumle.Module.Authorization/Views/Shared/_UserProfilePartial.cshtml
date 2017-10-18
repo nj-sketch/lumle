@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Identity;
 @using System.Security.Claims;
 
-@inject UserManager<User> UserManager;
+@inject UserManager<User> UserManager
 
 @{
     var timeZone1 = ((ClaimsIdentity)User.Identity).FindFirst("TimeZone");
