@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <AssemblyName>Lumle.Web</AssemblyName>
-    <MVCRazorCompileOnPublish>false</MVCRazorCompileOnPublish>
+    <MVCRazorCompileOnPublish>true</MVCRazorCompileOnPublish>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <OutputType>Exe</OutputType>
     <PackageId>Lumle.Web</PackageId>
