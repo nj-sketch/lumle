@@ -1,6 +1,6 @@
-﻿namespace Lumle.Module.Authorization.Models
+﻿namespace Lumle.Module.Authorization.ViewModels.SideBarViewModels
 {
-    public class SubMenuModel
+    public class SideBarSubMenuVM
     {
         public string SubMenu { get; set; }
         public string SubMenuDisplayName { get; set; }
