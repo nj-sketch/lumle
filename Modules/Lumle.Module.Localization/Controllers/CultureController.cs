@@ -58,7 +58,7 @@ namespace Lumle.Module.Localization.Controllers
             UserManager<User> userManager,
             IStringLocalizer<ResourceString> localizer,
             IRepository<Resource> resourceRepository
-            )
+        )
         {
             _userManager = userManager;
             _cultureService = cultureService;

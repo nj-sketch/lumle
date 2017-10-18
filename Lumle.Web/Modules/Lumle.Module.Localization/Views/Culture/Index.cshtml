@@ -1,4 +1,4 @@
-@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery antiforgery;
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery antiforgery
 
 @model IEnumerable<CultureModel>
 
@@ -7,10 +7,11 @@
     var antiforgeryRequestToken = antiforgery.GetAndStoreTokens(Context).RequestToken;
     var hasPermissionForAddNewCulture = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.LocalizationCultureCreate), User);
     var inActiveCultureCount = Model.AsQueryable().Count(x => !x.IsEnable);
+    var cultures = Model.Where(x => x.IsEnable).ToList();
 }
 
 @section styles
-    {
+{
     <link href="~/assets/widgets/datatable/datatable.min.css" rel="stylesheet" />
     <link href="~/assets/widgets/input-switch/inputswitch-alt.min.css" rel="stylesheet" />
     <link href="~/lib/toastr/toastr.css" rel="stylesheet" />
@@ -81,9 +82,6 @@
 
 <div class="panel">
     <div class="panel-body">
-        <h3 class="title-hero">
-            Culture
-        </h3>
         <div class="dataTable">
             <table cellpadding="0" cellspacing="0" border="0" class="table" id="cultureDataTable">
                 <thead>
@@ -94,23 +92,24 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var culture in Model.Where(x => x.IsEnable))
+
+                    @for (int i = 0; i < cultures.Count; i++)
                     {
                         <tr>
-                            <td>@culture.Sn</td>
-                            <td>@culture.DisplayName</td>
+                            <td>@cultures[i].Sn</td>
+                            <td>@cultures[i].DisplayName</td>
                             <td>
                                 <div class="form-group ">
-                                    <a class="btn btn-info btn-xs display-inline" style="float:left;" href="~/localization/culture/@culture.Name"><i class="glyph-icon icon-cog"></i> @Localizer[LabelConstants.Manage]</a>
-                                    @if (culture.Name != "en-US")
+                                    <a class="btn btn-info btn-xs display-inline" style="float:left;" href="~/localization/culture/@cultures[i].Name"><i class="glyph-icon icon-cog"></i> @Localizer[LabelConstants.Manage]</a>
+                                    @if (cultures[i].Name != "en-US")
                                     {
-                                        if (culture.IsActive)
+                                        if (cultures[i].IsActive)
                                         {
-                                            <div class="switch-toggle switch-on" value="@culture.Name"></div>
+                                            <div class="switch-toggle switch-on" value="@cultures[i].Name"></div>
                                         }
                                         else
                                         {
-                                            <div class="switch-toggle switch-off" value="@culture.Name"></div>
+                                            <div class="switch-toggle switch-off" value="@cultures[i].Name"></div>
                                         }
                                     }
                                 </div>

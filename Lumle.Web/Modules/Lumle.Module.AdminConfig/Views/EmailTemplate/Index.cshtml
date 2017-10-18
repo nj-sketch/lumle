@@ -1,4 +1,4 @@
-@model IEnumerable<EmailTemplateModel>
+@model List<EmailTemplateModel>
 
 @{
     ViewData["Title"] =Localizer[LabelConstants.EmailTemplate];
@@ -9,7 +9,7 @@
     <link href="~/assets/widgets/datatable/datatable.min.css" rel="stylesheet" />
 }
 <style type="text/css">
-    .alert-dismissable .close, .alert-dismissible .close {right: 0px;}
+    .alert-dismissable .close, .alert-dismissible .close { right: 0px; }
 </style>
 
 <div id="page-title">
@@ -38,13 +38,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var emailTemplate in Model)
+
+                    @for (int i = 0; i < Model.Count; i++)
                     {
                         <tr>
-                            <td>@emailTemplate.Sn</td>
-                            <td>@emailTemplate.SlugDisplayName</td>
-                            <td>@emailTemplate.Subject</td>
-                            <td><a class="btn btn-info btn-xs" href="~/adminconfig/emailtemplate/edit/@emailTemplate.Id"><i class="glyph-icon icon-cog"></i> @Localizer[LabelConstants.Manage]</a></td>
+                            <td>@Model[i].Sn</td>
+                            <td>@Model[i].SlugDisplayName</td>
+                            <td>@Model[i].Subject</td>
+                            <td><a class="btn btn-info btn-xs" href="~/adminconfig/emailtemplate/edit/@Model[i].Id"><i class="glyph-icon icon-cog"></i> @Localizer[LabelConstants.Manage]</a></td>
                         </tr>
                     }
                 </tbody>
