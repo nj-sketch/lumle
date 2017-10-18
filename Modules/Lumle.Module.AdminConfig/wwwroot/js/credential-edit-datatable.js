@@ -16,7 +16,6 @@
         $(this).prop("disabled", true);
         tr.find("img").show();
 
-        var token = $("input[type=hidden][name=__RequestVerificationToken]").val();
         $.ajax({
             type: "POST",
             url: rootDir + "adminconfig/credential/edit",

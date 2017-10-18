@@ -67,7 +67,7 @@ namespace Lumle.Module.AdminConfig.Controllers
         {
             try
             {
-                var credential = _credentialService.GetAllCredential(x => x.CredentialCategoryId == credentialCategoryId);
+                var credential = _credentialService.GetAllCredential(x => x.CredentialCategoryId == credentialCategoryId).ToList();
 
                 if (!credential.Any())
                 {
