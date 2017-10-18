@@ -1,15 +1,16 @@
 @using Lumle.Module.Authorization.ViewModels.PermissionViewModels
-@model IEnumerable<PermissionVM>
-@{
-    //var hasPermissionForCreate = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.AuthorizationPermissionCreate), User);
-    var hasPermissionForUpdate = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.AuthorizationPermissionUpdate), User);
-    //var hasPermissionForDelete = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.AuthorizationPermissionDelete), User);
+@model List<PermissionVM>
+
+@{   
+    var hasPermissionForUpdate = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.AuthorizationPermissionUpdate), User);   
 
     ViewData["Title"] = "Permission";
 }
+
 @section styles{
     <link rel="stylesheet" type="text/css" href="~/assets/widgets/datatable/datatable.css">
 }
+
 <div class="row">
     <div id="page-title">
         <h2 class="display-inline">Permissions</h2>
@@ -20,7 +21,9 @@
             <li class="active">Permissions</li>
         </ol>
     </div>
+
     @Html.Partial("_MessagePanel")
+
     <div class="panel">
         <div class="panel-body">
             <div class="dataTable">
@@ -36,16 +39,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model)
+
+                        @for (var i = 0; i < Model.Count; i++)
                         {
-                            //var deleteModal = "deleteModal" + item.Id;
                             <tr>
-                                <td>@item.Slug</td>
-                                <td>@item.DisplayName</td>
+                                <td>@Model[i].Slug</td>
+                                <td>@Model[i].DisplayName</td>
                                 @if (hasPermissionForUpdate)
                                 {
                                     <td>
-                                        <a id="editPermission" href="~/authorization/permission/edit/@item.Id"
+                                        <a id="editPermission" href="~/authorization/permission/edit/@Model[i].Id"
                                            class="btn btn-info btn-xs">
                                             <i class="glyph-icon icon-pencil"></i> Edit
                                         </a>

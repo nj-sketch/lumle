@@ -34,7 +34,7 @@ namespace Lumle.Module.Authorization.Controllers
         public IActionResult Index()
         {
             var permissionEntities = _permissionService.GetAll();
-            var permissions = Mapper.Map<IEnumerable<PermissionVM>>(permissionEntities);
+            var permissions = Mapper.Map<IList<PermissionVM>>(permissionEntities);
 
             return View(permissions);
         }
