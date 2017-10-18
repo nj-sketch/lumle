@@ -41,7 +41,7 @@ namespace Lumle.Module.AdminConfig.Controllers
             IUnitOfWork unitOfWork,
             UserManager<User> userManager,
             IStringLocalizer<ResourceString> localizer
-            )
+        )
         {
             _userManager = userManager;
             _credentialCategoryService = credentialCategoryService;
@@ -55,7 +55,8 @@ namespace Lumle.Module.AdminConfig.Controllers
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.AdminConfigCredentialView)]
         public IActionResult Index()
         {
-            var credentialCategory = _credentialCategoryService.GetAllCredentialCategory();
+            var credentialCategory = _credentialCategoryService.GetAllCredentialCategory().ToList();
+
             return View(credentialCategory);
         }
 
@@ -66,7 +67,7 @@ namespace Lumle.Module.AdminConfig.Controllers
         {
             try
             {
-                var credential = _credentialService.GetAllCredential(x => x.CredentialCategoryId == credentialCategoryId);
+                var credential = _credentialService.GetAllCredential(x => x.CredentialCategoryId == credentialCategoryId).ToList();
 
                 if (!credential.Any())
                 {
