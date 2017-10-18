@@ -67,22 +67,14 @@ namespace Lumle.Module.Authorization.Controllers
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.AuthorizationRoleView)]
         public IActionResult Index()
         {
-            var roles = _roleManager.Roles.Select(c => new
+            var roles = _roleManager.Roles.Select(c => new RoleListVM
             {
                 RoleName = c.Name,
                 Id = c.Id,
                 Description = c.Description,
                 NumberOfUsers = c.Users.Count(),
                 Priority = c.Priority
-            }).ToList().Select(r => new RoleListVM
-            {
-                RoleName = r.RoleName,
-                Id = r.Id,
-                Description = r.Description,
-                NumberOfUsers = r.NumberOfUsers,
-                Priority = r.Priority
-            });
-
+            }).ToList();
 
             return View(roles);
         }
