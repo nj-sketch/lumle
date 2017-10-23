@@ -5,9 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using Lumle.Infrastructure.Constants.Messenging;
 using Lumle.Infrastructure.Utilities.Abstracts;
-using Microsoft.Extensions.Logging;
 
 namespace Lumle.Infrastructure.Utilities
 {

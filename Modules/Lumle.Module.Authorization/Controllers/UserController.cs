@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using Lumle.Data.Data.Abstracts;
 using Microsoft.AspNetCore.Authorization;
 using Lumle.Infrastructure.Constants.AuthorizeRules;
@@ -57,6 +56,8 @@ namespace Lumle.Module.Authorization.Controllers
         private readonly IApplicationTokenService _applicationTokenService;
         private readonly IStringLocalizer<ResourceString> _localizer;
         private readonly ITimeZoneHelper _timeZoneHelper;
+        private readonly IFileHandler _fileHandler;
+        private readonly IUrlHelper _urlHelper;
 
         public UserController(
             UserManager<User> userManager,
@@ -70,7 +71,9 @@ namespace Lumle.Module.Authorization.Controllers
             IApplicationTokenService applicationTokenService,
             IStringLocalizer<ResourceString> localizer,
             IHostingEnvironment env,
-            ITimeZoneHelper timeZoneHelper
+            ITimeZoneHelper timeZoneHelper,
+            IFileHandler fileHandler,
+            IUrlHelper urlHelper
         )
         {
             _userManager = userManager;
@@ -83,7 +86,8 @@ namespace Lumle.Module.Authorization.Controllers
             _applicationTokenService = applicationTokenService;
             _localizer = localizer;
             _timeZoneHelper = timeZoneHelper;
-
+            _fileHandler = fileHandler;
+            _urlHelper = urlHelper;
         }
 
         [HttpGet]
@@ -426,6 +430,9 @@ namespace Lumle.Module.Authorization.Controllers
                     requestedUser.LastName = model.LastName;
                     requestedUser.Country = (int)(model.EnumCountry);
                     requestedUser.State = (int)(model.EnumState);
+                    requestedUser.City = model.City;
+                    requestedUser.StreetAddress = model.StreetAddress;
+                    requestedUser.PostalCode = model.PostalCode;
 
                     _profileService.Update(requestedUser);
 
@@ -669,64 +676,43 @@ namespace Lumle.Module.Authorization.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            var profileEntity = _profileService.GetSingle(x => x.UserId == user.Id);
-            if (profileEntity != null)
-            {
-                var profileVm = Mapper.Map<ProfileVM>(profileEntity);
-                profileVm.FirstName = profileVm.FirstName ?? "";
-                profileVm.LastName = profileVm.LastName ?? "";
-                profileVm.Phone = profileVm.Phone ?? "";
-                profileVm.TimeZone = user.TimeZone;
-                profileVm.Email = user.Email;
-                profileVm.UserName = user.UserName;
-
-                return View("Profile", profileVm);
-            }
-
-            var profile = new ProfileVM();
-            {
-                profile.Email = user.Email;
-                profile.UserName = user.UserName;
-            }
-
-            return View("Profile", profile);
-        }
-
-        [HttpGet("profile/edit/{id:int}")]
-        public async Task<IActionResult> EditProfile(int id)
-        {
-            if (id <= 0)
-            {
-                TempData["ErrorMsg"] = _localizer[ActionMessageConstants.ResourceNotFoundErrorMessage].Value;
-                return RedirectToAction("Profile");
-            }
-
-            var profileEntity = _profileService.GetSingle(x => x.Id == id);
-            if (profileEntity == null)
-            {
-                {
-                    TempData["ErrorMsg"] = _localizer[ActionMessageConstants.ResourceNotFoundErrorMessage].Value;
-                    return RedirectToAction("Profile");
-                }
-            }
-
-            var user = await GetCurrentUserAsync();
-            if (user == null)
+            var requestedUser = _profileService.GetSingle(x => x.UserId == user.Id);
+            if(requestedUser == null)
             {
                 return RedirectToAction("Login", "Account");
             }
 
-            var profileVm = Mapper.Map<ProfileVM>(profileEntity);
-            profileVm.Email = user.Email;
-            profileVm.UserName = user.UserName;
-            profileVm.TimeZone = user.TimeZone;
-            profileVm.TimeZone = user.TimeZone;
+            var requestedUserRoles = await _userManager.GetRolesAsync(user);
+            var _imageUrl = !string.IsNullOrEmpty(requestedUser.ProfileImage) ? $"{Request.Scheme}://{Request.Host}{_urlHelper.Content("~/")}uploadedimages/{requestedUser.ProfileImage}"
+                            : string.Empty;
+            var model = new ProfileVM
+            {
+                Id = requestedUser.Id,
+                UserId = user.Id,
+                UserName = user.UserName,
+                Email = user.Email,
+                TimeZone = user.TimeZone,
+                AccountStatus = user.AccountStatus,
+                FirstName = requestedUser.FirstName,
+                LastName = requestedUser.LastName,
+                EnumCountry = (CountryEnum)requestedUser.Country,
+                EnumState = (StateEnum)requestedUser.State,
+                TimeZoneList = GetAllSupportedTimeZones(),
+                StreetAddress = requestedUser.StreetAddress,
+                City = requestedUser.City,
+                PostalCode = requestedUser.PostalCode,
+                ProfileImageUrl = _imageUrl,
+                RoleName = requestedUserRoles.Any()
+                 ? _roleManager.Roles
+                     .FirstOrDefault(r => string.Equals(r.Name, requestedUserRoles.FirstOrDefault(),
+                         StringComparison.CurrentCultureIgnoreCase)).Name
+                 : ""
+            };
 
-            ViewBag.TimeZoneList = GetAllSupportedTimeZones(); //Timezone Init
-            return View("EditProfile", profileVm);
+            return View("Profile", model);
         }
 
-        [HttpPost("profile/edit/{id:int}")]
+        [HttpPost("profile")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditProfile(ProfileVM model)
         {
@@ -734,30 +720,113 @@ namespace Lumle.Module.Authorization.Controllers
             {
                 try
                 {
+                    #region Validation
+
                     if (!ModelState.IsValid)
                     {
-                        ViewBag.TimeZoneList = GetAllSupportedTimeZones(); //Timezone Init
                         TempData["ErrorMsg"] = _localizer[ActionMessageConstants.PleaseFillAllTheRequiredFieldErrorMessage].Value;
-                        return View("EditProfile", model);
+                        return View("Edit", model);
                     }
 
-                    var user = await _userManager.GetUserAsync(HttpContext.User);
-                    if (user.TimeZone != model.TimeZone.Trim())
+                    var user = await _userManager.FindByIdAsync(model.UserId);
+                    if (user == null)
                     {
-                        user.TimeZone = model.TimeZone;
-                        await _userManager.UpdateAsync(user);
+                        TempData["ErrorMsg"] = _localizer[ActionMessageConstants.ResourceNotFoundErrorMessage].Value;
+                        return RedirectToAction("Index");
                     }
 
                     var requestedUser = _profileService.GetSingle(x => x.UserId == model.UserId);
                     if (requestedUser == null)
                     {
-                        ViewBag.TimeZoneList = GetAllSupportedTimeZones(); //Timezone Init
                         TempData["ErrorMsg"] = _localizer[ActionMessageConstants.ResourceNotFoundErrorMessage].Value;
-                        return View("EditProfile", model);
+                        return RedirectToAction("Index");
                     }
 
-                    var profileEntity = Mapper.Map<UserProfile>(model);
-                    _profileService.Update(profileEntity);
+                    #endregion
+
+                    var loggedUser = await GetCurrentUserAsync(); //Get current logged user
+                    // Add previous user identity data in old record object for comparison
+                    var oldUserRecord = new User
+                    {
+                        Id = user.Id,
+                        UserName = user.UserName,
+                        Email = user.Email,
+                        NormalizedEmail = user.NormalizedEmail,
+                        NormalizedUserName = user.NormalizedUserName,
+                        LockoutEnabled = user.LockoutEnabled,
+                        CreatedBy = user.CreatedBy,
+                        TimeZone = user.TimeZone,
+                        AccountStatus = user.AccountStatus
+                    };
+
+                    //Update user in Identity
+                    user.UserName = model.UserName;
+                    user.Email = model.Email.ToLower();
+                    user.TimeZone = model.TimeZone;
+
+                    var result = await _userManager.UpdateAsync(user);
+                    if (!result.Succeeded)
+                    {
+                        TempData["ErrorMsg"] = $"{_localizer[ActionMessageConstants.ErrorOccured]}. {result.Errors.FirstOrDefault().Description}";
+                        return View("Edit", model);
+                    }
+
+                    #region Audit Log of User Identity
+
+                    var userAuditLogModel = new AuditLogModel
+                    {
+                        AuditActionType = AuditActionType.Update,
+                        OldObject = oldUserRecord,
+                        NewObject = user,
+                        KeyField = oldUserRecord.Id,
+                        ComparisonType = ComparisonType.ObjectCompare,
+                        LoggedUserEmail = loggedUser.Email
+                    };
+                    _auditLogService.Add(userAuditLogModel);
+
+                    #endregion
+
+                    // Add previous user profile data in old record object for comparison
+                    var oldUserProfileRecord = new UserProfile
+                    {
+                        Id = requestedUser.Id,
+                        FirstName = requestedUser.FirstName,
+                        LastName = requestedUser.LastName,
+                        UserId = requestedUser.UserId,
+                        Email = requestedUser.Email,
+                        UserName = requestedUser.UserName,
+                        Country = requestedUser.Country,
+                        State = requestedUser.State,
+                        StreetAddress = requestedUser.StreetAddress,
+                        City = requestedUser.City,
+                        PostalCode = requestedUser.PostalCode
+                    };
+
+                    //Update user in UserProfile
+                    requestedUser.FirstName = model.FirstName;
+                    requestedUser.LastName = model.LastName;
+                    requestedUser.Country = (int)(model.EnumCountry);
+                    requestedUser.State = (int)(model.EnumState);
+                    requestedUser.City = model.City;
+                    requestedUser.StreetAddress = model.StreetAddress;
+                    requestedUser.PostalCode = model.PostalCode;
+
+                    _profileService.Update(requestedUser);
+
+                    // For audit log of user identity
+                    #region User Profile Audit
+                    var userProfileAuditLogModel = new AuditLogModel
+                    {
+                        AuditActionType = AuditActionType.Update,
+                        OldObject = oldUserProfileRecord,
+                        NewObject = requestedUser,
+                        KeyField = oldUserProfileRecord.Id.ToString(),
+                        ComparisonType = ComparisonType.ObjectCompare,
+                        LoggedUserEmail = loggedUser.Email
+                    };
+
+                    _auditLogService.Add(userProfileAuditLogModel);
+                    #endregion
 
                     _context.SaveChanges();
                     transaction.Commit();
@@ -768,12 +837,43 @@ namespace Lumle.Module.Authorization.Controllers
                 catch (Exception ex)
                 {
                     transaction.Rollback();
-                    TempData["ErrorMsg"] = _localizer[ActionMessageConstants.InternalServerErrorMessage].Value;
                     Logger.Error(ex, ErrorLog.UpdateError);
-                    return View("EditProfile", model);
+                    TempData["ErrorMsg"] = _localizer[ActionMessageConstants.InternalServerErrorMessage].Value;
+                    return RedirectToAction("Profile");
                 }
             }
+        }
 
+        [HttpPost]
+        [Route("uploadprofileimage")]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> Upload()
+        {
+            try
+            {
+                var files = HttpContext.Request.Form.Files;
+                if (Request.Form.Files.Count > 0)
+                {
+                    var imageUrl = _fileHandler.UploadImage(Request.Form.Files[0], 0, 0);
+                    if (imageUrl != null)
+                    {
+                        var user = await GetCurrentUserAsync();
+
+                        var userProfile = _profileService.GetSingle(x => x.UserId == user.Id);
+                        userProfile.ProfileImage = imageUrl;
+
+                        _profileService.Update(userProfile);
+                        _unitOfWork.Save();
+
+                        return Json(new { success = true, imageName = imageUrl, imageUrl = $"{Request.Scheme}://{Request.Host}{_urlHelper.Content("~/")}uploadedimages/{imageUrl}", message = "Image updated successfully" });
+                    }
+                }
+                return Json(new { success = false, message = _localizer[ActionMessageConstants.ErrorOccured].Value });
+            }
+            catch (Exception)
+            {
+                return Json(new { success = false, message = _localizer[ActionMessageConstants.ErrorOccured].Value });
+            }
         }
 
         /// <summary>

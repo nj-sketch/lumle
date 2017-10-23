@@ -1,5 +1,5 @@
 $(function () {
-  
+
     var table = $("#articleDataTable").DataTable({
         "language": {
             "url": languageFileUrl

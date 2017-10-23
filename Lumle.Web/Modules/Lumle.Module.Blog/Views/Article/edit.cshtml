@@ -44,7 +44,7 @@
 
                         <div class="form-group form-section">
                             <label class="col-sm-3 control-label">Featured Image<span class="text-danger"></span></label>
-                            @if (!string.IsNullOrEmpty(@Model.FeaturedImageUrl))
+                            @if (!string.IsNullOrEmpty(Model.FeaturedImageUrl))
                             {
                                 <div class="col-sm-2">
                                     <img src="@Model.FeaturedImageUrl" class="img-responsive" alt="Featured Image" />
