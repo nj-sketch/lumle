@@ -21,7 +21,12 @@ namespace Lumle.Core.Services
         private readonly RoleManager<Role> _roleManager;
         private readonly UserManager<User> _userManager;
 
-        public BaseRoleClaimService(IRepository<BaseRoleClaim> baseRoleClaimRepository, IMemoryCache memoryCache, RoleManager<Role> roleManager, UserManager<User> userManager)
+        public BaseRoleClaimService(
+            IRepository<BaseRoleClaim> baseRoleClaimRepository,
+            IMemoryCache memoryCache,
+            RoleManager<Role> roleManager,
+            UserManager<User> userManager
+        )
         {
             _baseRoleClaimRepository = baseRoleClaimRepository;
             _memoryCache = memoryCache;
@@ -121,10 +126,9 @@ namespace Lumle.Core.Services
         {
             try
             {
-                List<BaseRoleClaim> claims;
                 BaseRoleClaim roleClaim;
 
-                if (_memoryCache.TryGetValue(CacheConstants.AuthorizationApplicationClaimsCache, out claims))
+                if (_memoryCache.TryGetValue(CacheConstants.AuthorizationApplicationClaimsCache, out List<BaseRoleClaim> claims))
                 {
                      roleClaim= claims.FirstOrDefault(x => x.RoleId == roleId &&
                                                                          x.ClaimType == claim.Type &&
@@ -146,10 +150,6 @@ namespace Lumle.Core.Services
                    
                 }
 
-
-                //var roleClaim = _baseRoleClaimRepository.GetSingle(x => x.RoleId == roleId &&
-                //                                                        x.ClaimType == claim.Type &&
-                //                                                        x.ClaimValue == claim.Value);
                 return roleClaim != null;
             }
             catch (Exception)
@@ -168,10 +168,9 @@ namespace Lumle.Core.Services
 
                 var roleId = await _roleManager.GetRoleIdAsync(roleModel);
 
-                List<BaseRoleClaim> claims;
                 BaseRoleClaim roleClaim;
 
-                if (_memoryCache.TryGetValue(CacheConstants.AuthorizationApplicationClaimsCache, out claims))
+                if (_memoryCache.TryGetValue(CacheConstants.AuthorizationApplicationClaimsCache, out List<BaseRoleClaim> claims))
                 {
                     roleClaim = claims.FirstOrDefault(x => x.RoleId == roleId &&
                                                                          x.ClaimType == claim.Type &&
@@ -193,10 +192,6 @@ namespace Lumle.Core.Services
 
                 }
 
-
-                //var roleClaim = _baseRoleClaimRepository.GetSingle(x => x.RoleId == roleId &&
-                //                                                        x.ClaimType == claim.Type &&
-                //                                                        x.ClaimValue == claim.Value);
                 return roleClaim != null;
             }
             catch (Exception)

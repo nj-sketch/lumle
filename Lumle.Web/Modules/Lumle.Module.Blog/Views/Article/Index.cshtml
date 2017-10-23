@@ -1,23 +1,28 @@
-@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery antiforgery;
+@using Lumle.Core.Models
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery antiforgery
+
+@model ActionOperation
 
 @{
     var antiforgeryRequestToken = antiforgery.GetAndStoreTokens(Context).RequestToken;
 
-    var hasPermissionForCreate = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.BlogArticleCreate), User);
-    var hasPermissionForUpdate = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.BlogArticleUpdate), User);
-    var hasPermissionForDelete = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.BlogArticleDelete), User);
+    //var hasPermissionForCreate = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.BlogArticleCreate), User);
+    //var hasPermissionForUpdate = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.BlogArticleUpdate), User);
+    //var hasPermissionForDelete = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.BlogArticleDelete), User);
 
     ViewData["Title"] = Localizer[LabelConstants.Article];
 }
+
 @section styles{
     <link href="~/css/dataTables.bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="~/assets/widgets/datatable/datatable.min.css">
 }
+
 <div class="row">
     <div id="page-title">
         <h2 class="display-inline">@Localizer[LabelConstants.Article]</h2>
         <div class="pull-right">
-            @if (hasPermissionForCreate)
+            @if (Model.CreateAction)
             {
                 <a class="btn btn-primary btn-sm" href="~/blog/article/new"><i class="glyph-icon icon-plus"></i> @Localizer[LabelConstants.AddNew]</a>
             }
@@ -50,11 +55,14 @@
         </div>
     </div>
 </div>
+
 @section scripts{
     <script type="text/javascript">
         var token = @Json.Serialize(antiforgeryRequestToken);
-        var hasPermissionForUpdate = @hasPermissionForUpdate.ToString().ToLower();
-        var hasPermissionForDelete = @hasPermissionForDelete.ToString().ToLower();
+        @*var hasPermissionForUpdate = @hasPermissionForUpdate.ToString().ToLower();
+        var hasPermissionForDelete = @hasPermissionForDelete.ToString().ToLower();*@
+        var hasPermissionForUpdate = @Model.UpdateAction.ToString().ToLower();
+        var hasPermissionForDelete = @Model.DeleteAction.ToString().ToLower();
     </script>
     <script src="~/lib/toastr/toastr.min.js"></script>
     <script src="~/js/jquery.dataTables.min.js"></script>

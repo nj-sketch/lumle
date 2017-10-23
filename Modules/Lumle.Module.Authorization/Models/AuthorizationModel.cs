@@ -10,6 +10,5 @@
 
         public bool IsAssigned { get; set; }
 
-
     }
 }

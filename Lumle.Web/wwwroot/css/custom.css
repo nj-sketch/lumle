@@ -103,4 +103,8 @@
     text-decoration: none;
 }
 
-.table { width: 100% !important; }
+@media (max-width:1200px){
+    .dataTable .col-sm-12 {
+        overflow-x: scroll;
+    }
+}

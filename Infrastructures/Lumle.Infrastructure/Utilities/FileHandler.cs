@@ -34,12 +34,18 @@ namespace Lumle.Infrastructure.Utilities
                     Directory.CreateDirectory(directory);
                 }
 
-                var imageName = $"{ Guid.NewGuid()}_{width}X{height}_{sourceImage.FileName}";
-                var imagePath = Path.Combine(directory, imageName);
-
-
                 var stream = sourceImage.OpenReadStream();
                 var image = Image.Load(stream);
+
+                // For image where resize width and height is not provided
+                if(height == 0 && width == 0)
+                {
+                    width = image.Width;
+                    height = image.Height;
+                }
+
+                var imageName = $"{ Guid.NewGuid()}_{width}X{height}_{sourceImage.FileName}";
+                var imagePath = Path.Combine(directory, imageName);
 
                 if (image.Width > image.Height)
                 {
@@ -73,31 +79,6 @@ namespace Lumle.Infrastructure.Utilities
                 throw new Exception(ex.Message);
             }
         }
-        //private string UploadOriginalImage(IFormFile sourceImage)
-        //{
-        //    try
-        //    {
-        //        var directory = Path.Combine(_environment.WebRootPath, "uploadedimages");
-        //        var imagePath = Path.Combine(directory, $"{Guid.NewGuid()}_original_{sourceImage.FileName}");
-
-        //        Image image = null;
-        //        var stream = sourceImage.OpenReadStream();
-        //        image = Image.Load(stream);
-
-        //        var destinationImage = CropImage(image, 0, 0, image.Width, image.Height, image.Width, image.Height);
-
-        //        using (var fileStream = new FileStream(imagePath, FileMode.Create))
-        //        {
-        //            destinationImage.Save(fileStream);
-
-        //        }
-        //        return imagePath;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return null;
-        //    }
-        //}
 
         private Image<Rgba32> CropImage(Image<Rgba32> sourceImage, int sourceX, int sourceY, int sourceWidth, int sourceHeight, int destinationWidth, int destinationHeight)
         {
@@ -105,10 +86,6 @@ namespace Lumle.Infrastructure.Utilities
                         .Crop(new Rectangle(sourceX, sourceY, sourceWidth, sourceHeight)));
 
             return sourceImage;
-
-            //return sourceImage
-            //     .ReSize(destinationWidth, destinationHeight)
-            //     .Crop(new Rectangle(sourceX, sourceY, sourceWidth, sourceHeight));
         }
 
     }

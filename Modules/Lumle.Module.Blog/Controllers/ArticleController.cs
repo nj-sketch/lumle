@@ -27,6 +27,9 @@ using Lumle.Infrastructure.Constants.Localization;
 using Lumle.Infrastructure.Utilities.Abstracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
+using Lumle.Core.Services.Abstracts;
+using Lumle.Core.Models;
+using System.Security.Claims;
 
 namespace Lumle.Module.Blog.Controllers
 {
@@ -44,6 +47,7 @@ namespace Lumle.Module.Blog.Controllers
         private IHostingEnvironment _environment;
         private IUrlHelper _urlHelper;
         private string _imageUrl;
+        private readonly IBaseRoleClaimService _baseRoleClaimService;
 
         public ArticleController(
             UserManager<User> userManager,
@@ -54,7 +58,9 @@ namespace Lumle.Module.Blog.Controllers
             ITimeZoneHelper timeZoneHelper,
             IFileHandler fileHandler,
             IHostingEnvironment environment,
-            IUrlHelper urlHelper)
+            IUrlHelper urlHelper,
+            IBaseRoleClaimService baseRoleClaimService
+        )
         {
             _userManager = userManager;
             _unitOfWork = unitOfWork;
@@ -65,13 +71,21 @@ namespace Lumle.Module.Blog.Controllers
             _fileHandler = fileHandler;
             _environment = environment;
             _urlHelper = urlHelper;
+            _baseRoleClaimService = baseRoleClaimService;
         }
 
         [HttpGet]
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.BlogArticleView)]
-        public ViewResult Index()
+        public async Task<ViewResult> Index()
         {
-            return View();
+            var actionModel = new ActionOperation
+            {
+                CreateAction = await _baseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.BlogArticleCreate), User),
+                UpdateAction = await _baseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.BlogArticleUpdate), User),
+                DeleteAction = await _baseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.BlogArticleDelete), User)
+            };
+
+            return View(actionModel);
         }
 
         [HttpGet("new")]

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using Lumle.Data.Models;
-using Lumle.Infrastructure.Enums;
 
 namespace Lumle.Core.Models
 {
@@ -40,5 +39,6 @@ namespace Lumle.Core.Models
 
         public DateTime DeletedDate { get; set; }
 
+        public string ProfileImage { get; set; }
     }
 }
