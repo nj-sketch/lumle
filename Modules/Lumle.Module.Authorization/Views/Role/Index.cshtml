@@ -51,11 +51,13 @@
                             }
                         </tr>
                     </thead>
-                    <tbody>                  
+                    <tbody>    
+                        @{ int counter = 0; }
                         @for (var i = 0; i < Model.Count(); i++)
                         {
+                            counter = counter + 1;
                             <tr>
-                                <td>@i</td>
+                                <td>@counter</td>
                                 <td>@Model[i].RoleName</td>
                                 <td>@Model[i].Priority</td>
                                 <td>@Model[i].Description</td>

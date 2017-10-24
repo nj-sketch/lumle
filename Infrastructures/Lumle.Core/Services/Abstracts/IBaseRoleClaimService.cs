@@ -18,5 +18,6 @@ namespace Lumle.Core.Services.Abstracts
         void DeleteWhere(Expression<Func<BaseRoleClaim, bool>> predicate);
         bool IsClaimExist(Claim claim, string roleId);
         Task<bool> IsClaimExist(Claim claim, ClaimsPrincipal claimPrinciple);
+        Task<Dictionary<string, bool>> GetActionPrevilegeAsync(Dictionary<string, Claim> claims, ClaimsPrincipal claimPrincipal);
     }
 }

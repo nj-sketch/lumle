@@ -21,9 +21,9 @@ namespace Lumle.Module.Authorization.DbSeed
 
                 //Blog >>Article
                 new Permission {Slug="blog.article.create", DisplayName= "Create Article", Menu="blog", SubMenu="article", CreatedDate=DateTime.UtcNow, LastUpdated=DateTime.UtcNow},
-                new Permission {Slug="blog.article.read", DisplayName= "View blog", Menu="blog", SubMenu="article", CreatedDate=DateTime.UtcNow, LastUpdated=DateTime.UtcNow},
-                new Permission {Slug="blog.article.update", DisplayName= "View blog", Menu="blog", SubMenu="article", CreatedDate=DateTime.UtcNow, LastUpdated=DateTime.UtcNow},
-                new Permission {Slug="blog.article.delete", DisplayName= "View blog", Menu="blog", SubMenu="article", CreatedDate=DateTime.UtcNow, LastUpdated=DateTime.UtcNow},
+                new Permission {Slug="blog.article.read", DisplayName= "View Blog", Menu="blog", SubMenu="article", CreatedDate=DateTime.UtcNow, LastUpdated=DateTime.UtcNow},
+                new Permission {Slug="blog.article.update", DisplayName= "Update Blog", Menu="blog", SubMenu="article", CreatedDate=DateTime.UtcNow, LastUpdated=DateTime.UtcNow},
+                new Permission {Slug="blog.article.delete", DisplayName= "Delete Blog", Menu="blog", SubMenu="article", CreatedDate=DateTime.UtcNow, LastUpdated=DateTime.UtcNow},
                
                 //Authorization  >> Permission
                 new Permission {Slug="authorization.permission.create", DisplayName= "Create Permission", Menu="authorization", SubMenu="permission", CreatedDate=DateTime.UtcNow, LastUpdated=DateTime.UtcNow},
