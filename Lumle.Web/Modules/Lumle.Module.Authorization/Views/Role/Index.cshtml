@@ -1,14 +1,6 @@
-@model List<RoleListVM>
-@inject RoleManager<Role> RoleManager
+@model RoleListVM
+
 @{
-    var hasPermissionForCreate = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.AuthorizationRoleCreate), User);
-    var hasPermissionForUpdate = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.AuthorizationRoleUpdate), User);
-    var hasPermissionForDelete = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.AuthorizationRoleDelete), User);
-
-    var loggedUser = await UserManager.FindByNameAsync(User.Identity.Name);
-    var loggedUserRoles = await UserManager.GetRolesAsync(loggedUser);
-    var loggedUserRole = await RoleManager.FindByNameAsync(loggedUserRoles.First());
-
     ViewData["Title"] =Localizer[LabelConstants.Role];
 }
 
@@ -20,7 +12,7 @@
     <div id="page-title">
         <h2 class="display-inline">@Localizer[LabelConstants.Role]</h2>
         <div class="pull-right">
-            @if (hasPermissionForCreate)
+            @if (Model.ActionOperation.CreateAction)
             {
                 <a class="btn btn-primary btn-sm" href="~/authorization/role/add"><i class="glyph-icon icon-plus"></i>&nbsp;@Localizer[LabelConstants.AddNew]</a>
             }
@@ -45,7 +37,7 @@
                             <th>@Localizer[LabelConstants.Priority]</th>
                             <th>@Localizer[LabelConstants.Description]</th>
                             <th>@Localizer[LabelConstants.User]</th>
-                            @if (hasPermissionForUpdate || hasPermissionForDelete)
+                            @if (Model.ActionOperation.UpdateAction || Model.ActionOperation.DeleteAction)
                             {
                                 <th>@Localizer[LabelConstants.Action]</th>
                             }
@@ -53,37 +45,37 @@
                     </thead>
                     <tbody>    
                         @{ int counter = 0; }
-                        @for (var i = 0; i < Model.Count(); i++)
+                        @for (var i = 0; i < Model.RoleModels.Count(); i++)
                         {
                             counter = counter + 1;
                             <tr>
                                 <td>@counter</td>
-                                <td>@Model[i].RoleName</td>
-                                <td>@Model[i].Priority</td>
-                                <td>@Model[i].Description</td>
-                                <td>@Model[i].NumberOfUsers</td>
-                                @if (hasPermissionForUpdate || hasPermissionForDelete)
+                                <td>@Model.RoleModels[i].RoleName</td>
+                                <td>@Model.RoleModels[i].Priority</td>
+                                <td>@Model.RoleModels[i].Description</td>
+                                <td>@Model.RoleModels[i].NumberOfUsers</td>
+                                @if (Model.ActionOperation.UpdateAction || Model.ActionOperation.DeleteAction)
                                 {
                                     <td>
-                                        @if (loggedUserRole.Priority <= Model[i].Priority)
+                                        @if (ViewBag.RolePriority <= Model.RoleModels[i].Priority)
                                         {
-                                            if (hasPermissionForUpdate)
+                                            if (Model.ActionOperation.UpdateAction)
                                             {
-                                                <a id="editRoleModal" href="~/authorization/role/edit/@Model[i].Id"
+                                                <a id="editRoleModal" href="~/authorization/role/edit/@Model.RoleModels[i].Id"
                                                    class="btn btn-info btn-xs">
                                                     <i class="glyph-icon icon-pencil"></i> @Localizer[LabelConstants.Edit]
                                                 </a>
-                                                <a id="addEditRoleCredential" href="~/authorization/role/permission/@Model[i].Id"
+                                                <a id="addEditRoleCredential" href="~/authorization/role/permission/@Model.RoleModels[i].Id"
                                                    class="btn btn-info btn-xs">
                                                     <i class="glyph-icon icon-cog"></i> @Localizer[LabelConstants.Manage]
                                                 </a>
                                             }
 
-                                            if (hasPermissionForDelete)
+                                            if (Model.ActionOperation.DeleteAction)
                                             {
-                                                if (Model[i].NumberOfUsers == 0)
+                                                if (Model.RoleModels[i].NumberOfUsers == 0)
                                                 {
-                                                    var deleteModal = "deleteModal" + Model[i].Id;
+                                                    var deleteModal = "deleteModal" + Model.RoleModels[i].Id;
                                                     <button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#@deleteModal">
                                                         <i class="glyph-icon icon-trash-o"></i> Delete
                                                     </button>
@@ -97,9 +89,9 @@
                                                                     <h3 class="modal-title">@Localizer[LabelConstants.DeleteRole]</h3>
                                                                 </div>
 
-                                                                <form asp-action="DeleteRole" role="form" asp-route-id="@Model[i].Id" method="post">
+                                                                <form asp-action="DeleteRole" role="form" asp-route-id="@Model.RoleModels[i].Id" method="post">
                                                                     <div class="modal-body">
-                                                                        @Localizer[LabelConstants.AreYouSureYouWantToDelete] <span><b>@Model[i].RoleName</b></span> ?
+                                                                        @Localizer[LabelConstants.AreYouSureYouWantToDelete] <span><b>@Model.RoleModels[i].RoleName</b></span> ?
                                                                     </div>
                                                                     <div class="modal-footer">
                                                                         <button data-dismiss="modal" class="btn btn-default" type="button">@Localizer[LabelConstants.Cancel]</button>

@@ -1,17 +1,10 @@
-@inject UserManager<User> UserManager
-@inject RoleManager<Role> RoleManager
-@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery antiforgery;
+@using Lumle.Core.Models
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery antiforgery
+
+@model ActionOperation
 
 @{
     var antiforgeryRequestToken = antiforgery.GetAndStoreTokens(Context).RequestToken;
-    var hasPermissionForCreate = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.AuthorizationUserCreate), User);
-    var hasPermissionForUpdate = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.AuthorizationUserUpdate), User);
-    var hasPermissionForDelete = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.AuthorizationUserDelete), User);
-
-    var userName = User.Identity.Name;
-    var loggedUser = await UserManager.FindByNameAsync(User.Identity.Name);
-    var loggedUserRole = await UserManager.GetRolesAsync(loggedUser);
-    var role = await RoleManager.FindByNameAsync(loggedUserRole.First());
 
     ViewData["Title"] = Localizer[LabelConstants.User];
 }
@@ -24,13 +17,13 @@
 }
 
 <div class="row">
-    <label id="loggedUser" hidden="hidden" value="@userName"></label>
-    <label id="loggedUserRolePriority" hidden="hidden" value="@role.Priority"></label>
+    <label id="loggedUser" hidden="hidden" value="@ViewBag.Username"></label>
+    <label id="loggedUserRolePriority" hidden="hidden" value="@ViewBag.RolePriority"></label>
     <div id="page-title">
         <h2 class="display-inline">@Localizer[LabelConstants.User]</h2>
         <div class="pull-right">
 
-            @if (hasPermissionForCreate)
+            @if (Model.CreateAction)
             {
                 <a class="btn btn-primary btn-sm" href="~/authorization/user/add"><i class="glyph-icon icon-plus"></i>&nbsp;@Localizer[LabelConstants.AddNew]</a>
             }
@@ -92,11 +85,11 @@
 </div>
 
 @section scripts
-    {
+{
     <script type="text/javascript">
         var token = @Json.Serialize(antiforgeryRequestToken);
-        var hasPermissionForUpdate = @hasPermissionForUpdate.ToString().ToLower();
-        var hasPermissionForDelete = @hasPermissionForDelete.ToString().ToLower();
+        var hasPermissionForUpdate = @Model.UpdateAction.ToString().ToLower();
+        var hasPermissionForDelete = @Model.DeleteAction.ToString().ToLower();
     </script>
 
     <script src="~/lib/toastr/toastr.min.js"></script>
