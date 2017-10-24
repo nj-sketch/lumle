@@ -37,6 +37,7 @@ using Lumle.Infrastructure.Constants.Localization;
 using Lumle.Infrastructure.Utilities.Abstracts;
 using Lumle.Infrastructure.Enums;
 using System.Security.Claims;
+using Lumle.Infrastructure.Constants.ActionConstants;
 
 namespace Lumle.Module.Authorization.Controllers
 {
@@ -46,6 +47,7 @@ namespace Lumle.Module.Authorization.Controllers
     public class UserController : Controller
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly IBaseRoleClaimService _baseRoleClaimService;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;
         private readonly IProfileService _profileService;
@@ -60,6 +62,7 @@ namespace Lumle.Module.Authorization.Controllers
         private readonly IUrlHelper _urlHelper;
 
         public UserController(
+            IBaseRoleClaimService baseRoleClaimService,
             UserManager<User> userManager,
             RoleManager<Role> roleManager,
             IProfileService profileService,
@@ -76,6 +79,7 @@ namespace Lumle.Module.Authorization.Controllers
             IUrlHelper urlHelper
         )
         {
+            _baseRoleClaimService = baseRoleClaimService;
             _userManager = userManager;
             _roleManager = roleManager;
             _profileService = profileService;
@@ -92,9 +96,37 @@ namespace Lumle.Module.Authorization.Controllers
 
         [HttpGet]
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.AuthorizationUserView)]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            #region action-privelege
+            // Make map to check for the action previleges
+            var map = new Dictionary<string, Claim>
+            {
+                { OperationActionConstant.CreateAction, new Claim("permission", Permissions.AuthorizationUserCreate) },
+                { OperationActionConstant.UpdateAction, new Claim("permission", Permissions.AuthorizationUserUpdate) },
+                { OperationActionConstant.DeleteAction, new Claim("permission", Permissions.AuthorizationUserDelete) }
+            };
+
+            // Get action previlege according to actions provided
+            var actionClaimResult = await _baseRoleClaimService.GetActionPrevilegeAsync(map, User);
+            var actionModel = new ActionOperation
+            {
+                CreateAction = actionClaimResult[OperationActionConstant.CreateAction],
+                UpdateAction = actionClaimResult[OperationActionConstant.UpdateAction],
+                DeleteAction = actionClaimResult[OperationActionConstant.DeleteAction]
+            };
+            #endregion
+
+            #region logged-user-info
+            var user = await GetCurrentUserAsync();
+            var loggedUserRole = await _userManager.GetRolesAsync(user);
+            var role = await _roleManager.FindByNameAsync(loggedUserRole.First());
+
+            ViewBag.Username = user.UserName;
+            ViewBag.RolePriority = role.Priority;
+            #endregion
+
+            return View(actionModel);
         }
 
         [HttpGet("add")]

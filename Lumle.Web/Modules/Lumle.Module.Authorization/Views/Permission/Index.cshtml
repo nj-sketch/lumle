@@ -2,7 +2,7 @@
 @model List<PermissionVM>
 
 @{   
-    var hasPermissionForUpdate = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.AuthorizationPermissionUpdate), User);   
+    var updateAction = ViewBag.UpdateAction;
 
     ViewData["Title"] = "Permission";
 }
@@ -32,7 +32,7 @@
                         <tr>
                             <th>Slug</th>
                             <th>Display Name</th>
-                            @if (hasPermissionForUpdate)
+                            @if (updateAction)
                             {
                                 <th>Action</th>
                             }
@@ -45,7 +45,7 @@
                             <tr>
                                 <td>@Model[i].Slug</td>
                                 <td>@Model[i].DisplayName</td>
-                                @if (hasPermissionForUpdate)
+                                @if (updateAction)
                                 {
                                     <td>
                                         <a id="editPermission" href="~/authorization/permission/edit/@Model[i].Id"

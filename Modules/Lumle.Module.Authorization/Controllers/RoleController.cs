@@ -24,6 +24,9 @@ using Microsoft.Extensions.Localization;
 using Lumle.Infrastructure.Constants.Localization;
 using Microsoft.Extensions.Caching.Memory;
 using Lumle.Infrastructure.Constants.Cache;
+using Lumle.Module.Authorization.Models;
+using System.Security.Claims;
+using Lumle.Infrastructure.Constants.ActionConstants;
 
 namespace Lumle.Module.Authorization.Controllers
 {
@@ -65,9 +68,28 @@ namespace Lumle.Module.Authorization.Controllers
 
         [HttpGet]
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.AuthorizationRoleView)]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var roles = _roleManager.Roles.Select(c => new RoleListVM
+            #region action-privelege
+            // Make map to check for the action previleges
+            var map = new Dictionary<string, Claim>
+            {
+                { OperationActionConstant.CreateAction, new Claim("permission", Permissions.AuthorizationRoleCreate) },
+                { OperationActionConstant.UpdateAction, new Claim("permission", Permissions.AuthorizationRoleUpdate) },
+                { OperationActionConstant.DeleteAction, new Claim("permission", Permissions.AuthorizationRoleDelete) }
+            };
+
+            // Get action previlege according to actions provided
+            var actionClaimResult = await _baseRoleClaimService.GetActionPrevilegeAsync(map, User);
+            var actionModel = new ActionOperation
+            {
+                CreateAction = actionClaimResult[OperationActionConstant.CreateAction],
+                UpdateAction = actionClaimResult[OperationActionConstant.UpdateAction],
+                DeleteAction = actionClaimResult[OperationActionConstant.DeleteAction]
+            };
+            #endregion
+
+            var roles = _roleManager.Roles.Select(c => new RoleModel
             {
                 RoleName = c.Name,
                 Id = c.Id,
@@ -76,7 +98,21 @@ namespace Lumle.Module.Authorization.Controllers
                 Priority = c.Priority
             }).ToList();
 
-            return View(roles);
+            var roleListVm = new RoleListVM
+            {
+                RoleModels = roles,
+                ActionOperation = actionModel
+            };
+
+            #region logged-user-info
+            var user = await GetCurrentUserAsync();
+            var loggedUserRole = await _userManager.GetRolesAsync(user);
+            var role = await _roleManager.FindByNameAsync(loggedUserRole.First());
+
+            ViewBag.RolePriority = role.Priority;
+            #endregion
+
+            return View(roleListVm);
         }
 
         [HttpGet("add")]
@@ -234,7 +270,6 @@ namespace Lumle.Module.Authorization.Controllers
                 return RedirectToAction("Index");
             }
         }
-
 
         [HttpPost("delete/{id}")]
         [ValidateAntiForgeryToken]

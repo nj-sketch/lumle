@@ -10,6 +10,10 @@ using Lumle.Module.Authorization.Models;
 using Lumle.Data.Data.Abstracts;
 using Microsoft.AspNetCore.Authorization;
 using Lumle.Infrastructure.Constants.AuthorizeRules;
+using Lumle.Core.Services.Abstracts;
+using System.Security.Claims;
+using Lumle.Infrastructure.Constants.ActionConstants;
+using System.Threading.Tasks;
 
 namespace Lumle.Module.Authorization.Controllers
 {
@@ -17,24 +21,41 @@ namespace Lumle.Module.Authorization.Controllers
     [Authorize]
     public class PermissionController : Controller
     {
+        private readonly IBaseRoleClaimService _baseRoleClaimService;
         private readonly IPermissionService _permissionService;
         private readonly IUnitOfWork _unitOfWork;
 
         public PermissionController(
+            IBaseRoleClaimService baseRoleClaimService,
             IPermissionService permissionService,
             IUnitOfWork unitOfWork
         )
         {
-            _unitOfWork = unitOfWork;
+            _baseRoleClaimService = baseRoleClaimService;
             _permissionService = permissionService;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet]
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.AuthorizationPermissionView)]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            #region action-privelege
+            // Make map to check for the action previleges
+            var map = new Dictionary<string, Claim>
+            {
+                { OperationActionConstant.UpdateAction, new Claim("permission", Permissions.AuthorizationPermissionUpdate) }
+            };
+
+            // Get action previlege according to actions provided
+            var actionClaimResult = await _baseRoleClaimService.GetActionPrevilegeAsync(map, User);
+            #endregion
+
             var permissionEntities = _permissionService.GetAll();
             var permissions = Mapper.Map<IList<PermissionVM>>(permissionEntities);
+
+            // Send permission edit previlege in view
+            ViewBag.UpdateAction = actionClaimResult[OperationActionConstant.UpdateAction];
 
             return View(permissions);
         }
