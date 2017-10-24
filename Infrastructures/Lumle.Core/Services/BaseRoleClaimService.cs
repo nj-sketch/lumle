@@ -199,5 +199,52 @@ namespace Lumle.Core.Services
                 return false;
             }
         }
+
+        public async Task<Dictionary<string, bool>> GetActionPrevilegeAsync(Dictionary<string, Claim> claims, ClaimsPrincipal claimPrincipal)
+        {
+            try
+            {
+                // Get current user thorough claims
+                var user = await _userManager.GetUserAsync(claimPrincipal);
+                
+                // Get role assigned to user
+                var userRole = await _userManager.GetRolesAsync(user);
+
+                var roleModel = await _roleManager.FindByNameAsync(userRole.FirstOrDefault());
+
+                var roleId = await _roleManager.GetRoleIdAsync(roleModel);
+
+                var roleClaims = _baseRoleClaimRepository.GetAll().ToList();
+                // dictionary that contains return value
+                var map = new Dictionary<string, bool>();
+
+                // Check for the action previleges
+                foreach(var pair in claims)
+                {
+                    var actionClaim = pair.Value;
+                    map.Add(pair.Key, CheckRoleClaimForAction(roleClaims, actionClaim, roleId));
+                }
+
+                return map;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        private bool CheckRoleClaimForAction(List<BaseRoleClaim> baseRoleClaims, Claim claim, string roleId)
+        {
+            bool flag = false;
+            var roleClaim = baseRoleClaims.FirstOrDefault(x => x.RoleId == roleId &&
+                                                                     x.ClaimType == claim.Type &&
+                                                                     x.ClaimValue == claim.Value);
+            if(roleClaim != null)
+            {
+                flag = true;
+            }
+
+            return flag;
+        }
     }
 }

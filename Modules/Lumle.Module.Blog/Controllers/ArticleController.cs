@@ -30,6 +30,7 @@ using Microsoft.AspNetCore.Hosting;
 using Lumle.Core.Services.Abstracts;
 using Lumle.Core.Models;
 using System.Security.Claims;
+using Lumle.Infrastructure.Constants.ActionConstants;
 
 namespace Lumle.Module.Blog.Controllers
 {
@@ -78,11 +79,21 @@ namespace Lumle.Module.Blog.Controllers
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.BlogArticleView)]
         public async Task<ViewResult> Index()
         {
+            // Make map to check for the action previleges
+            var map = new Dictionary<string, Claim>
+            {
+                { OperationActionConstant.CreateAction, new Claim("permission", Permissions.BlogArticleCreate) },
+                { OperationActionConstant.UpdateAction, new Claim("permission", Permissions.BlogArticleUpdate) },
+                { OperationActionConstant.DeleteAction, new Claim("permission", Permissions.BlogArticleDelete) }
+            };
+
+            // Get action previlege according to actions provided
+            var actionClaimResult = await _baseRoleClaimService.GetActionPrevilegeAsync(map, User);
             var actionModel = new ActionOperation
             {
-                CreateAction = await _baseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.BlogArticleCreate), User),
-                UpdateAction = await _baseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.BlogArticleUpdate), User),
-                DeleteAction = await _baseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.BlogArticleDelete), User)
+                CreateAction = actionClaimResult[OperationActionConstant.CreateAction],
+                UpdateAction = actionClaimResult[OperationActionConstant.UpdateAction],
+                DeleteAction = actionClaimResult[OperationActionConstant.DeleteAction]
             };
 
             return View(actionModel);
