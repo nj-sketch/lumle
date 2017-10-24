@@ -29,10 +29,11 @@
                 <img src="@Model.ProfileImageUrl" id="profileImage" class="image" alt="Featured Image" />
 
                 <div class="overlay">
-                    @*<div class="text"><button class="btn btn-primary btn-sm">Change Avatar</button></div>*@
-                    <input type="file" name="myProfileImage" id="myProfileImageInput" accept="image/png,image/jpg,image/jpeg">
+                    <div class="edit-avatar">
+                        <input type="file" name="myProfileImage" id="myProfileImageInput" accept="image/png,image/jpg,image/jpeg">
+                        <i class="glyph-icon icon-camera"></i>
+                    </div>
                 </div>
-
             }
             else
             {
@@ -41,7 +42,10 @@
                 </div>
 
                 <div class="overlay">
-                    <input type="file" name="myProfileImage" id="myProfileImageInput" accept="image/png,image/jpg,image/jpeg">
+                    <div class="edit-avatar">
+                        <input type="file" name="myProfileImage" id="myProfileImageInput" accept="image/png,image/jpg,image/jpeg">
+                        <i class="glyph-icon icon-camera"></i>
+                    </div>
                 </div>
             }
         </div>
