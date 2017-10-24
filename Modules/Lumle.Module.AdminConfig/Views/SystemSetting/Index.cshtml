@@ -1,22 +1,17 @@
-﻿@model SystemSettingVM
-@using Lumle.Infrastructure.Constants.SystemSetting
-@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
 
-@functions
-{
-    public string GetAntiXsrfRequestToken()
-    {
-        return Xsrf.GetAndStoreTokens(Context).RequestToken;
-    }
+@using Lumle.Infrastructure.Constants.SystemSetting
+
+@model SystemSettingVM
+
+@{
+    ViewData["Title"] = Localizer[LabelConstants.SystemSetting];
 }
+
 @section styles
 {
-    <link href="~/assets/widgets/input-switch/inputswitch-alt.min.css" rel="stylesheet" />
-    <link href="~/lib/toastr/toastr.css" rel="stylesheet" />
-}
-@{
-    ViewData["Title"] =Localizer[LabelConstants.SystemSetting];
-    var hasPermissionForUpdate = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.AdminConfigSystemSettingUpdate), User);
+    <link href="~/assets/widgets/input-switch/inputswitch-alt.min.css" type="text/css" rel="stylesheet" />
+    <link href="~/lib/toastr/toastr.css" type="text/css" rel="stylesheet" />
 }
 
 <div id="page-title">
@@ -94,7 +89,7 @@
 
 @section scripts{
     <script type="text/javascript">
-            var hasPermissionForUpdate = @hasPermissionForUpdate.ToString().ToLower();
+            var hasPermissionForUpdate = @Model.UpdateAction.ToString().ToLower();
     </script>
     <script src="~/lib/toastr/toastr.min.js"></script>
     <script src="~/adminconfig/js/systemsetting-index.js"></script>

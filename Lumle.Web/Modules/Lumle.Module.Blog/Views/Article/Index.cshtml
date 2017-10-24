@@ -6,10 +6,6 @@
 @{
     var antiforgeryRequestToken = antiforgery.GetAndStoreTokens(Context).RequestToken;
 
-    //var hasPermissionForCreate = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.BlogArticleCreate), User);
-    //var hasPermissionForUpdate = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.BlogArticleUpdate), User);
-    //var hasPermissionForDelete = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.BlogArticleDelete), User);
-
     ViewData["Title"] = Localizer[LabelConstants.Article];
 }
 
@@ -59,8 +55,6 @@
 @section scripts{
     <script type="text/javascript">
         var token = @Json.Serialize(antiforgeryRequestToken);
-        @*var hasPermissionForUpdate = @hasPermissionForUpdate.ToString().ToLower();
-        var hasPermissionForDelete = @hasPermissionForDelete.ToString().ToLower();*@
         var hasPermissionForUpdate = @Model.UpdateAction.ToString().ToLower();
         var hasPermissionForDelete = @Model.DeleteAction.ToString().ToLower();
     </script>

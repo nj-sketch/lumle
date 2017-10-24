@@ -1,8 +1,6 @@
 ﻿@model EmailTemplateVM
-@inject IBaseRoleClaimService BaseRoleClaimService
 
 @{
-    var hasPermissionForEmailTemplateUpdate = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.AdminConfigCredentialUpdate), User);
     ViewData["Title"] = Localizer[LabelConstants.ManageEmailTemplate];
 }
 
@@ -21,7 +19,7 @@
 @Html.Partial("_MessagePanel")
 
 <div class="page-title">
-    @if (hasPermissionForEmailTemplateUpdate)
+    @if (Model.UpdateAction)
     {
         <div class="pull-right" style="margin:15px 15px 0 0;">
             <a class="btn btn-info btn-xs" href="~/adminconfig/emailtemplate/last/@Model.Id">@Localizer[LabelConstants.LoadLastTemplate]</a>
@@ -37,31 +35,31 @@
                 <div class="row">
                     <div class="col-md-12 main-section">
                         @Html.HiddenFor(x => x.Id)
-                        @if (hasPermissionForEmailTemplateUpdate)
+
+                        <div class="form-group">
+                            <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.Title]<span class="text-danger"> *</span></label>
+                            <div class="col-lg-6">
+                                <input asp-for="SlugDisplayName" class="form-control" required />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Subject" class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.EmailSubject]<span class="text-danger"> *</span></label>
+                            <div class="col-lg-6">
+                                <input asp-for="Subject" class="form-control" required />
+                            </div>
+                        </div>
+
+                        <div class="form-group form-section">
+                            <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.EmailBody]<span class="text-danger"> *</span></label>
+                            <div class="col-lg-6">
+                                <div class="example-box-wrapper">
+                                    <textarea asp-for="Body" row="10" class="wysiwyg-editor" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        @if (Model.UpdateAction)
                         {
-                            <div class="form-group">
-                                <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.Title]<span class="text-danger"> *</span></label>
-                                <div class="col-lg-6">
-                                    <input asp-for="SlugDisplayName" class="form-control" required />
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label asp-for="Subject" class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.EmailSubject]<span class="text-danger"> *</span></label>
-                                <div class="col-lg-6">
-                                    <input asp-for="Subject" class="form-control" required />
-                                </div>
-                            </div>
-
-                            <div class="form-group form-section">
-                                <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.EmailBody]<span class="text-danger"> *</span></label>
-                                <div class="col-lg-6">
-                                    <div class="example-box-wrapper">
-                                        <textarea asp-for="Body" row="10" class="wysiwyg-editor" required></textarea>
-                                    </div>
-                                </div>
-                            </div>
-
                             <div class="form-group form-section">
                                 <div class="col-sm-9">
                                     <div class="pull-right">
@@ -74,29 +72,6 @@
                         }
                         else
                         {
-                            <div class="form-group">
-                                <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.Title]<span class="text-danger"> *</span></label>
-                                <div class="col-lg-6">
-                                    <input asp-for="SlugDisplayName" class="form-control" required readonly />
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label asp-for="Subject" class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.EmailSubject]<span class="text-danger"> *</span></label>
-                                <div class="col-lg-6">
-                                    <input asp-for="Subject" class="form-control" required readonly />
-                                </div>
-                            </div>
-
-                            <div class="form-group form-section">
-                                <label class="col-lg-3 col-sm-3 control-label">@Localizer[LabelConstants.EmailBody]<span class="text-danger"> *</span></label>
-                                <div class="col-lg-6">
-                                    <div class="example-box-wrapper">
-                                        <textarea asp-for="Body" row="10" class="wysiwyg-editor" required readonly></textarea>
-                                    </div>
-                                </div>
-                            </div>
-
                             <div class="form-group form-section">
                                 <div class="col-sm-9">
                                     <div class="pull-right">

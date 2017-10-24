@@ -19,6 +19,11 @@ using Lumle.Infrastructure.Constants.Localization;
 using System.Linq;
 using Lumle.Core.Attributes;
 using Lumle.Core.Localizer;
+using Lumle.Core.Services.Abstracts;
+using Lumle.Module.AdminConfig.ViewModels;
+using System.Collections.Generic;
+using System.Security.Claims;
+using Lumle.Infrastructure.Constants.ActionConstants;
 
 namespace Lumle.Module.AdminConfig.Controllers
 {
@@ -27,6 +32,7 @@ namespace Lumle.Module.AdminConfig.Controllers
     public class CredentialController : Controller
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly IBaseRoleClaimService _baseRoleClaimService;
         private readonly ICredentialCategoryService _credentialCategoryService;
         private readonly ICredentialService _credentialService;
         private readonly UserManager<User> _userManager;
@@ -35,17 +41,19 @@ namespace Lumle.Module.AdminConfig.Controllers
         private readonly IStringLocalizer<ResourceString> _localizer;
 
         public CredentialController(
+            IBaseRoleClaimService baseRoleClaimService,
             ICredentialCategoryService credentialCategoryService,
-            IAuditLogService auditLogService,
             ICredentialService credentialService,
-            IUnitOfWork unitOfWork,
             UserManager<User> userManager,
+            IAuditLogService auditLogService,         
+            IUnitOfWork unitOfWork,           
             IStringLocalizer<ResourceString> localizer
         )
         {
-            _userManager = userManager;
+            _baseRoleClaimService = baseRoleClaimService;
             _credentialCategoryService = credentialCategoryService;
             _credentialService = credentialService;
+            _userManager = userManager;           
             _auditLogService = auditLogService;
             _unitOfWork = unitOfWork;
             _localizer = localizer;
@@ -63,18 +71,35 @@ namespace Lumle.Module.AdminConfig.Controllers
         [HttpGet]
         [Route("{credentialCategoryId:int}")]
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.AdminConfigCredentialView)]
-        public IActionResult Edit(int credentialCategoryId)
+        public async Task<IActionResult> Edit(int credentialCategoryId)
         {
             try
             {
-                var credential = _credentialService.GetAllCredential(x => x.CredentialCategoryId == credentialCategoryId).ToList();
+                #region template-edit-permission
+                // Make map to check for the action previleges
+                var map = new Dictionary<string, Claim>
+                {
+                    { OperationActionConstant.UpdateAction, new Claim("permission", Permissions.AdminConfigCredentialUpdate) }
+                };
 
-                if (!credential.Any())
+                // Get action previlege according to actions provided
+                var actionClaimResult = await _baseRoleClaimService.GetActionPrevilegeAsync(map, User);
+                #endregion
+
+                var credentials = _credentialService.GetAllCredential(x => x.CredentialCategoryId == credentialCategoryId).ToList();
+
+                if (!credentials.Any())
                 {
                     TempData["ErrorMsg"] = _localizer[ActionMessageConstants.ResourceNotFoundErrorMessage].Value;
                 }
 
-                return View(credential);
+                var credentialVm = new CredentialVM
+                {
+                    CredentialModels = credentials,
+                    UpdateAction = actionClaimResult[OperationActionConstant.UpdateAction]
+                };
+
+                return View(credentialVm);
             }
             catch (Exception)
             {

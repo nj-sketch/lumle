@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Lumle.Module.AdminConfig.ViewModels
 {
@@ -24,5 +20,6 @@ namespace Lumle.Module.AdminConfig.ViewModels
         [Display(Name ="Email Body")]
         public string Body { get; set; }
 
+        public bool UpdateAction { get; set; } // Denotes the update previlege according to the user role
     }
 }

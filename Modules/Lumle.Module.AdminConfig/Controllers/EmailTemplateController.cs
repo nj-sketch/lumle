@@ -18,6 +18,10 @@ using Lumle.Infrastructure.Constants.Localization;
 using Lumle.Module.Audit.Enums;
 using Lumle.Module.Audit.Models;
 using Lumle.Module.Audit.Services;
+using Lumle.Core.Services.Abstracts;
+using System.Security.Claims;
+using System.Collections.Generic;
+using Lumle.Infrastructure.Constants.ActionConstants;
 
 namespace Lumle.Module.AdminConfig.Controllers
 {
@@ -25,8 +29,8 @@ namespace Lumle.Module.AdminConfig.Controllers
     [Authorize]
     public class EmailTemplateController : Controller
     {
-
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly IBaseRoleClaimService _baseRoleClaimService;       
         private readonly IEmailTemplateService _emailTemplateService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<User> _userManager;
@@ -34,17 +38,19 @@ namespace Lumle.Module.AdminConfig.Controllers
         private readonly IStringLocalizer<ResourceString> _localizer;
 
         public EmailTemplateController(
+            IBaseRoleClaimService baseRoleClaimService,
             IEmailTemplateService emailTemplateService,
             IUnitOfWork unitOfWork,
-            IAuditLogService auditLogService,
             UserManager<User> userManager,
+            IAuditLogService auditLogService,           
             IStringLocalizer<ResourceString> localizer
         )
         {
+            _baseRoleClaimService = baseRoleClaimService;
             _emailTemplateService = emailTemplateService;
             _unitOfWork = unitOfWork;
-            _auditLogService = auditLogService;
             _userManager = userManager;
+            _auditLogService = auditLogService;           
             _localizer = localizer;
         }
 
@@ -61,8 +67,19 @@ namespace Lumle.Module.AdminConfig.Controllers
         [HttpGet]
         [Route("edit/{emailTemplateId:int}")]
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.AdminConfigEmailTemplateView)]
-        public IActionResult GetEmailTemplate(int emailTemplateId)
+        public async Task<IActionResult> GetEmailTemplate(int emailTemplateId)
         {
+            #region template-edit-permission
+            // Make map to check for the action previleges
+            var map = new Dictionary<string, Claim>
+            {
+                { OperationActionConstant.UpdateAction, new Claim("permission", Permissions.AdminConfigCredentialUpdate) }
+            };
+
+            // Get action previlege according to actions provided
+            var actionClaimResult = await _baseRoleClaimService.GetActionPrevilegeAsync(map, User);
+            #endregion
+
             var emailTemplate = _emailTemplateService.GetSingle(x => x.Id == emailTemplateId);
             if (emailTemplate == null)
             {
@@ -85,6 +102,9 @@ namespace Lumle.Module.AdminConfig.Controllers
             }
 
             var emailTemplateVm = AutoMapper.Mapper.Map<EmailTemplateVM>(emailTemplate);
+
+            // Add permission for edit
+            emailTemplateVm.UpdateAction = actionClaimResult[OperationActionConstant.UpdateAction];
 
             return View("Edit", emailTemplateVm);
         }
