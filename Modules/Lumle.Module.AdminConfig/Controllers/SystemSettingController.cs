@@ -21,6 +21,7 @@ using Lumle.Module.Audit.Models;
 using Lumle.Infrastructure.Constants.Localization;
 using Microsoft.Extensions.Localization;
 using Lumle.Core.Localizer;
+using Lumle.Infrastructure.Constants.ActionConstants;
 
 namespace Lumle.Module.AdminConfig.Controllers
 {
@@ -28,6 +29,7 @@ namespace Lumle.Module.AdminConfig.Controllers
     [Authorize]
     public class SystemSettingController : Controller
     {
+        private readonly IBaseRoleClaimService _baseRoleClaimService;
         private readonly ISystemSettingService _systemSettingService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<User> _userManager;
@@ -35,13 +37,17 @@ namespace Lumle.Module.AdminConfig.Controllers
         private readonly RoleManager<Role> _roleManager;
         private readonly IStringLocalizer<ResourceString> _localizer;
 
-        public SystemSettingController(ISystemSettingService systemSettingService,
+        public SystemSettingController(
+            IBaseRoleClaimService baseRoleClaimService,
+            ISystemSettingService systemSettingService,
             IUnitOfWork unitOfWork,
             UserManager<User> userManager,
             IAuditLogService auditLogService,
-             RoleManager<Role> roleManager,
-             IStringLocalizer<ResourceString> localizer)
+            RoleManager<Role> roleManager,
+            IStringLocalizer<ResourceString> localizer
+        )
         {
+            _baseRoleClaimService = baseRoleClaimService;
             _systemSettingService = systemSettingService;
             _unitOfWork = unitOfWork;
             _userManager = userManager;
@@ -54,9 +60,22 @@ namespace Lumle.Module.AdminConfig.Controllers
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.AdminConfigSystemSettingView)]
         public async Task<IActionResult> Index()
         {
+            #region action-permission
+            // Make map to check for the action previleges
+            var map = new Dictionary<string, Claim>
+            {
+                { OperationActionConstant.UpdateAction, new Claim("permission", Permissions.AdminConfigSystemSettingUpdate) }
+            };
+
+            // Get action previlege according to actions provided
+            var actionClaimResult = await _baseRoleClaimService.GetActionPrevilegeAsync(map, User);
+            #endregion
+
             var systemSettingEntity = _systemSettingService.GetSingle(x => x.Slug == SystemSetting.MaintenanceMode);
             var systemSettingModel = Mapper.Map<SystemSettingVM>(systemSettingEntity);
+
             systemSettingModel.Roles = await GetAllSupportedRolesAsync();
+            systemSettingModel.UpdateAction = actionClaimResult[OperationActionConstant.UpdateAction];
 
             return View(systemSettingModel);
         }
@@ -153,7 +172,6 @@ namespace Lumle.Module.AdminConfig.Controllers
             return Json(new { success = true, messageTitle = _localizer[ActionMessageConstants.UpdatedSuccessfully].Value, message = _localizer[ActionMessageConstants.UpdatedSuccessfully].Value });
 
         }
-
 
         [HttpPost("CheckUserCredential")]
         [ValidateAntiForgeryToken]

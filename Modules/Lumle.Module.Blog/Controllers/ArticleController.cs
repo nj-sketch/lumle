@@ -38,6 +38,7 @@ namespace Lumle.Module.Blog.Controllers
     [Authorize]
     public class ArticleController : Controller
     {
+        private readonly IBaseRoleClaimService _baseRoleClaimService;
         private readonly IArticleService _articleService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IAuditLogService _auditLogService;
@@ -45,34 +46,33 @@ namespace Lumle.Module.Blog.Controllers
         private readonly IStringLocalizer<ResourceString> _localizer;
         private readonly ITimeZoneHelper _timeZoneHelper;
         private readonly IFileHandler _fileHandler;
-        private IHostingEnvironment _environment;
-        private IUrlHelper _urlHelper;
+        private readonly IHostingEnvironment _environment;
+        private readonly IUrlHelper _urlHelper;
         private string _imageUrl;
-        private readonly IBaseRoleClaimService _baseRoleClaimService;
 
         public ArticleController(
-            UserManager<User> userManager,
+            IBaseRoleClaimService baseRoleClaimService,
             IArticleService articleService,
-            IAuditLogService auditLogService,
             IUnitOfWork unitOfWork,
+            IAuditLogService auditLogService,
+            UserManager<User> userManager,
             IStringLocalizer<ResourceString> localizer,
             ITimeZoneHelper timeZoneHelper,
             IFileHandler fileHandler,
             IHostingEnvironment environment,
-            IUrlHelper urlHelper,
-            IBaseRoleClaimService baseRoleClaimService
+            IUrlHelper urlHelper
         )
         {
-            _userManager = userManager;
-            _unitOfWork = unitOfWork;
+            _baseRoleClaimService = baseRoleClaimService;
             _articleService = articleService;
+            _unitOfWork = unitOfWork;
             _auditLogService = auditLogService;
-            _localizer = localizer;
+            _userManager = userManager;
+             _localizer = localizer;
             _timeZoneHelper = timeZoneHelper;
             _fileHandler = fileHandler;
             _environment = environment;
             _urlHelper = urlHelper;
-            _baseRoleClaimService = baseRoleClaimService;
         }
 
         [HttpGet]

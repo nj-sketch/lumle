@@ -1,11 +1,9 @@
-﻿using System;
-
-namespace Lumle.Core.Models
+﻿namespace Lumle.Core.Models
 {
     public class ActionOperation
     {
-        public Boolean CreateAction { get; set; }
-        public Boolean UpdateAction { get; set; }
-        public Boolean DeleteAction { get; set; }
+        public bool CreateAction { get; set; }
+        public bool UpdateAction { get; set; }
+        public bool DeleteAction { get; set; }
     }
 }

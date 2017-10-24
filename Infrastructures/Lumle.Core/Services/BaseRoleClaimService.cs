@@ -233,7 +233,7 @@ namespace Lumle.Core.Services
             }
         }
 
-        private bool CheckRoleClaimForAction(List<BaseRoleClaim> baseRoleClaims, Claim claim, string roleId)
+        private Boolean CheckRoleClaimForAction(List<BaseRoleClaim> baseRoleClaims, Claim claim, string roleId)
         {
             bool flag = false;
             var roleClaim = baseRoleClaims.FirstOrDefault(x => x.RoleId == roleId &&

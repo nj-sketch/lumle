@@ -4,45 +4,45 @@
     var errorMessage = "";
     var table = $("#credentialDataTable").DataTable();
 
-        $("#credentialDataTable tbody").on("click", ".btn", function (e) {
-        e.preventDefault();
+    $("#credentialDataTable tbody").on("click", ".btn", function (e) {
+    e.preventDefault();
 
-        var tr = $(this).parents("tr");
+    var tr = $(this).parents("tr");
 
-        var data = table.row(tr).data();
+    var data = table.row(tr).data();
 
-        var credential = { "Id": data[4], "Value": tr.find("input").val() };
+    var credential = { "Id": data[4], "Value": tr.find("input").val() };
 
-        $(this).prop("disabled", true);
-        tr.find("img").show();
+    $(this).prop("disabled", true);
+    tr.find("img").show();
 
-        $.ajax({
-            type: "POST",
-            url: rootDir + "adminconfig/credential/edit",
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            data: JSON.stringify(credential),
-            headers: {
-                "RequestVerificationToken": token
-            },
-            success: function (response) {
-                tr.find("button").prop("disabled", false);
-                tr.find("img").hide();
+    $.ajax({
+        type: "POST",
+        url: rootDir + "adminconfig/credential/edit",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        data: JSON.stringify(credential),
+        headers: {
+            "RequestVerificationToken": token
+        },
+        success: function (response) {
+            tr.find("button").prop("disabled", false);
+            tr.find("img").hide();
 
-                if (response != null && response.success) {
-                    displaySuccess(response.message, response.messageTitle);
-                } else {
-                    displayError(response.message, response.messageTitle);
-                }
-            },
-            error: function () {
-                tr.find("button").prop("disabled", false);
-                tr.find("img").hide();
-                errorMessage = "Opps. something went wrong. Please try again.";
-                displayError(errorMessage,"Error occured");
+            if (response != null && response.success) {
+                displaySuccess(response.message, response.messageTitle);
+            } else {
+                displayError(response.message, response.messageTitle);
             }
-        });
+        },
+        error: function () {
+            tr.find("button").prop("disabled", false);
+            tr.find("img").hide();
+            errorMessage = "Opps. something went wrong. Please try again.";
+            displayError(errorMessage,"Error occured");
+        }
     });
+});
 });
 
 function displaySuccess(message, messageTitle) {
