@@ -17,7 +17,7 @@ namespace Lumle.Web.Data
                                 .AddJsonFile("appsettings.json")
                                 .Build();
 
-            builder.UseSqlServer(configuration["ConnectionStrings:LocalConnection"], b => b.MigrationsAssembly("Lumle.Web"));
+            builder.UseSqlServer(configuration["ConnectionStrings:SQLConnection"], b => b.MigrationsAssembly("Lumle.Web"));
 
             return new BaseContext(builder.Options);
         }

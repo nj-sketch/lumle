@@ -160,7 +160,7 @@ namespace Lumle.Web.Infrastructures.Extensions
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
             services.AddDbContext<BaseContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("LocalConnection"),
+                options.UseSqlServer(configuration.GetConnectionString("SQLConnection"),
                     b => b.MigrationsAssembly(migrationsAssembly)));
             return services;
         }
