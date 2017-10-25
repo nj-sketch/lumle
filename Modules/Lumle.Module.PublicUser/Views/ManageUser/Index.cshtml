@@ -8,7 +8,7 @@
     }
 }
 @{
-    var hasPermissionForUpdate = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.PublicUserUpdate), User);
+    var hasPermissionForUpdate = true;
 
     ViewData["Title"] = Localizer[LabelConstants.PublicUser];
 }
@@ -44,7 +44,7 @@
                         <th>@Localizer[LabelConstants.Email]</th>
                         <th>@Localizer[LabelConstants.Gender]</th>
                         <th>@Localizer[LabelConstants.Provider]</th>
-                        <th>@Localizer[LabelConstants.SignUpdate]</th>
+                        <th>Sign-up Date</th>
                         <th>@Localizer[LabelConstants.AccountType]</th>
                         <th>@Localizer[LabelConstants.EmailConfirmed]</th>
                         <th>@Localizer[LabelConstants.Status]</th>
@@ -96,7 +96,7 @@
 </div>
 
 @section scripts
-    {
+{
     <script type="text/javascript">
         var hasPermissionForUpdate = @hasPermissionForUpdate.ToString().ToLower();
     </script>

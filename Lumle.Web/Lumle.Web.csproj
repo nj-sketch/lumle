@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <AssemblyName>Lumle.Web</AssemblyName>
-    <MVCRazorCompileOnPublish>true</MVCRazorCompileOnPublish>
+    <MVCRazorCompileOnPublish>false</MVCRazorCompileOnPublish>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <OutputType>Exe</OutputType>
     <PackageId>Lumle.Web</PackageId>
@@ -14,11 +14,12 @@
 
   <ItemGroup>
     <None Remove="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Remove="Properties\PublishProfiles\lumle - Web Deploy.pubxml" />
     <None Remove="Properties\PublishProfiles\lumle-staging - Web Deploy.pubxml" />
   </ItemGroup>
   
   <ItemGroup>
-    <None Update="wwwroot\**\*;Views\**\*;nlog.config;appsettings.json;bower.json;package.json">
+    <None Update="wwwroot\**\*;Modules\**\*;Views\**\*;nlog.config;appsettings.json;bower.json;package.json">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
   </ItemGroup>
