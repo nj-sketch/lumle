@@ -1,33 +1,29 @@
+@using Lumle.Module.Localization.ViewModels
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery antiforgery
 
-@model IEnumerable<CultureModel>
+@model CultureListVM
 
 @{
     ViewData["Title"] = Localizer[LabelConstants.Culture];
     var antiforgeryRequestToken = antiforgery.GetAndStoreTokens(Context).RequestToken;
-    var hasPermissionForAddNewCulture = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.LocalizationCultureCreate), User);
-    var inActiveCultureCount = Model.AsQueryable().Count(x => !x.IsEnable);
-    var cultures = Model.Where(x => x.IsEnable).ToList();
 }
 
 @section styles
 {
-    <link href="~/assets/widgets/datatable/datatable.min.css" rel="stylesheet" />
-    <link href="~/assets/widgets/input-switch/inputswitch-alt.min.css" rel="stylesheet" />
-    <link href="~/lib/toastr/toastr.css" rel="stylesheet" />
+    <link href="~/assets/widgets/datatable/datatable.min.css" type="text/css" rel="stylesheet" />
+    <link href="~/assets/widgets/input-switch/inputswitch-alt.min.css" type="text/css" rel="stylesheet" />
+    <link href="~/lib/toastr/toastr.css" type="text/css" rel="stylesheet" />
     <style>
-        div.switch-toggle {
-            left: 110px;
-        }
+        div.switch-toggle { left: 110px; }
     </style>
 }
 
 <div id="page-title">
     <h2 class="display-inline">@Localizer[LabelConstants.Localization]</h2>
 
-    @if (hasPermissionForAddNewCulture)
+    @if (Model.CreateAction)
     {
-        @if (inActiveCultureCount > 0)
+        @if (Model.InActiveCultureCount > 0)
         {
             <button class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#addLanguageModal">
                 <i class="glyph-icon icon-plus"></i>  @Localizer[LabelConstants.AddNew]
@@ -61,9 +57,11 @@
                             <div class="col-sm-6">
                                 <select class="form-control" name="selectedCulture" required>
                                     <option value="" selected>@Localizer[LabelConstants.PleaseSelect]</option>
-                                    @foreach (var item in Model.Where(x => !x.IsEnable))
+
+                                    @for (int i = 0; i < Model.InActiveCultureCount; i++)
                                     {
-                                        <option value="@item.Name">@item.DisplayName</option>
+                                        <option value="@Model.InActiveCultures[i].Name">@Model.InActiveCultures[i].DisplayName</option>
+
                                     }
                                 </select>
                             </div>
@@ -93,23 +91,23 @@
                 </thead>
                 <tbody>
 
-                    @for (int i = 0; i < cultures.Count; i++)
+                    @for (int i = 0; i < Model.EnabledCultures.Count; i++)
                     {
                         <tr>
-                            <td>@cultures[i].Sn</td>
-                            <td>@cultures[i].DisplayName</td>
+                            <td>@Model.EnabledCultures[i].Sn</td>
+                            <td>@Model.EnabledCultures[i].DisplayName</td>
                             <td>
                                 <div class="form-group ">
-                                    <a class="btn btn-info btn-xs display-inline" style="float:left;" href="~/localization/culture/@cultures[i].Name"><i class="glyph-icon icon-cog"></i> @Localizer[LabelConstants.Manage]</a>
-                                    @if (cultures[i].Name != "en-US")
+                                    <a class="btn btn-info btn-xs display-inline" style="float:left;" href="~/localization/culture/@Model.EnabledCultures[i].Name"><i class="glyph-icon icon-cog"></i> @Localizer[LabelConstants.Manage]</a>
+                                    @if (Model.EnabledCultures[i].Name != "en-US")
                                     {
-                                        if (cultures[i].IsActive)
+                                        if (Model.EnabledCultures[i].IsActive)
                                         {
-                                            <div class="switch-toggle switch-on" value="@cultures[i].Name"></div>
+                                            <div class="switch-toggle switch-on" value="@Model.EnabledCultures[i].Name"></div>
                                         }
                                         else
                                         {
-                                            <div class="switch-toggle switch-off" value="@cultures[i].Name"></div>
+                                            <div class="switch-toggle switch-off" value="@Model.EnabledCultures[i].Name"></div>
                                         }
                                     }
                                 </div>

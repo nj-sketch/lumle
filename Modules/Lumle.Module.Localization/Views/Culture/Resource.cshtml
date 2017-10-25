@@ -6,8 +6,8 @@
 @{
     ViewData["Title"] = Localizer[LabelConstants.Resource];
     var antiforgeryRequestToken = antiforgery.GetAndStoreTokens(Context).RequestToken;
-    var hasPermissionForUpdateResource = await BaseRoleClaimService.IsClaimExist(new Claim("permission", Permissions.LocalizationCultureUpdate), User);
     var cultureName = new CultureInfo(Model.Culture).DisplayName;
+    var hasPermissionForUpdate = ViewBag.UpdateAction;
 }
 
 @section styles
@@ -110,7 +110,7 @@
 {
     <script type="text/javascript">
         var token = @Json.Serialize(antiforgeryRequestToken);
-        var hasPermissionForUpdateResource=@hasPermissionForUpdateResource.ToString().ToLower();
+        var hasPermissionForUpdateResource=@hasPermissionForUpdate.ToString().ToLower();
     </script>
     <script src="~/lib/toastr/toastr.min.js"></script>
     <script src="~/js/jquery.dataTables.min.js"></script>
