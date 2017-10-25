@@ -344,7 +344,7 @@ namespace Lumle.Module.Authorization.Controllers
             }
 
             var roleClaims = _baseRoleClaimService.GetAll(x => x.RoleId == role.Id && x.ClaimType == "permission").ToList();
-            var modules = _permissionService.GetPermissionsIncludingAssigned(roleClaims);
+            var modules = _permissionService.GetPermissionsIncludingAssigned(roleClaims).ToList();
 
             return View("RolePermissionConfig", modules);
         }

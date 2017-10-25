@@ -48,7 +48,6 @@
             RoleId: role,
             ClaimValues: selected
         });
-        var token = $("input[type=hidden][name=__RequestVerificationToken]").val();
         $.ajax({
             url: url,
             type: "POST",
