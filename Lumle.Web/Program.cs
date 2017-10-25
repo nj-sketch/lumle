@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore;
-using Microsoft.Extensions.Configuration;
-using System.IO;
-using Microsoft.Extensions.Logging;
 
 namespace Lumle.Web
 {

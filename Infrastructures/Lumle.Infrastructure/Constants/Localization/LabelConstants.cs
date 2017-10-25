@@ -19,6 +19,10 @@
         public const string SignUp = "Sign Up";
         public const string LogIn = "Log In";
         public const string Register = "Register";
+        public const string Upload = "Upload";
+        public const string SaveAndExit = "Save and Exit";
+        public const string LOGIN = "LOGIN";
+
         #endregion
 
         #region Menu and submenu
@@ -71,7 +75,6 @@
 
         #region Admin Configuration Module
         public const string CredentialCategory = "Credential Category";
-        public const string Category = "Category";
         public const string ManageCredential = "Manage Credential";
         public const string ManageEmailTemplate = "Manage Email Template";
         public const string Value = "Value";
@@ -98,7 +101,6 @@
 
         #region Authorization Module
         public const string Name = "Name";
-        public const string UserName = "Username";
         public const string Priority = "Priority";
         public const string Description = "Description";
         public const string DeleteRole = "Delete Role";
@@ -125,7 +127,7 @@
         public const string AddUser = "Add User";
         public const string ChangePhoto = "Change Photo";
         public const string ChangePassword = "Change Password";
-        public const string Logout = "Logout";
+        public const string Logout = "Log out";
         #endregion
 
         #region Core Module
@@ -165,7 +167,7 @@
         public const string Date = "Date";
         public const string DeleteHoliday = "Delete Holiday";
         public const string DeleteEvent = "Delete Event";
-        public const string DoYouWantToDelete = "Are you sure you want to delete";
+        public const string DoYouWantToDelete = "Do you want to delete";
         public const string Start = "Start";
         public const string End = "End";
         public const string EditHoliday = "Edit Holiday";
@@ -195,15 +197,6 @@
         public const string Browser = "Browser";
         #endregion
 
-        #region Blog Module
-        public const string AddArticle = "Add Article";
-        public const string Content = "Content";
-        public const string Publish = "Publish";
-        public const string Author = "Author";
-        public const string CreatedDate = "Created Date";
-        public const string EditArticle = "Edit Article";
-        #endregion
-
         #region Error Module
         public const string Error = "Error";
         public const string BadRequestPleaseCheckYourRequest = "Bad request. Please check your request";
@@ -219,13 +212,14 @@
         #region PublicUser Module
         public const string PublicUser = "Public User";
         public const string Gender = "Gender";
-        public const string AccountType = "Account Type"; 
+        public const string AccountType = "Account Type";
         public const string Provider = "Provider";
-        public const string SignUpdate = "Signup Date";
+        public const string LastLogin = "Last Login";
         public const string General = "General";
         public const string Staff = "Staff";
         public const string Blocked = "Blocked";
         public const string Enabled = "Enabled";
+        public const string Pending = "Pending";
         public const string UpdatePublicUser = "Update Public User";
         #endregion
 
