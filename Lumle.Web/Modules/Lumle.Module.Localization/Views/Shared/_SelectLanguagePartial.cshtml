@@ -1,9 +1,7 @@
 @using Microsoft.AspNetCore.Localization;
 @using Lumle.Module.Localization.Services;
-@using Lumle.Module.Localization.Controllers;
 @using Microsoft.AspNetCore.Identity;
 
-@inject IViewLocalizer Localizer
 @inject ICultureService CultureService
 @inject UserManager<User> UserManager
 
@@ -22,11 +20,7 @@
     }
 }
 
-
-
-
 <div>
-    @*<input type="hidden" id="currentCultureName" value="@requestCulture.RequestCulture.UICulture.Name"/>*@
     <input type="hidden" id="currentCultureName" value="@userCulture" />
 
     <a href="#" class="dropdown-toggle" data-toggle="dropdown">

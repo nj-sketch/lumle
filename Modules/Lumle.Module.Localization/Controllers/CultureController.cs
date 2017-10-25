@@ -30,6 +30,9 @@ using Lumle.Infrastructure.Constants.Localization;
 using OfficeOpenXml;
 using System.IO;
 using Lumle.Infrastructure.Constants.Cache;
+using Lumle.Core.Services.Abstracts;
+using System.Security.Claims;
+using Lumle.Infrastructure.Constants.ActionConstants;
 
 namespace Lumle.Module.Localization.Controllers
 {
@@ -39,6 +42,7 @@ namespace Lumle.Module.Localization.Controllers
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
+        private readonly IBaseRoleClaimService _baseRoleClaimService;
         private readonly ICultureService _cultureService;
         private readonly IResourceService _resourceService;
         private readonly IUnitOfWork _unitOfWork;
@@ -50,6 +54,7 @@ namespace Lumle.Module.Localization.Controllers
         private readonly IRepository<Resource> _resourceRepository;
 
         public CultureController(
+            IBaseRoleClaimService baseRoleClaimService,
             ICultureService cultureService,
             IResourceService resourceService,
             IUnitOfWork unitOfWork,
@@ -60,6 +65,7 @@ namespace Lumle.Module.Localization.Controllers
             IRepository<Resource> resourceRepository
         )
         {
+            _baseRoleClaimService = baseRoleClaimService;
             _userManager = userManager;
             _cultureService = cultureService;
             _resourceService = resourceService;
@@ -105,18 +111,58 @@ namespace Lumle.Module.Localization.Controllers
 
         [HttpGet]
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.LocalizationCultureView)]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var culture = _cultureService.GetAllCulture();
+            #region action-privelege
+            // Make map to check for the action previleges
+            var map = new Dictionary<string, Claim>
+            {
+                { OperationActionConstant.CreateAction, new Claim("permission", Permissions.LocalizationCultureCreate) }
+            };
 
-            return View(culture);
+            // Get action previlege according to actions provided
+            var actionClaimResult = await _baseRoleClaimService.GetActionPrevilegeAsync(map, User);
+            #endregion
+
+            var cultures = _cultureService.GetAllCulture();
+
+            // Get inactive cultures
+            var inActiveCultures = cultures.Where(x => !x.IsEnable).ToList();
+
+            // Get enabled cultures
+            var enabledCultures = cultures.Where(x => x.IsEnable).ToList();
+
+            var cultureListVm = new CultureListVM
+            {
+                EnabledCultures = enabledCultures,
+                InActiveCultures = inActiveCultures,
+                InActiveCultureCount = inActiveCultures.Count,
+                CreateAction = actionClaimResult[OperationActionConstant.CreateAction]
+            };
+
+            return View(cultureListVm);
         }
 
         [HttpGet("{culture}")]
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.LocalizationCultureView)]
-        public IActionResult Resource(string culture)
+        public async Task<IActionResult> Resource(string culture)
         {
+            #region action-privelege
+            // Make map to check for the action previleges
+            var map = new Dictionary<string, Claim>
+            {
+                { OperationActionConstant.UpdateAction, new Claim("permission", Permissions.LocalizationCultureUpdate) }
+            };
+
+            // Get action previlege according to actions provided
+            var actionClaimResult = await _baseRoleClaimService.GetActionPrevilegeAsync(map, User);
+            #endregion
+
             var model = new ImportResourceModel { Culture = culture };
+
+            // Send permission edit previlege in view
+            ViewBag.UpdateAction = actionClaimResult[OperationActionConstant.UpdateAction];
+
             return View("Resource", model);
         }
 
