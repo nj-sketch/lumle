@@ -17,7 +17,6 @@ using Lumle.Web.DataSeed;
 using NLog.Web;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
-using NLog;
 
 namespace Lumle.Web
 {
