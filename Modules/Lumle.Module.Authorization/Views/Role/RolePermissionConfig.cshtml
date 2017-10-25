@@ -1,16 +1,9 @@
-﻿@model IEnumerable<Lumle.Module.Authorization.Models.PermissionModels.Module>
-@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+﻿@model IList<Lumle.Module.Authorization.Models.PermissionModels.Module>
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery antiforgery
 
 @{
     ViewData["Title"] = Localizer[LabelConstants.RoleCredentialManagement];
-}
-
-@functions
-{
-    public string GetAntiXsrfRequestToken()
-    {
-        return Xsrf.GetAndStoreTokens(Context).RequestToken;
-    }
+    var antiforgeryRequestToken = antiforgery.GetAndStoreTokens(Context).RequestToken;
 }
 
 <div>
@@ -32,13 +25,14 @@
         </div>
         <br />
         <div class="form-horizontal">
-            @foreach (var item in Model)
+
+            @for (int i = 0; i < Model.Count; i++)
             {
                 <div class="panel col-md-12">
                     <div class="panel-body">
                         <div class="form-group">
-                            <h3 class="title-hero" style="text-transform: capitalize;">@item.Name</h3><hr />
-                            @foreach (var subMod in item.SubModules)
+                            <h3 class="title-hero" style="text-transform: capitalize;">@Model[i].Name</h3><hr />
+                            @foreach (var subMod in Model[i].SubModules)
                             {
                                 <div class="col-md-3 submodule">
                                     <h5 class="title-hero" style="text-transform: capitalize;">@subMod.Name</h5>
@@ -67,5 +61,8 @@
 </div>
 
 @section Scripts {
+    <script type="text/javascript">
+        var token = @Json.Serialize(antiforgeryRequestToken);
+    </script>
     <script type="text/javascript" src="~/authorization/js/authorization-role-credential.js"></script>
 }

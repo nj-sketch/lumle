@@ -25,6 +25,7 @@
         public const string UnableToDeleteErrorMessage = "Unable to delete. Please try again";
         public const string UnableToAddErrorMessage = "Unable to add. Please try again";
         public const string UnableToUpdateErrorMessage = "Unable to update. Please try again";
+
         #region Constants used in core module
         //account controller constants AccountCreatedSuccessfully
         public const string AccountCreatedSuccessfully = "Success!!! Your account has been created please check your email and confirm to login";
@@ -53,6 +54,7 @@
         public const string ExternalLoginRemovedErrorMessage = "The external login was removed";
         public const string FailedToVerifyPhoneNumberErrorMessage = "Failed to verify phone number";
         #endregion
+
         #region Constants used in Calendar module
         public const string EventNotFoundErrorMessage = "Event not found. Please try again";
         public const string HolidayNotFoundErrorMessage = "Holiday not found. Please try again";

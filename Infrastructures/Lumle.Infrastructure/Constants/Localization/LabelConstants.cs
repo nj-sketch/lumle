@@ -94,8 +94,6 @@
         public const string UpdateSystemMaintenanceMode = "Update System Maintenance Mode";
         public const string EnterPasswordToUpdateSystemMaintenanceMode = "Enter password to update system maintenance mode";
 
-
-
         #endregion
 
         #region Authorization Module
