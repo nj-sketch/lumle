@@ -7,6 +7,7 @@
         public const string DeletedSuccessfully = "Deleted successfully";
         public const string EmailSentSuccessfully = "Email sent successfully";
         public const string Success = "Success";
+        public const string UnableToInsertDataAlreadyExist = "Unable to insert data. Data already exist";
         public const string ErrorOccured = "Error occured";
         public const string SelectValidItemErrorMessage = "Please select valid item";
         public const string ResourceNotFoundErrorMessage = "Resource you are looking no longer exits";
@@ -25,6 +26,11 @@
         public const string UnableToDeleteErrorMessage = "Unable to delete. Please try again";
         public const string UnableToAddErrorMessage = "Unable to add. Please try again";
         public const string UnableToUpdateErrorMessage = "Unable to update. Please try again";
+        public const string UnableToUploadErrorMessage = "Unable to upload image. Please try again";
+        public const string ImageUploadedSuccessfully = "Image uploaded successfully";
+        public const string DataNotFoundErrorMessage = "Data not found";
+        public const string InvalidRequestErrorMessage = "Invalid Request";
+        public const string StatusUpdatedButUnableToSentEmailErrorMessage = "Status updated but unable to sent email";
 
         #region Constants used in core module
         //account controller constants AccountCreatedSuccessfully
