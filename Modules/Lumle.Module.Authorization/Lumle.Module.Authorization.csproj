@@ -2,14 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <AssemblyName>Lumle.Module.Authorization</AssemblyName>
-    <PackageId>Lumle.Module.Authorization</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Lumle.Module.AdminConfig\Lumle.Module.AdminConfig.csproj" />
   </ItemGroup>
   
-  
-
 </Project>

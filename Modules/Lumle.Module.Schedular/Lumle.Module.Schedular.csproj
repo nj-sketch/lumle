@@ -2,16 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <AssemblyName>Lumle.Module.Schedular</AssemblyName>
-    <PackageId>Lumle.Module.Schedular</PackageId>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Hangfire" Version="1.6.16" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Lumle.Module.Authorization\Lumle.Module.Authorization.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Hangfire" Version="1.6.16" />
+  </ItemGroup>
+  
 </Project>

@@ -2,15 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <PreserveCompilationContext>true</PreserveCompilationContext>
-    <AssemblyName>Lumle.Web</AssemblyName>
-    <MVCRazorCompileOnPublish>false</MVCRazorCompileOnPublish>
-    <PreserveCompilationContext>true</PreserveCompilationContext>
-    <OutputType>Exe</OutputType>
-    <PackageId>Lumle.Web</PackageId>
     <UserSecretsId>aspnet-Lumle.Web-f3425a41-0a66-4455-a803-b3f0e8c3fb3d</UserSecretsId>
-    <AssetTargetFallback>$(AssetTargetFallback);portable-wp8+netcore45+net45+wp81+wpa81</AssetTargetFallback>
+    <EnableDefaultContentItems>false</EnableDefaultContentItems>
+    <MvcRazorCompileOnPublish>false</MvcRazorCompileOnPublish>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Properties\PublishProfiles\FolderProfile.pubxml" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Remove="Properties\PublishProfiles\FolderProfile.pubxml" />
@@ -25,15 +24,21 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
+    <ProjectReference Include="..\Infrastructures\Lumle.Core\Lumle.Core.csproj" />
+    <ProjectReference Include="..\Modules\Lumle.Module.CMS\Lumle.Module.CMS.csproj" />
+    <ProjectReference Include="..\Modules\Lumle.Module.Schedular\Lumle.Module.Schedular.csproj" />
+  </ItemGroup>
+      
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.1.1" />
     <PackageReference Include="CompareNETObjects" Version="3.9.0" />
     <PackageReference Include="Hangfire" Version="1.6.16" />
     <PackageReference Include="NLog" Version="5.0.0-beta11" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.4.1" />
     <PackageReference Include="System.Data.SqlClient" Version="4.4.0" />
-    <!--<PackageReference Include="NLog.Web.AspNetCore" Version="4.4.1" />-->
     <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.0" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,12 +46,6 @@
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.0" />
     <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.0" />
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Infrastructures\Lumle.Core\Lumle.Core.csproj" />
-    <ProjectReference Include="..\Modules\Lumle.Module.CMS\Lumle.Module.CMS.csproj" />
-    <ProjectReference Include="..\Modules\Lumle.Module.Schedular\Lumle.Module.Schedular.csproj" />
   </ItemGroup>
 
   <ItemGroup>
