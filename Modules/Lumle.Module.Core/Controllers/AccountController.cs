@@ -4,11 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Logging;
 using System.Linq;
 using Lumle.Data.Extensions;
-using Lumle.Infrastructure;
-using Lumle.Infrastructure.Constants.Messenging;
 using Lumle.Infrastructure.Utilities.Abstracts;
 using Lumle.Module.Core.ViewModels.AccountViewModels;
 using Microsoft.Extensions.Caching.Memory;
@@ -17,7 +14,6 @@ using Lumle.Infrastructure.Constants.IdentityConstants;
 using Lumle.Module.AdminConfig.Services;
 using System;
 using Lumle.Data.Data;
-using Lumle.Infrastructure.Utilities;
 using Lumle.Data.Data.Abstracts;
 using Lumle.Infrastructure.Constants.LumleLog;
 using Lumle.Infrastructure.Constants.Token;
@@ -31,7 +27,6 @@ using Lumle.Core.Localizer;
 using Lumle.Core.Models;
 using Lumle.Core.Services.Abstracts;
 using Lumle.Infrastructure.Constants.Localization;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
@@ -45,30 +40,26 @@ namespace Lumle.Module.Core.Controllers
     {
         #region Class Variables
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;
         private readonly LumleSignInManager<User> _signInManager;
         private readonly IProfileService _profileService;
         private readonly IEmailService _emailService;
-        private readonly ITwilioSmsService _twilioSmsService;
-        private readonly TwilioSmsCredentials _twilioSmsCredentials;
         private readonly IMemoryCache _memoryCache;
         private readonly BaseContext _context;
         private readonly IMessagingService _messagingService;
         private readonly IApplicationTokenService _applicationTokenService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IHttpContextAccessor _contextAccessor;
-
         private readonly ISystemSettingService _systemSettingService;
-        private readonly string _ipAddress;
-        private readonly string _browserName;
-
-        private IList<ResourceString> _resourceStrings;
         private readonly IRepository<Resource> _resourceRepository;
         private readonly IRepository<Culture> _cultureRepository;
         private readonly IStringLocalizer<ResourceString> _localizer;
         private readonly IdentityOptions _options;
-
+        private readonly string _ipAddress;
+        private readonly string _browserName;
+        private IList<ResourceString> _resourceStrings;
         #endregion
 
         public AccountController(
@@ -77,7 +68,6 @@ namespace Lumle.Module.Core.Controllers
             LumleSignInManager<User> signInManager,
             IProfileService profileService,
             IEmailService emailService,
-            ILoggerFactory loggerFactory,
             IMemoryCache memoryCache,
             BaseContext context,
             IMessagingService messagingService,
@@ -98,13 +88,6 @@ namespace Lumle.Module.Core.Controllers
             _signInManager = signInManager;
             _profileService = profileService;
             _emailService = emailService;
-            _twilioSmsService = new SmsService();
-            _twilioSmsCredentials = new TwilioSmsCredentials
-            {
-                AccountSid = Twilio.AccountSid,
-                Token = Twilio.AuthToken,
-                From = Twilio.FromNumber
-            };
             _memoryCache = memoryCache;
             _context = context;
             _messagingService = messagingService;
@@ -119,7 +102,6 @@ namespace Lumle.Module.Core.Controllers
             _localizer = localizer;
             _options = optionsAccessor?.Value ?? new IdentityOptions();
         }
-
 
         [HttpGet]
         [AllowAnonymous]
@@ -154,7 +136,7 @@ namespace Lumle.Module.Core.Controllers
         {
             ViewData["ReturnUrl"] = returnUrl;
             if (!ModelState.IsValid) return View(model);
-           // _memoryCache.Remove(CacheConstants.AuthorizationSidebarMenuCache);
+
             _memoryCache.Remove(CacheConstants.LocalizationCultureCache);
             _memoryCache.Remove(CacheConstants.LocalizationResourceCache);
             _memoryCache.Remove(CacheConstants.AuthorizationApplicationClaimsCache);
@@ -878,43 +860,43 @@ namespace Lumle.Module.Core.Controllers
 
         //
         // POST: /Account/SendCode
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SendCode(SendCodeVM model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View();
-            }
+        //[HttpPost]
+        //[AllowAnonymous]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> SendCode(SendCodeVM model)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return View();
+        //    }
 
-            var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
-            if (user == null)
-            {
-                return View("Error");
-            }
+        //    var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
+        //    if (user == null)
+        //    {
+        //        return View("Error");
+        //    }
 
-            // Generate the token and send it
-            var code = await _userManager.GenerateTwoFactorTokenAsync(user, model.SelectedProvider);
-            if (string.IsNullOrWhiteSpace(code))
-            {
-                return View("Error");
-            }
+        //    // Generate the token and send it
+        //    var code = await _userManager.GenerateTwoFactorTokenAsync(user, model.SelectedProvider);
+        //    if (string.IsNullOrWhiteSpace(code))
+        //    {
+        //        return View("Error");
+        //    }
 
-            var message = _localizer[ActionMessageConstants.SecurityCode].Value + code;
-            switch (model.SelectedProvider)
-            {
-                case "Email":
-                    return RedirectToAction(nameof(VerifyCode),
-                        new { Provider = model.SelectedProvider, model.ReturnUrl, model.RememberMe });
-                case "Phone":
-                    await _twilioSmsService.SendMessageAsync(_twilioSmsCredentials,
-                        await _userManager.GetPhoneNumberAsync(user), message);
-                    break;
-            }
+        //    var message = _localizer[ActionMessageConstants.SecurityCode].Value + code;
+        //    switch (model.SelectedProvider)
+        //    {
+        //        case "Email":
+        //            return RedirectToAction(nameof(VerifyCode),
+        //                new { Provider = model.SelectedProvider, model.ReturnUrl, model.RememberMe });
+        //        case "Phone":
+        //            await _twilioSmsService.SendMessageAsync(_twilioSmsCredentials,
+        //                await _userManager.GetPhoneNumberAsync(user), message);
+        //            break;
+        //    }
 
-            return RedirectToAction(nameof(VerifyCode), new { Provider = model.SelectedProvider, model.ReturnUrl, model.RememberMe });
-        }
+        //    return RedirectToAction(nameof(VerifyCode), new { Provider = model.SelectedProvider, model.ReturnUrl, model.RememberMe });
+        //}
 
         //
         // GET: /Account/VerifyCode

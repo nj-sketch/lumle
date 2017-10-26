@@ -98,7 +98,7 @@ namespace Lumle.Web
             {
                 routes.MapRoute(
                     "default",
-                    "{controller=Account}/{action=Index}/{id?}");
+                    "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

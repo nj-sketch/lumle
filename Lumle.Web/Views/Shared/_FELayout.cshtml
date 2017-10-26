@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>@ViewData["Title"]</title>
 
-
     <!-- new style refrences start -->
     <!-- HELPERS -->
     <link rel="stylesheet" type="text/css" href="~/assets/helpers/backgrounds.min.css">
@@ -64,10 +63,10 @@
     <div id="page-wrapper">
         <div class="main-header header-fixed font-inverse header-opacity header-resizable wow bounceInDown" data-0="padding: 35px 0; background: rgba(255,255,255,0.1);" data-250="padding: 0px 0; background: rgba(0,0,0,1)">
             <div class="container">
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="header-logo" title="Freight Auditing System"></a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="header-logo" title="Lumle CMS"></a>
                 <!-- .header-logo -->
                 <ul class="header-nav collapse">
-                    @await Html.PartialAsync("_LoginPartial")
+                    <vc:login-status></vc:login-status>
                 </ul>
 
             </div><!-- .container -->
