@@ -83,7 +83,7 @@ namespace Lumle.Web.Infrastructures.Extensions
                 }
             }
 
-            Infrastructure.GlobalConfiguration.Modules = modules;
+            GlobalConfiguration.Modules = modules;
             return services;
         }
         public static IServiceCollection AddCustomizedMvc(this IServiceCollection services, IList<ModuleInfo> modules)
@@ -160,7 +160,7 @@ namespace Lumle.Web.Infrastructures.Extensions
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
             services.AddDbContext<BaseContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("SQLConnection"),
+                options.UseSqlServer(configuration.GetConnectionString("LocalConnection"),
                     b => b.MigrationsAssembly(migrationsAssembly)));
             return services;
         }

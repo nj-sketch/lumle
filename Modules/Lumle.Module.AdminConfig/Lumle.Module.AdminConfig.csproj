@@ -2,8 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <AssemblyName>Lumle.Module.AdminConfig</AssemblyName>
-    <PackageId>Lumle.Module.AdminConfig</PackageId>
   </PropertyGroup>
 
   <ItemGroup>

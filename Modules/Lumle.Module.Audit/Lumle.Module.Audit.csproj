@@ -2,16 +2,14 @@
   
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <AssemblyName>Lumle.Module.Audit</AssemblyName>
-    <PackageId>Lumle.Module.Audit</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CompareNETObjects" Version="3.9.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Infrastructures\Lumle.Core\Lumle.Core.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="CompareNETObjects" Version="3.9.0" />
   </ItemGroup>
 
 </Project>

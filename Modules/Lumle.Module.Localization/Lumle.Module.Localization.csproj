@@ -2,8 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <AssemblyName>Lumle.Module.Localization</AssemblyName>
-    <PackageId>Lumle.Module.Localization</PackageId>
   </PropertyGroup>
   
     <ItemGroup>
