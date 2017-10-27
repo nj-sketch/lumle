@@ -95,6 +95,12 @@
     text-decoration:none;
 }
 #header-nav-right .dropdown>a:focus{ text-decoration:none; }
+.custom_user a { min-width: 165px; }
+.custom_user span {
+    width: 95px;
+    float: left;
+    line-height: 25px;
+}
 @media (max-width:1200px){
     .dataTable .col-sm-12 {
         overflow-x: scroll;
