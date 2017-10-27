@@ -439,7 +439,7 @@ namespace Lumle.Module.Localization.Controllers
                 return RedirectToAction("Resource", new { model.Culture });
             }
             var count = 0;
-            if (model.files.Count > 0)
+            if (model.Files.Count > 0)
             {
                 var culture = _cultureService.GetSingle(x => x.Name == model.Culture.Trim());
                 if (culture == null)
@@ -448,7 +448,7 @@ namespace Lumle.Module.Localization.Controllers
                     return RedirectToAction("Resource", new { model.Culture });
                 }
                 var excelDataModel = new List<ResourceKeyValueHeper>();
-                foreach (var file in model.files)
+                foreach (var file in model.Files)
                 {
                     if (file.Length <= 0) continue;
                     var fileStream = file.OpenReadStream();

@@ -10,6 +10,6 @@ namespace Lumle.Module.Localization.Models
         public string Culture { get; set; }
         public int ResourceCategoryId { get; set; }
 
-        public ICollection<IFormFile> files { get; set; }
+        public ICollection<IFormFile> Files { get; set; }
     }
 }

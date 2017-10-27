@@ -1,9 +1,9 @@
 ﻿using Lumle.Module.Localization.Models;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using Lumle.Core.Models;
+using Lumle.Module.Localization.ViewModels;
 
 namespace Lumle.Module.Localization.Services
 {
@@ -16,8 +16,6 @@ namespace Lumle.Module.Localization.Services
         void Update(Culture entity);
         void DeleteWhere(Expression<Func<Culture, bool>> predicate);
         IEnumerable<CultureModel> GetAllCulture();
-        IEnumerable<SelectListItem> GetAllCultureSelectListItem();
-
-
+        CultureSelectListVM GetAllActiveCultures();
     }
 }
