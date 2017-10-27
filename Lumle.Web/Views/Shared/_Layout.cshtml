@@ -45,16 +45,14 @@
                 </div><!-- #header-nav-left -->
 
                 <div id="header-nav-right">
-                    @Html.Partial("~/Modules/Lumle.Module.Localization/Views/Shared/_SelectLanguagePartial.cshtml")
+                    <vc:select-language></vc:select-language>
                 </div>
 
             </div>
 
             <div id="page-sidebar">
                 <!-- SideBar loaded through SideBar View Component -->
-                <vc:side-bar>
-
-                </vc:side-bar>
+                <vc:side-bar></vc:side-bar>
             </div>
 
             <div id="page-content-wrapper">

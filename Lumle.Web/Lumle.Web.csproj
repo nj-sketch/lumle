@@ -26,6 +26,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Infrastructures\Lumle.Core\Lumle.Core.csproj" />
     <ProjectReference Include="..\Modules\Lumle.Module.CMS\Lumle.Module.CMS.csproj" />
+    <ProjectReference Include="..\Modules\Lumle.Module.Localization\Lumle.Module.Localization.csproj" />
     <ProjectReference Include="..\Modules\Lumle.Module.Schedular\Lumle.Module.Schedular.csproj" />
   </ItemGroup>
       

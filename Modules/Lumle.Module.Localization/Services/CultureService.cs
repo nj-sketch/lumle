@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Caching.Memory;
 using NLog;
 using Lumle.Infrastructure.Constants.Cache;
+using Lumle.Module.Localization.ViewModels;
 
 namespace Lumle.Module.Localization.Services
 {
@@ -28,6 +29,7 @@ namespace Lumle.Module.Localization.Services
             _cultureRepository = cultureRepository;
             _memoryCache = memoryCache;
         }
+
         public void Add(Culture entity)
         {
             try
@@ -80,6 +82,36 @@ namespace Lumle.Module.Localization.Services
             }
         }
 
+        public CultureSelectListVM GetAllActiveCultures()
+        {
+            try
+            {
+                if (_memoryCache.TryGetValue(CacheConstants.LocalizationCultureCache, out CultureSelectListVM cultureList)) return cultureList;
+
+                var data = (from e in _cultureRepository.GetAll(x => x.IsEnable && x.IsActive)
+                            select new SelectListItem
+                            {
+                                Value = e.Name,
+                                Text = e.DisplayName
+                            }).ToList();
+
+                var cacheOption = new MemoryCacheEntryOptions()
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1),
+                    Priority = CacheItemPriority.High
+                };
+
+                _memoryCache.Set(CacheConstants.LocalizationCultureCache, data, cacheOption);
+
+                return new CultureSelectListVM { CulturesList = data };
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, ErrorLog.DataFetchError);
+                throw;
+            }
+        }
+
         public IEnumerable<CultureModel> GetAllCulture()
         {
             try
@@ -104,35 +136,35 @@ namespace Lumle.Module.Localization.Services
         }
 
 
-        public IEnumerable<SelectListItem> GetAllCultureSelectListItem()
-        {
-            try
-            {
-                if (_memoryCache.TryGetValue(CacheConstants.LocalizationCultureCache, out List<SelectListItem> cultureList)) return cultureList;
+        //public IEnumerable<SelectListItem> GetAllCultureSelectListItem()
+        //{
+        //    try
+        //    {
+        //        if (_memoryCache.TryGetValue(CacheConstants.LocalizationCultureCache, out List<SelectListItem> cultureList)) return cultureList;
 
-                var data = (from e in _cultureRepository.GetAll(x => x.IsEnable && x.IsActive)
-                            select new SelectListItem
-                            {
-                                Value = e.Name,
-                                Text = e.DisplayName
-                            }).ToList();
+        //        var data = (from e in _cultureRepository.GetAll(x => x.IsEnable && x.IsActive)
+        //                    select new SelectListItem
+        //                    {
+        //                        Value = e.Name,
+        //                        Text = e.DisplayName
+        //                    }).ToList();
 
-                var cacheOption = new MemoryCacheEntryOptions()
-                {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1),
-                    Priority = CacheItemPriority.High
-                };
+        //        var cacheOption = new MemoryCacheEntryOptions()
+        //        {
+        //            AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1),
+        //            Priority = CacheItemPriority.High
+        //        };
 
-                _memoryCache.Set(CacheConstants.LocalizationCultureCache, data, cacheOption);
+        //        _memoryCache.Set(CacheConstants.LocalizationCultureCache, data, cacheOption);
 
-                return data;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex, ErrorLog.DataFetchError);
-                throw;
-            }
-        }
+        //        return data;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Logger.Error(ex, ErrorLog.DataFetchError);
+        //        throw;
+        //    }
+        //}
 
         public Culture GetSingle(Expression<Func<Culture, bool>> predicate)
         {

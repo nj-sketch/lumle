@@ -81,6 +81,20 @@
     color: #0954ab;
     text-decoration: none;
 }
+#header-nav-right .language-dropdown > a {
+    border: none;
+    width: auto;
+    color: #fff;
+}
+.language-dropdown ul { left: -55px !important; }
+.language-dropdown > .dropdown-menu:after, .minicolors-position-bottom .minicolors-panel:after {
+    left: 88%;
+}
+#header-nav-right .dropdown>a:hover{
+    background:none;
+    text-decoration:none;
+}
+#header-nav-right .dropdown>a:focus{ text-decoration:none; }
 @media (max-width:1200px){
     .dataTable .col-sm-12 {
         overflow-x: scroll;
