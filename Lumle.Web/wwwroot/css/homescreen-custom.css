@@ -1,0 +1,57 @@
+﻿.scroller-icon {
+    position: relative;
+    bottom: 110px !important;
+    left: 0;
+    margin-left: 0;
+    width: 100% !important;
+    height: 60px;
+    border: rgba(255,255,255,.1) solid;
+    border-radius: 50px;
+    border-radius: 0 !important;
+    border: none !important;
+    color: #fff;
+    z-index: 999;
+    top: 75px;
+}
+.scroller-icon h6 {
+    font-size: 24px;
+    margin-left: 0;
+    color: rgba(255,255,255,.7);
+}
+.scroller-icon ul {
+    padding-left: 0;
+    margin: 1px 0 10px 0;
+    text-align: left;
+}
+.scroller-icon ul li a {
+    color: #fff;
+}
+
+.scroller-icon ul li {
+    list-style: none;
+}
+
+.socailnetwork ul li {
+    display: inline-block;
+}
+
+.socailnetwork ul {
+    margin: 0 0 0 0;
+}
+
+.socailnetwork p {
+    text-align: center;
+}
+
+.scroller-icon i {
+    font-size: 14px !important;
+    margin-right: 10px;
+}
+
+.socailnetwork ul li i {
+    font-size: 24px !important;
+}
+
+.socailnetwork ul li i:hover {
+    color: #eee;
+}

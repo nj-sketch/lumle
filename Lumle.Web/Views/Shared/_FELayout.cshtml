@@ -36,6 +36,7 @@
     <!-- Frontend responsive -->
     <link rel="stylesheet" type="text/css" href="~/assets/helpers/responsive-elements.min.css">
     <link rel="stylesheet" type="text/css" href="~/assets/helpers/frontend-responsive.min.css">
+    <link rel="stylesheet" type="text/css" href="~/css/homescreen-custom.css" />
 
     @RenderSection("styles", required: false)
     <!-- JS Core -->
@@ -74,13 +75,13 @@
 
     </div>
     @RenderBody()
-    <footer>
+    @*<footer>
         <div class="footer-pane">
             <div class="container clearfix">
                 <div class="logo">&copy; @DateTime.Now.Year All Rights Reserved.</div>
             </div>
         </div>
-    </footer>
+    </footer>*@
 </body>
 </html>
 

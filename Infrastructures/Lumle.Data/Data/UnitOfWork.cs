@@ -23,10 +23,10 @@ namespace Lumle.Data.Data
                 _baseContext.SaveChanges();
                 _transaction.Commit();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 _transaction.Rollback();
-                throw new Exception(ex.Message);
+                throw;
             }
             finally
             {
@@ -42,10 +42,10 @@ namespace Lumle.Data.Data
                 await _baseContext.SaveChangesAsync();
                 _transaction.Commit();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 _transaction.Rollback();
-                throw new Exception(ex.Message);
+                throw;
             }
             finally
             {
