@@ -18,6 +18,8 @@ using NLog.Web;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using Lumle.Infrastructure.Models;
+using WebMarkupMin.AspNetCore2;
+using WebMarkupMin.Core;
 
 namespace Lumle.Web
 {
@@ -61,9 +63,28 @@ namespace Lumle.Web
             services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Fastest);
             services.AddResponseCompression();
 
+            //services.AddWebOptimizer();
+
             services.AddCustomizedMvc(GlobalConfiguration.Modules);
             services.AddMemoryCache();
-
+            // HTML minifier
+            services
+             .AddWebMarkupMin(options =>
+             {
+                 options.AllowMinificationInDevelopmentEnvironment = true;
+                 options.DisablePoweredByHttpHeaders = true;
+             })
+             .AddHtmlMinification(options =>
+             {
+                 options.MinificationSettings.RemoveOptionalEndTags = false;
+                 options.MinificationSettings.WhitespaceMinificationMode = WhitespaceMinificationMode.Safe;
+             });
+            //services.AddWebOptimizer(pipeline =>
+            //{
+            //    pipeline.MinifyJsFiles();
+            //    pipeline.MinifyCssFiles()
+            //            .InlineImages(1);
+            //});
             return services.Build(Configuration, _hostingEnvironment);
         }
 
@@ -88,6 +109,7 @@ namespace Lumle.Web
             app.SeedData(context);
 
             app.UseCustomizedRequestLocalization();
+            //app.UseWebOptimizer();
             app.UseCustomizedStaticFiles(Modules);
 
             // Checking System maintenance mode 
@@ -97,7 +119,8 @@ namespace Lumle.Web
             // app.UseSchedularMiddleware();
 
             app.UseStatusCodePagesWithRedirects("~/{0}");
-
+            // For HTMl minifier
+            app.UseWebMarkupMin();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
