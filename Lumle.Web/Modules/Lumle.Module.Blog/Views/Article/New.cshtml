@@ -5,10 +5,6 @@
     ViewData["Title"] = "Add Article";
 }
 
-@*@section styles{
-    <link href="~/assets/widgets/summernote-wysiwyg/summernote-wysiwyg.min.css" rel="stylesheet" />
-}*@
-
 <div class="breadcrumb-section clearfix">
     <ol class="breadcrumb">
         <li class="module">@Localizer[LabelConstants.Blog]</li>
@@ -69,30 +65,5 @@
 @section scripts {
     <script src="~/lib/tinymce/tinymce.min.js"></script>
     <script type="text/javascript" src="~/blog/js/blog-custom.js"></script>
-    @*<script src="~/assets/widgets/summernote-wysiwyg/summernote-wysiwyg.min.js"></script>*@
     <script type="text/javascript" src="~/assets/widgets/parsley/parsley.js"></script>
-    @*<script type="text/javascript">
-        $(function () {
-            "use strict";
-            $('.wysiwyg-editor').summernote({
-                height: 350
-            });
-        });
-    </script>*@
-    @*<script type="text/javascript">
-        $(document).ready(function () {
-            $('#mainForm').on('submit', function () {
-                var form = $(this);
-                form.parsley().validate();
-                var isValidForm = form.parsley().isValid();
-                if (isValidForm) {
-                    form.find('button[type=submit]').prop('disabled', true);
-                    $("#loadingImg").show();
-                    form.get(0).submit();
-                }
-                return false;
-            });
-        });
-    </script>*@
-
 }
