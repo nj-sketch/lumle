@@ -9,6 +9,7 @@ $(function () {
             "type": "POST",
             "url": rootDir + "publicuser/DataHandler",
             "contentType": "application/json; charset=utf-8",
+            "headers": { 'RequestVerificationToken': antiforgeryToken },
             "data": function (data) {
                 return JSON.stringify(data);
             },
@@ -101,7 +102,6 @@ $(function () {
             IsBlocked: isBlocked,
             IsStaff: isStaff
         });
-        var token = $("input[type=hidden][name=__RequestVerificationToken]").val();
 
         $.ajax({
             url: rootDir + "publicuser/update",
@@ -109,7 +109,7 @@ $(function () {
             contentType: "application/json",
             data: user,
             headers: {
-                "RequestVerificationToken": token
+                "RequestVerificationToken": antiforgeryToken
             },
             success: function (response) {
                 debugger;
@@ -132,7 +132,7 @@ $(function () {
 });
 
 var actionButton = function (data, type, full, meta) {
-    var actionBtn = '&nbsp;&nbsp;<button class="btn btn-info btn-sm btn-update"><i class="glyph-icon icon-pencil"></i> ' + editButtonDisplayName + '</button>';
+    var actionBtn = '&nbsp;&nbsp;<button class="btn btn-info btn-xs btn-update"><i class="glyph-icon icon-pencil"></i> ' + editButtonDisplayName + '</button>';
     return actionBtn;
 }
 
@@ -162,8 +162,6 @@ var renderIsEmailVerified = function (data) {
         return '<span class="bs-label bg-orange alert-icon"><i class="glyph-icon tooltip-button icon-warning" title="Not Confirmed" data-original-title="Not Confirmed"></i> Not Confirmed </span>';
     }
 }
-
-
 
 function displaySuccess(message, messageTitle) {
     toastr.success(message, messageTitle);

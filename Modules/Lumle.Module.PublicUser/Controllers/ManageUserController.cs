@@ -1,7 +1,9 @@
 ﻿using Lumle.Core.Attributes;
 using Lumle.Core.Localizer;
+using Lumle.Core.Services.Abstracts;
 using Lumle.Data.Data.Abstracts;
 using Lumle.Data.Models;
+using Lumle.Infrastructure.Constants.ActionConstants;
 using Lumle.Infrastructure.Constants.AuthorizeRules;
 using Lumle.Infrastructure.Constants.Localization;
 using Lumle.Infrastructure.Utilities.Abstracts;
@@ -20,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using static Lumle.Infrastructure.Helpers.DataTableHelper;
 
@@ -29,6 +32,7 @@ namespace Lumle.Module.PublicUser.Controllers
     [Authorize]
     public class ManageUserController : Controller
     {
+        private readonly IBaseRoleClaimService _baseRoleClaimService;
         private readonly IPublicUserService _publicUserService;
         private readonly UserManager<User> _userManager;
         private readonly ITimeZoneHelper _timeZoneHelper;
@@ -36,13 +40,16 @@ namespace Lumle.Module.PublicUser.Controllers
         private readonly IAuditLogService _auditLogService;
         private readonly IStringLocalizer<ResourceString> _localizer;
 
-        public ManageUserController(IPublicUserService publicUserService, 
+        public ManageUserController(
+            IBaseRoleClaimService baseRoleClaimService,
+            IPublicUserService publicUserService, 
             UserManager<User> userManager,
             ITimeZoneHelper timeZoneHelper,
             IUnitOfWork unitOfwork,
             IAuditLogService auditLogService,
             IStringLocalizer<ResourceString> localizer)
         {
+            _baseRoleClaimService = baseRoleClaimService;
             _publicUserService = publicUserService;
             _userManager = userManager;
             _timeZoneHelper = timeZoneHelper;
@@ -53,8 +60,19 @@ namespace Lumle.Module.PublicUser.Controllers
 
         [HttpGet]
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.PublicUserView)]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            // Make map to check for the action previleges
+            var map = new Dictionary<string, Claim>
+            {
+                { OperationActionConstant.UpdateAction, new Claim("permission", Permissions.PublicUserUpdate) }
+            };
+
+            // Get action previlege according to actions provided
+            var actionClaimResult = await _baseRoleClaimService.GetActionPrevilegeAsync(map, User);
+
+            ViewBag.UpdateAction = actionClaimResult[OperationActionConstant.UpdateAction];
+
             return View();
         }
 
