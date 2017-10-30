@@ -1,3 +1,6 @@
+@using Lumle.Infrastructure.Models
+@inject IOptionsSnapshot<LumleSettings> settings
+
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -8,8 +11,8 @@
                 <div class="center-content">
                     <div class="container">
                         <div class="hero-box font-inverse">
-                            <h2 class="hero-heading wow fadeInDown" data-wow-duration="0.6s">The Perfect Base CMS for Enterprise application</h2>
-                            <p class="pad25T mrg25B hero-text wow bounceInUp" data-wow-duration="0.9s" data-wow-delay="0.2s"> Lumle is the CMS developted by EKbana Solution Pte. It's the base CMS for any enterprise web application develoment in .NET platform.</p>
+                            <h2 class="hero-heading wow fadeInDown" data-wow-duration="0.6s">@settings.Value.Name</h2>
+                            <p class="pad25T mrg25B hero-text wow bounceInUp" data-wow-duration="0.9s" data-wow-delay="0.2s"> @settings.Value.Description</p>
                             <div class="pad25T">
                                 <button class="mrg5R btn btn-alt btn-hover btn-lg btn-outline-inverse remove-bg">
                                     <span>Support</span>

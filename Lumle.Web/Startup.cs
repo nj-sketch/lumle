@@ -17,6 +17,7 @@ using Lumle.Web.DataSeed;
 using NLog.Web;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
+using Lumle.Infrastructure.Models;
 
 namespace Lumle.Web
 {
@@ -43,6 +44,9 @@ namespace Lumle.Web
             services.AddMsSqlDataStore(Configuration);
             services.AddIdentity();
             services.AddFrameworkServices(Configuration);
+
+            // Configure LumleSettings
+            services.Configure<LumleSettings>(Configuration.GetSection("LumleSettings"));
 
             //call this in case you need aspnet-user-authtype/aspnet-user-identity
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

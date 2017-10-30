@@ -7,6 +7,7 @@ using NLog;
 using Lumle.Infrastructure.Constants.LumleLog;
 using SixLabors.ImageSharp;
 using SixLabors.Primitives;
+using System.Threading.Tasks;
 
 namespace Lumle.Infrastructure.Utilities
 {
@@ -88,5 +89,24 @@ namespace Lumle.Infrastructure.Utilities
             return sourceImage;
         }
 
+        public async Task<string> SaveFile(byte[] bytes, string fileName, string suffix = null)
+        {
+            suffix = suffix ?? DateTime.UtcNow.Ticks.ToString();
+
+            string ext = Path.GetExtension(fileName);
+            string name = Path.GetFileNameWithoutExtension(fileName);
+            string folder = Path.Combine(_environment.WebRootPath, "blogs");
+            string relative = $"files/{name}_{suffix}{ext}";
+            string absolute = Path.Combine(folder, relative);
+            string dir = Path.GetDirectoryName(absolute);
+
+            Directory.CreateDirectory(dir);
+            using (var writer = new FileStream(absolute, FileMode.CreateNew))
+            {
+                await writer.WriteAsync(bytes, 0, bytes.Length).ConfigureAwait(false);
+            }
+
+            return "/blogs/" + relative;
+        }
     }
 }

@@ -31,6 +31,8 @@ using Lumle.Core.Services.Abstracts;
 using Lumle.Core.Models;
 using System.Security.Claims;
 using Lumle.Infrastructure.Constants.ActionConstants;
+using System.Text.RegularExpressions;
+using System.Xml;
 
 namespace Lumle.Module.Blog.Controllers
 {
@@ -128,7 +130,10 @@ namespace Lumle.Module.Blog.Controllers
             articleModel.LastUpdated = DateTime.UtcNow;
             articleModel.Slug = "Test slug";
             articleModel.FeaturedImageUrl = _imageUrl;
+            // Convert Base64 image to image format
+            articleModel.Content = await SaveFilesToDisk(articleModel.Content);
             var articleEntity = Mapper.Map<Article>(articleModel);
+
             _articleService.Add(articleEntity);
             _unitOfWork.Save();
 
@@ -178,7 +183,7 @@ namespace Lumle.Module.Blog.Controllers
             // Save images if any
             if (model.FeaturedImage != null)
             {
-                _imageUrl = _fileHandler.UploadImage(model.FeaturedImage, 720, 360);
+                _imageUrl = _fileHandler.UploadImage(model.FeaturedImage, 300, 360);
             }
 
             var article = _articleService.GetSingle(x => x.Id == model.Id);
@@ -198,7 +203,7 @@ namespace Lumle.Module.Blog.Controllers
 
             // update in database
             article.Title = model.Title;
-            article.Content = model.Content;
+            article.Content = await SaveFilesToDisk(model.Content);
             article.FeaturedImageUrl = _imageUrl ?? article.FeaturedImageUrl;
 
             _articleService.Update(article);
@@ -321,6 +326,38 @@ namespace Lumle.Module.Blog.Controllers
         private async Task<User> GetCurrentUserAsync()
         {
             return await _userManager.GetUserAsync(HttpContext.User);
+        }
+
+        private async Task<String> SaveFilesToDisk(String content)
+        {
+            var imgRegex = new Regex("<img[^>].+ />", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+            var base64Regex = new Regex("data:[^/]+/(?<ext>[a-z]+);base64,(?<base64>.+)", RegexOptions.IgnoreCase);
+
+            foreach (Match match in imgRegex.Matches(content))
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.LoadXml("<root>" + match.Value + "</root>");
+
+                var img = doc.FirstChild.FirstChild;
+                var srcNode = img.Attributes["src"];
+                var fileNameNode = img.Attributes["data-filename"];
+
+                // The HTML editor creates base64 DataURIs which we'll have to convert to image files on disk
+                if (srcNode != null && fileNameNode != null)
+                {
+                    var base64Match = base64Regex.Match(srcNode.Value);
+                    if (base64Match.Success)
+                    {
+                        byte[] bytes = Convert.FromBase64String(base64Match.Groups["base64"].Value);
+                        srcNode.Value = await _fileHandler.SaveFile(bytes, fileNameNode.Value).ConfigureAwait(false);
+
+                        img.Attributes.Remove(fileNameNode);
+                        content = content.Replace(match.Value, img.OuterXml);
+                    }
+                }
+            }
+
+            return content;
         }
         #endregion
     }
