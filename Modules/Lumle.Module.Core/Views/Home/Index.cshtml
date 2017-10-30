@@ -4,6 +4,7 @@
 @{
     ViewData["Title"] = "Home Page";
 }
+
 <div id="fullpage">
     <div class="section bg-gradient-9" id="section0">
         <div class="slide">
@@ -13,7 +14,7 @@
                         <div class="hero-box font-inverse">
                             <h2 class="hero-heading wow fadeInDown" data-wow-duration="0.6s">@settings.Value.Name</h2>
                             <p class="pad25T mrg25B hero-text wow bounceInUp" data-wow-duration="0.9s" data-wow-delay="0.2s"> @settings.Value.Description</p>
-                            <div class="pad25T">
+                            <div class="pad25T btn-section">
                                 <button class="mrg5R btn btn-alt btn-hover btn-lg btn-outline-inverse remove-bg">
                                     <span>Support</span>
                                     <i class="glyph-icon icon-arrow-right"></i>
@@ -23,12 +24,27 @@
                                     <i class="glyph-icon icon-bar-chart-o"></i>
                                 </button>
                             </div>
+
+                            <div class="scroller-icon">
+                                <h6>Contact Info</h6>
+                                <ul>
+                                    <li><i class="glyph-icon icon-user"></i>Niraj Lama</li>
+                                    <li><i class="glyph-icon icon-map-marker"></i>Kwagal, Lalitpur</li>
+                                    <li><i class="glyph-icon icon-phone"></i>+977 9843124578</li>
+                                    <li><i class="glyph-icon icon-envelope"></i><a href="#"><a href="#">demo@gmail.com</a></li>
+                                </ul>
+                                <div class="socailnetwork">
+                                    <ul>
+                                        <li><a href=""><i class="glyph-icon icon-facebook"></i></a></li>
+                                        <li><a href=""><i class="glyph-icon icon-twitter"></i></a></li>
+                                        <li><a href=""><i class="glyph-icon icon-skype"></i></a></li>
+                                    </ul>
+                                    <p> &copy; Copyright. All Right Reserved.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="scroller-icon">
-                <div class="glyph-icon icon-angle-down font-white"></div>
             </div>
         </div>
     </div>
