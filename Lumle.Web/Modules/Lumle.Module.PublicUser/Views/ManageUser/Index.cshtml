@@ -1,14 +1,8 @@
-@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery antiforgery
 
-@functions
-{
-    public string GetAntiXsrfRequestToken()
-    {
-        return Xsrf.GetAndStoreTokens(Context).RequestToken;
-    }
-}
 @{
-    var hasPermissionForUpdate = true;
+    var hasPermissionForUpdate = ViewBag.UpdateAction;
+    var antiforgeryRequestToken = antiforgery.GetAndStoreTokens(Context).RequestToken;
 
     ViewData["Title"] = Localizer[LabelConstants.PublicUser];
 }
@@ -35,24 +29,26 @@
 
     <div class="panel">
         <div class="panel-body">
-            <table class="table table-hover table-responsive table-bordered" id="publicUserDataTable" style="width:100% !important;">
-                <thead>
-                    <tr>
-                        <th>@Localizer[LabelConstants.SN]</th>
-                        <th></th>
-                        <th>@Localizer[LabelConstants.User]</th>
-                        <th>@Localizer[LabelConstants.Email]</th>
-                        <th>@Localizer[LabelConstants.Gender]</th>
-                        <th>@Localizer[LabelConstants.Provider]</th>
-                        <th>Sign-up Date</th>
-                        <th>@Localizer[LabelConstants.AccountType]</th>
-                        <th>@Localizer[LabelConstants.EmailConfirmed]</th>
-                        <th>@Localizer[LabelConstants.Status]</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+            <div class="dataTable">
+                <table class="table" id="publicUserDataTable" style="width:100% !important;">
+                    <thead>
+                        <tr>
+                            <th>@Localizer[LabelConstants.SN]</th>
+                            <th></th>
+                            <th>@Localizer[LabelConstants.User]</th>
+                            <th>@Localizer[LabelConstants.Email]</th>
+                            <th>@Localizer[LabelConstants.Gender]</th>
+                            <th>@Localizer[LabelConstants.Provider]</th>
+                            <th>Sign-up Date</th>
+                            <th>@Localizer[LabelConstants.AccountType]</th>
+                            <th>@Localizer[LabelConstants.EmailConfirmed]</th>
+                            <th>@Localizer[LabelConstants.Status]</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -99,10 +95,10 @@
 {
     <script type="text/javascript">
         var hasPermissionForUpdate = @hasPermissionForUpdate.ToString().ToLower();
+        var antiforgeryToken = @Json.Serialize(antiforgeryRequestToken);
     </script>
     <script src="~/lib/toastr/toastr.min.js"></script>
     <script src="~/js/jquery.dataTables.min.js"></script>
     <script src="~/js/dataTables.bootstrap.min.js"></script>
-    <script src="~/lib/toastr/toastr.min.js"></script>
     <script src="~/publicuser/js/publicuser-manageuser-index.js"></script>
 }
