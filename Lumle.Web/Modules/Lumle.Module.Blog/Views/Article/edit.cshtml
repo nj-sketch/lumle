@@ -6,7 +6,7 @@
 }
 
 @section styles{
-    <link href="~/assets/widgets/summernote-wysiwyg/summernote-wysiwyg.min.css" rel="stylesheet" />
+    @*<link href="~/assets/widgets/summernote-wysiwyg/summernote-wysiwyg.min.css" rel="stylesheet" />*@
 }
 
 <div class="breadcrumb-section clearfix">
@@ -24,6 +24,7 @@
     <div class="panel-body custom-panel">
         <div class="example-box-wrapper">
             <form id="mainForm" enctype="multipart/form-data" class="form-horizontal bordered-row" asp-action="edit" method="post" data-parsley-validate novalidate>
+                @Html.HiddenFor(x => x.Id)
                 <div class="row">
                     <div class="col-md-12 main-section">
                         <div class="form-group">
@@ -36,9 +37,10 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Content</label>
                             <div class="col-sm-6">
-                                <div class="example-box-wrapper">
+                                <textarea asp-for="Content" row="10" aria-label="Content"></textarea>
+                                @*<div class="example-box-wrapper">
                                     <textarea asp-for="Content" row="10" class="wysiwyg-editor"></textarea>
-                                </div>
+                                </div>*@
                             </div>
                         </div>
 
@@ -83,9 +85,11 @@
 
 
 @section scripts {
-    <script src="~/assets/widgets/summernote-wysiwyg/summernote-wysiwyg.min.js"></script>
+    <script src="~/lib/tinymce/tinymce.min.js"></script>
+    <script type="text/javascript" src="~/blog/js/blog-custom.js"></script>
+    @*<script src="~/assets/widgets/summernote-wysiwyg/summernote-wysiwyg.min.js"></script>*@
     <script type="text/javascript" src="~/assets/widgets/parsley/parsley.js"></script>
-    <script type="text/javascript">
+    @*<script type="text/javascript">
         $(function () {
             "use strict";
             $('.wysiwyg-editor').summernote({
@@ -107,6 +111,6 @@
                 return false;
             });
         });
-    </script>
+    </script>*@
 
 }
