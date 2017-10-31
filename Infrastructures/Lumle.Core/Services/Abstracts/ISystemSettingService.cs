@@ -1,15 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 using Lumle.Core.Models;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Lumle.Core.Services.Abstracts
 {
     public interface ISystemSettingService
     {
-        IEnumerable<AppSystem> GetAll(Expression<Func<AppSystem, bool>> predicate);
-        IEnumerable<AppSystem> GetAll();
-        AppSystem GetSingle(Expression<Func<AppSystem, bool>> predicate);
-        void Update(AppSystem entity);
+        IQueryable<AppSystem> GetAll(Expression<Func<AppSystem, bool>> predicate);
+        IQueryable<AppSystem> GetAll();
+        Task<AppSystem> GetSingle(Expression<Func<AppSystem, bool>> predicate);
+        Task Update(AppSystem entity);
     }
 }

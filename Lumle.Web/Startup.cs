@@ -79,12 +79,14 @@ namespace Lumle.Web
                  options.MinificationSettings.RemoveOptionalEndTags = false;
                  options.MinificationSettings.WhitespaceMinificationMode = WhitespaceMinificationMode.Safe;
              });
+
             //services.AddWebOptimizer(pipeline =>
             //{
             //    pipeline.MinifyJsFiles();
             //    pipeline.MinifyCssFiles()
             //            .InlineImages(1);
             //});
+
             return services.Build(Configuration, _hostingEnvironment);
         }
 

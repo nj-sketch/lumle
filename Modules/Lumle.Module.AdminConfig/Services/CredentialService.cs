@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 using Lumle.Module.AdminConfig.Entities;
 using Lumle.Data.Data.Abstracts;
@@ -7,6 +6,7 @@ using Lumle.Module.AdminConfig.Models;
 using System.Linq;
 using Lumle.Infrastructure.Constants.LumleLog;
 using NLog;
+using System.Threading.Tasks;
 
 namespace Lumle.Module.AdminConfig.Services
 {
@@ -20,7 +20,7 @@ namespace Lumle.Module.AdminConfig.Services
             _credentialRepository = credentialRepository;
         }
 
-        public IEnumerable<Credential> GetAll()
+        public IQueryable<Credential> GetAll()
         {
             try
             {
@@ -33,7 +33,7 @@ namespace Lumle.Module.AdminConfig.Services
             }
         }
 
-        public IEnumerable<Credential> GetAll(Expression<Func<Credential, bool>> predicate)
+        public IQueryable<Credential> GetAll(Expression<Func<Credential, bool>> predicate)
         {
             try
             {
@@ -46,7 +46,7 @@ namespace Lumle.Module.AdminConfig.Services
             }
         }
 
-        public IEnumerable<CredentialModel> GetAllCredential(Expression<Func<Credential, bool>> predicate)
+        public IQueryable<CredentialModel> GetAllCredential(Expression<Func<Credential, bool>> predicate)
         {
             try
             {
@@ -62,7 +62,7 @@ namespace Lumle.Module.AdminConfig.Services
                 return credential.Select(x =>
                 {
                     x.Sn = ++i; return x;
-                }).ToList();
+                }).AsQueryable();
             }
             catch (Exception ex)
             {
@@ -71,11 +71,11 @@ namespace Lumle.Module.AdminConfig.Services
             }
         }
 
-        public Credential GetSingle(Expression<Func<Credential, bool>> predicate)
+        public async Task<Credential> GetSingle(Expression<Func<Credential, bool>> predicate)
         {
             try
             {
-                return _credentialRepository.GetSingle(predicate);
+                return await _credentialRepository.GetSingle(predicate);
             }
             catch (Exception ex)
             {
@@ -84,11 +84,11 @@ namespace Lumle.Module.AdminConfig.Services
             }
         }
 
-        public void Update(Credential entity)
+        public async Task Update(Credential entity)
         {
             try
             {
-                _credentialRepository.Update(entity);
+                await _credentialRepository.Update(entity);
             }
             catch (Exception ex)
             {

@@ -1,9 +1,10 @@
 ﻿using Lumle.Module.AdminConfig.Entities;
+using System.Threading.Tasks;
 
 namespace Lumle.Module.AdminConfig.Services
 {
     public interface IServiceHealthService
     {
-        void Add(ServiceHealth serviceHealth);
+        Task Add(ServiceHealth serviceHealth);
     }
 }

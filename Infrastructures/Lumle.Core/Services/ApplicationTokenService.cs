@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using Lumle.Core.Models;
 using Lumle.Core.Services.Abstracts;
 using Lumle.Data.Data.Abstracts;
+using System.Threading.Tasks;
 
 namespace Lumle.Core.Services
 {
@@ -15,52 +16,52 @@ namespace Lumle.Core.Services
             _appTokenRepository = appTokenRepository;
         }
 
-        public ApplicationToken GetSingle(Expression<Func<ApplicationToken, bool>> predicate)
+        public async Task<ApplicationToken> GetSingle(Expression<Func<ApplicationToken, bool>> predicate)
         {
             try
             {
-                var article = _appTokenRepository.GetSingle(predicate);
+                var article = await _appTokenRepository.GetSingle(predicate);
                 return article;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
-        public void Add(ApplicationToken entity)
+        public async Task Add(ApplicationToken entity)
         {
             try
             {
-                _appTokenRepository.Add(entity);
+               await _appTokenRepository.Add(entity);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
-        public void Update(ApplicationToken entity)
+        public async Task Update(ApplicationToken entity)
         {
             try
             {
-                _appTokenRepository.Update(entity);
+                await _appTokenRepository.Update(entity);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
-        public void DeleteWhere(Expression<Func<ApplicationToken, bool>> predicate)
+        public async Task DeleteWhere(Expression<Func<ApplicationToken, bool>> predicate)
         {
             try
             {
-                _appTokenRepository.DeleteWhere(predicate);
+                await _appTokenRepository.DeleteWhere(predicate);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new Exception(ex.Message);
+                throw;
             }
         }
         

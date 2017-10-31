@@ -7,12 +7,14 @@ using Lumle.Data.Data.Abstracts;
 using Lumle.Infrastructure.Constants.LumleLog;
 using Lumle.Module.Localization.Models;
 using NLog;
+using System.Threading.Tasks;
 
 namespace Lumle.Module.Localization.Services
 {
     public class ResourceService : IResourceService
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         private readonly IRepository<Culture> _cultureRespository;
         private readonly IRepository<Resource> _resourceRepository;
 
@@ -26,11 +28,11 @@ namespace Lumle.Module.Localization.Services
             _cultureRespository = cultureRespository;
         }
 
-        public void Add(Resource entity)
+        public async Task Add(Resource entity)
         {
             try
             {
-                _resourceRepository.Add(entity);
+                await _resourceRepository.Add(entity);
             }
             catch (Exception ex)
             {
@@ -39,11 +41,11 @@ namespace Lumle.Module.Localization.Services
             }
         }
 
-        public void DeleteWhere(Expression<Func<Resource, bool>> predicate)
+        public async Task DeleteWhere(Expression<Func<Resource, bool>> predicate)
         {
             try
             {
-                _resourceRepository.DeleteWhere(predicate);
+                await _resourceRepository.DeleteWhere(predicate);
             }
             catch (Exception ex)
             {
@@ -52,7 +54,7 @@ namespace Lumle.Module.Localization.Services
             }
         }
 
-        public IEnumerable<Resource> GetAll()
+        public IQueryable<Resource> GetAll()
         {
             try
             {
@@ -65,7 +67,7 @@ namespace Lumle.Module.Localization.Services
             }
         }
 
-        public IEnumerable<Resource> GetAll(Expression<Func<Resource, bool>> predicate)
+        public IQueryable<Resource> GetAll(Expression<Func<Resource, bool>> predicate)
         {
             try
             {
@@ -130,11 +132,11 @@ namespace Lumle.Module.Localization.Services
             }
         }
 
-        public Resource GetSingle(Expression<Func<Resource, bool>> predicate)
+        public async Task<Resource> GetSingle(Expression<Func<Resource, bool>> predicate)
         {
             try
             {
-                return _resourceRepository.GetSingle(predicate);
+                return await _resourceRepository.GetSingle(predicate);
             }
             catch (Exception ex)
             {
@@ -143,11 +145,11 @@ namespace Lumle.Module.Localization.Services
             }
         }
 
-        public void Update(Resource entity)
+        public async Task Update(Resource entity)
         {
             try
             {
-                _resourceRepository.Update(entity);
+                await _resourceRepository.Update(entity);
             }
             catch (Exception ex)
             {

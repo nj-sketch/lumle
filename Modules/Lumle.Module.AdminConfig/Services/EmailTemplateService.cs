@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Lumle.Module.AdminConfig.Entities;
@@ -7,6 +6,7 @@ using Lumle.Data.Data.Abstracts;
 using Lumle.Infrastructure.Constants.LumleLog;
 using Lumle.Module.AdminConfig.Models;
 using NLog;
+using System.Threading.Tasks;
 
 namespace Lumle.Module.AdminConfig.Services
 {
@@ -20,11 +20,11 @@ namespace Lumle.Module.AdminConfig.Services
             _emailTemplateRepository = emailTemplateRepository;
         }
 
-        public void Add(EmailTemplate entity)
+        public async Task Add(EmailTemplate entity)
         {
             try
             {
-                _emailTemplateRepository.Add(entity);
+                await _emailTemplateRepository.Add(entity);
             }
             catch (Exception ex)
             {
@@ -33,8 +33,7 @@ namespace Lumle.Module.AdminConfig.Services
             }
         }
 
-
-        public IEnumerable<EmailTemplate> GetAll()
+        public IQueryable<EmailTemplate> GetAll()
         {
             try
             {
@@ -47,7 +46,7 @@ namespace Lumle.Module.AdminConfig.Services
             }
         }
 
-        public IEnumerable<EmailTemplate> GetAll(Expression<Func<EmailTemplate, bool>> predicate)
+        public IQueryable<EmailTemplate> GetAll(Expression<Func<EmailTemplate, bool>> predicate)
         {
             try
             {
@@ -60,7 +59,7 @@ namespace Lumle.Module.AdminConfig.Services
             }
         }
 
-        public IEnumerable<EmailTemplateModel> GetAllEmailTemplate()
+        public IQueryable<EmailTemplateModel> GetAllEmailTemplate()
         {
             try
             {
@@ -74,7 +73,7 @@ namespace Lumle.Module.AdminConfig.Services
                                Subject=e.Subject
                             }).ToList();
 
-                return data.Select(x => { x.Sn = ++i; return x; }).ToList();
+                return data.Select(x => { x.Sn = ++i; return x; }).AsQueryable();
             }
             catch (Exception ex)
             {
@@ -83,11 +82,11 @@ namespace Lumle.Module.AdminConfig.Services
             }
         }
 
-        public EmailTemplate GetSingle(Expression<Func<EmailTemplate, bool>> predicate)
+        public async Task<EmailTemplate> GetSingle(Expression<Func<EmailTemplate, bool>> predicate)
         {
             try
             {
-              return  _emailTemplateRepository.GetSingle(predicate);
+              return  await _emailTemplateRepository.GetSingle(predicate);
             }
             catch (Exception ex)
             {
@@ -96,11 +95,11 @@ namespace Lumle.Module.AdminConfig.Services
             }
         }
 
-        public void Update(EmailTemplate entity)
+        public async Task Update(EmailTemplate entity)
         {
             try
             {
-                _emailTemplateRepository.Update(entity);
+                await _emailTemplateRepository.Update(entity);
             }
             catch (Exception ex)
             {

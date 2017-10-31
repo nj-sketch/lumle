@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 using Lumle.Data.Data.Abstracts;
 using Lumle.Infrastructure.Constants.LumleLog;
@@ -19,7 +18,7 @@ namespace Lumle.Module.Audit.Services
             _customLogRepository = customLogRepository;
         }
 
-        public IEnumerable<CustomLog> GetAll(Expression<Func<CustomLog, bool>> predicate)
+        public IQueryable<CustomLog> GetAll(Expression<Func<CustomLog, bool>> predicate)
         {
             try
             {

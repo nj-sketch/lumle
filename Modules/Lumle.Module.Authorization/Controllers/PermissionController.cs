@@ -71,7 +71,7 @@ namespace Lumle.Module.Authorization.Controllers
         [HttpPost("add")]
         [ValidateAntiForgeryToken]
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.AuthorizationPermissionCreate)]
-        public IActionResult Add(PermissionVM model)
+        public async Task<IActionResult> Add(PermissionVM model)
         {
             try
             {
@@ -82,7 +82,7 @@ namespace Lumle.Module.Authorization.Controllers
                 }
 
                 var isSlugExist =
-                    _permissionService.GetSingle(
+                   await _permissionService.GetSingle(
                         x => string.Equals(x.Slug, model.Slug.Trim(), StringComparison.CurrentCultureIgnoreCase));
 
                 if (isSlugExist != null)
@@ -94,8 +94,8 @@ namespace Lumle.Module.Authorization.Controllers
                 var permissionModel = SplitSlug(model);
                 var permissionEntity = Mapper.Map<Permission>(permissionModel);
 
-                _permissionService.Add(permissionEntity);
-                _unitOfWork.Save();
+                await _permissionService.Add(permissionEntity);
+                await _unitOfWork.SaveAsync();
 
                 TempData["SuccessMsg"] = "Permission added successfully.";
                 return RedirectToAction("Index");
@@ -109,7 +109,7 @@ namespace Lumle.Module.Authorization.Controllers
 
         [HttpGet("edit/{id:int}")]
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.AuthorizationPermissionUpdate)]
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
             if (id <= 0)
             {
@@ -117,7 +117,7 @@ namespace Lumle.Module.Authorization.Controllers
                 return RedirectToAction("Index");
             }
 
-            var permissionEntity = _permissionService.GetSingle(x => x.Id == id);
+            var permissionEntity = await _permissionService.GetSingle(x => x.Id == id);
             if (permissionEntity == null)
             {
                 TempData["ErrorMsg"] = "Permission not found.";
@@ -132,7 +132,7 @@ namespace Lumle.Module.Authorization.Controllers
         [HttpPost("edit/{id:int}")]
         [ValidateAntiForgeryToken]
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.AuthorizationPermissionUpdate)]
-        public IActionResult Edit(PermissionVM model)
+        public async Task<IActionResult> Edit(PermissionVM model)
         {
             try
             {
@@ -142,7 +142,7 @@ namespace Lumle.Module.Authorization.Controllers
                     return View(model);
                 }
 
-                var permission = _permissionService.GetSingle(x => x.Id == model.Id);
+                var permission = await _permissionService.GetSingle(x => x.Id == model.Id);
                 if (permission == null)
                 {
                     TempData["ErrorMsg"] = "Permission does not exist.";
@@ -153,8 +153,8 @@ namespace Lumle.Module.Authorization.Controllers
                 var permissionEntity = Mapper.Map<Permission>(permissionModel);
                 permissionEntity.Id = model.Id;
 
-                _permissionService.Update(permissionEntity);
-                _unitOfWork.Save();
+                await _permissionService.Update(permissionEntity);
+                await _unitOfWork.SaveAsync();
 
                 TempData["SuccessMsg"] = "Permission updated successfully.";
                 return RedirectToAction("Index");
@@ -170,7 +170,7 @@ namespace Lumle.Module.Authorization.Controllers
         [HttpPost("delete/{id:int}")]
         [ValidateAntiForgeryToken]
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.AuthorizationPermissionDelete)]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             try
             {
@@ -180,15 +180,15 @@ namespace Lumle.Module.Authorization.Controllers
                     return RedirectToAction("Index");
                 }
 
-                var permission = _permissionService.GetSingle(x => x.Id == id);
+                var permission = await _permissionService.GetSingle(x => x.Id == id);
                 if (permission == null)
                 {
                     TempData["ErrorMsg"] = "Permission not found.";
                     return RedirectToAction("Index");
                 }
 
-                _permissionService.DeleteWhere(x => x.Id == id);
-                _unitOfWork.Save();
+                await _permissionService.DeleteWhere(x => x.Id == id);
+                await _unitOfWork.SaveAsync();
 
                 TempData["SuccessMsg"] = "Permission deleted successfully.";
                 return RedirectToAction("Index");
@@ -212,6 +212,7 @@ namespace Lumle.Module.Authorization.Controllers
                 SubMenu = slugArray.Length > 1 ? slugArray[1].Trim().ToLower() : string.Empty,
                 CreatedDate = DateTime.UtcNow
             };
+
             return permission;
         }
         #endregion

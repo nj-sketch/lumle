@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 using Lumle.Core.Models;
 using Lumle.Core.Services.Abstracts;
 using Lumle.Data.Data.Abstracts;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Lumle.Core.Services
 {
@@ -15,50 +16,51 @@ namespace Lumle.Core.Services
         {
             _appSystemRepository = appSystemRepository;
         }
-        public IEnumerable<AppSystem> GetAll()
+
+        public IQueryable<AppSystem> GetAll()
         {
             try
             {
                 return _appSystemRepository.GetAll();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new Exception(ex.Message);
+                throw;
             }
         }
-        public IEnumerable<AppSystem> GetAll(Expression<Func<AppSystem, bool>> predicate)
+        public IQueryable<AppSystem> GetAll(Expression<Func<AppSystem, bool>> predicate)
         {
             try
             {
                 return _appSystemRepository.GetAll(predicate);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
-        public AppSystem GetSingle(Expression<Func<AppSystem, bool>> predicate)
+        public async Task<AppSystem> GetSingle(Expression<Func<AppSystem, bool>> predicate)
         {
             try
             {
-                return _appSystemRepository.GetSingle(predicate);
+                return await _appSystemRepository.GetSingle(predicate);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
-        public void Update(AppSystem entity)
+        public async Task Update(AppSystem entity)
         {
             try
             {
-                _appSystemRepository.Update(entity);
+                await _appSystemRepository.Update(entity);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new Exception(ex.Message);
+                throw;
             }
         }
     }

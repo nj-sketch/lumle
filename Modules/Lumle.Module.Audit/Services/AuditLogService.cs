@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Newtonsoft.Json;
 using NLog;
 using Lumle.Infrastructure.Utilities.Abstracts;
+using System.Threading.Tasks;
 
 namespace Lumle.Module.Audit.Services
 {
@@ -40,11 +41,11 @@ namespace Lumle.Module.Audit.Services
             Initialize();
         }
 
-        public void Add(AuditLog entity)
+        public async Task Add(AuditLog entity)
         {
             try
             {
-                _auditLogRepository.Add(entity);
+               await _auditLogRepository.Add(entity);
             }
             catch (Exception ex)
             {
@@ -53,7 +54,7 @@ namespace Lumle.Module.Audit.Services
             }
         }
 
-        private void AddObjectAuditRecord(AuditLogModel auditLogModel)
+        private async Task AddObjectAuditRecord(AuditLogModel auditLogModel)
         {
             try
             {
@@ -106,7 +107,7 @@ namespace Lumle.Module.Audit.Services
                     AuditSummary = auditSummary
                 };
 
-                Add(audit);
+                await Add(audit);
             }
             catch (Exception ex)
             {
@@ -119,7 +120,7 @@ namespace Lumle.Module.Audit.Services
         {
             try
             {
-                return _auditLogRepository.GetAll();
+                return  _auditLogRepository.GetAll();
             }
             catch (Exception ex)
             {
@@ -128,7 +129,7 @@ namespace Lumle.Module.Audit.Services
             }
         }
 
-        public List<AuditChange> GetAll(Expression<Func<AuditLog, bool>> predicate, string userTimezone)
+        public IQueryable<AuditChange> GetAll(Expression<Func<AuditLog, bool>> predicate, string userTimezone)
         {
             try
             {
@@ -162,7 +163,7 @@ namespace Lumle.Module.Audit.Services
                     result.Add(change);
                 }
 
-                return result;
+                return result.AsQueryable();
             }
             catch (Exception ex)
             {
@@ -171,7 +172,7 @@ namespace Lumle.Module.Audit.Services
             }
         }
 
-        private void AddStringAuditRecord(AuditLogModel auditLogModel)
+        private async Task AddStringAuditRecord(AuditLogModel auditLogModel)
         {
             try
             {
@@ -219,7 +220,7 @@ namespace Lumle.Module.Audit.Services
                     NewValue = newAuditRecord
                 };
 
-                Add(audit);
+                await Add(audit);
             }
             catch (Exception ex)
             {
@@ -247,7 +248,7 @@ namespace Lumle.Module.Audit.Services
                    || input.StartsWith("[") && input.EndsWith("]");
         }
 
-        private void AddListAuditRecord(AuditLogModel auditLogModel)
+        private async Task AddListAuditRecord(AuditLogModel auditLogModel)
         {
             try
             {
@@ -295,7 +296,7 @@ namespace Lumle.Module.Audit.Services
                     ModuleInfo = auditLogModel.AdditionalInfo
                 };
 
-                Add(audit);
+                await Add(audit);
             }
             catch (Exception ex)
             {
@@ -304,7 +305,7 @@ namespace Lumle.Module.Audit.Services
             }
         }
 
-        public List<AuditChange> GetListRecords(Expression<Func<AuditLog, bool>> predicate, string userTimezone)
+        public IQueryable<AuditChange> GetListRecords(Expression<Func<AuditLog, bool>> predicate, string userTimezone)
         {
             try
             {
@@ -332,7 +333,7 @@ namespace Lumle.Module.Audit.Services
                     result.Add(auditChange);
                 }
 
-                return result;
+                return result.AsQueryable();
             }
             catch (Exception ex)
             {
@@ -341,7 +342,7 @@ namespace Lumle.Module.Audit.Services
             }
         }
 
-        private void AddObjectListAuditRecord(AuditLogModel auditLogModel)
+        private async Task AddObjectListAuditRecord(AuditLogModel auditLogModel)
         {
             try
             {
@@ -388,9 +389,9 @@ namespace Lumle.Module.Audit.Services
                     NewValue = JsonConvert.SerializeObject(auditLogModel.NewObject),
                     Changes = JsonConvert.SerializeObject(auditInfoList),
                     AuditSummary = "An exisiting record has been updated in " + modelName + " module by " + auditLogModel.LoggedUserEmail
-            };
+                };
 
-                Add(audit);
+                await Add(audit);
             }
             catch (Exception ex)
             {
@@ -399,7 +400,7 @@ namespace Lumle.Module.Audit.Services
             }
         }
 
-        public void Add(AuditLogModel auditLogModel)
+        public async Task Add(AuditLogModel auditLogModel)
         {
             try
             {
@@ -407,16 +408,16 @@ namespace Lumle.Module.Audit.Services
                 switch (auditLogModel.ComparisonType)
                 {
                     case ComparisonType.ObjectCompare:
-                        AddObjectAuditRecord(auditLogModel);
+                        await AddObjectAuditRecord(auditLogModel);
                         break;
                     case ComparisonType.StringCompare:
-                        AddStringAuditRecord(auditLogModel);
+                        await AddStringAuditRecord(auditLogModel);
                         break;
                     case ComparisonType.ListCompare:
-                        AddListAuditRecord(auditLogModel);
+                        await AddListAuditRecord(auditLogModel);
                         break;
                     case ComparisonType.ObjectListCompare:
-                        AddObjectListAuditRecord(auditLogModel);
+                        await AddObjectListAuditRecord(auditLogModel);
                         break;
                     default:
                         throw new NotImplementedException();

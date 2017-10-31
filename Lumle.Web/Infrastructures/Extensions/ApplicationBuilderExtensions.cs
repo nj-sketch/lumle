@@ -32,6 +32,7 @@ namespace Lumle.Web.Infrastructures.Extensions
                     RequestPath = new PathString("/" + module.ShortName)
                 });
             }
+
             return app;
         }
 

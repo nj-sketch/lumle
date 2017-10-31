@@ -36,84 +36,84 @@ namespace Lumle.Core.Services
                 var claims = _baseRoleClaimRepository.Count(predicate);
                 return claims;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
-        public IEnumerable<BaseRoleClaim> GetAll(Expression<Func<BaseRoleClaim, bool>> predicate)
+        public IQueryable<BaseRoleClaim> GetAll(Expression<Func<BaseRoleClaim, bool>> predicate)
         {
             try
             {
                 var claims = _baseRoleClaimRepository.GetAll(predicate);
                 return claims;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
-        public IEnumerable<BaseRoleClaim> GetAll()
+        public IQueryable<BaseRoleClaim> GetAll()
         {
             try
             {
                 var claims = _baseRoleClaimRepository.GetAll();
                 return claims;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
-        public BaseRoleClaim GetSingle(Expression<Func<BaseRoleClaim, bool>> predicate)
+        public async Task<BaseRoleClaim> GetSingle(Expression<Func<BaseRoleClaim, bool>> predicate)
         {
             try
             {
-                var claim = _baseRoleClaimRepository.GetSingle(predicate);
+                var claim = await _baseRoleClaimRepository.GetSingle(predicate);
                 return claim;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
-        public void Add(BaseRoleClaim entity)
+        public async Task Add(BaseRoleClaim entity)
         {
             try
             {
-                _baseRoleClaimRepository.Add(entity);
+                await _baseRoleClaimRepository.Add(entity);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
-        public void Update(BaseRoleClaim entity)
+        public async Task Update(BaseRoleClaim entity)
         {
             try
             {
-                _baseRoleClaimRepository.Update(entity);
+                await _baseRoleClaimRepository.Update(entity);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
-        public void DeleteWhere(Expression<Func<BaseRoleClaim, bool>> predicate)
+        public async Task DeleteWhere(Expression<Func<BaseRoleClaim, bool>> predicate)
         {
             try
             {
-                _baseRoleClaimRepository.DeleteWhere(predicate);
+                await _baseRoleClaimRepository.DeleteWhere(predicate);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 

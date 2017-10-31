@@ -3,6 +3,7 @@ using Lumle.Data.Data.Abstracts;
 using Lumle.Infrastructure.Constants.LumleLog;
 using Lumle.Module.AdminConfig.Entities;
 using NLog;
+using System.Threading.Tasks;
 
 namespace Lumle.Module.AdminConfig.Services
 {
@@ -16,13 +17,13 @@ namespace Lumle.Module.AdminConfig.Services
             _serviceHealthRepository = serviceHealthRepository;
         }
 
-        public void Add(ServiceHealth serviceHealth)
+        public async Task Add(ServiceHealth serviceHealth)
         {
             try
             {
                 if (serviceHealth == null) return;
 
-                _serviceHealthRepository.Add(serviceHealth);
+                await _serviceHealthRepository.Add(serviceHealth);
             }
             catch (Exception ex)
             {

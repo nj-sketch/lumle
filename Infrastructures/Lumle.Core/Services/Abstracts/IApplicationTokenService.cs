@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Linq.Expressions;
 using Lumle.Core.Models;
+using System.Threading.Tasks;
 
 namespace Lumle.Core.Services.Abstracts
 {
     public interface IApplicationTokenService
     {
-        ApplicationToken GetSingle(Expression<Func<ApplicationToken, bool>> predicate);
-        void Add(ApplicationToken entity);
-        void Update(ApplicationToken entity);
-        void DeleteWhere(Expression<Func<ApplicationToken, bool>> predicate);
+        Task<ApplicationToken> GetSingle(Expression<Func<ApplicationToken, bool>> predicate);
+        Task Add(ApplicationToken entity);
+        Task Update(ApplicationToken entity);
+        Task DeleteWhere(Expression<Func<ApplicationToken, bool>> predicate);
     }
 }

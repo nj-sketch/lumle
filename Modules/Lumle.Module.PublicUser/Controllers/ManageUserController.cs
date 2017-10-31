@@ -83,7 +83,7 @@ namespace Lumle.Module.PublicUser.Controllers
             if (!ModelState.IsValid)
                 return Json(new { success = false, messageTitle = _localizer[ActionMessageConstants.UnableToUpdateErrorMessage].Value, message = _localizer[ActionMessageConstants.UnableToUpdateErrorMessage].Value });
 
-            var publicUser = _publicUserService.GetSingle(x => x.Id == Convert.ToInt32(user.Id));
+            var publicUser = await _publicUserService.GetSingle(x => x.Id == Convert.ToInt32(user.Id));
             if(publicUser == null)
                 return Json(new { success = false, messageTitle = _localizer[ActionMessageConstants.ErrorOccured].Value, message = _localizer[ActionMessageConstants.ErrorOccured].Value });
 
@@ -99,7 +99,7 @@ namespace Lumle.Module.PublicUser.Controllers
             publicUser.IsStaff = Convert.ToBoolean(user.IsStaff);
             publicUser.LastUpdated = DateTime.UtcNow;
 
-            _publicUserService.Update(publicUser);
+            await _publicUserService.Update(publicUser);
 
             var currentUser = await GetCurrentUserAsync(); // Get current logged in user
 
@@ -113,10 +113,10 @@ namespace Lumle.Module.PublicUser.Controllers
                 LoggedUserEmail = currentUser.Email,
                 ComparisonType = ComparisonType.ObjectCompare
             };
-            _auditLogService.Add(auditLogModel);
+            await _auditLogService.Add(auditLogModel);
             #endregion
 
-            _unitOfwork.Save();
+            await _unitOfwork.SaveAsync();
 
             return Json(new { success = true, messageTitle = _localizer[ActionMessageConstants.UpdatedSuccessfully].Value, message = _localizer[ActionMessageConstants.UpdatedSuccessfully].Value });
         }
