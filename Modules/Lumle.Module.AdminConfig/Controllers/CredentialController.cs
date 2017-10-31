@@ -32,6 +32,7 @@ namespace Lumle.Module.AdminConfig.Controllers
     public class CredentialController : Controller
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         private readonly IBaseRoleClaimService _baseRoleClaimService;
         private readonly ICredentialCategoryService _credentialCategoryService;
         private readonly ICredentialService _credentialService;
@@ -116,7 +117,7 @@ namespace Lumle.Module.AdminConfig.Controllers
         {
             try
             {
-                var data = _credentialService.GetSingle(x => x.Id == credential.Id);
+                var data = await _credentialService.GetSingle(x => x.Id == credential.Id);
                 if (data == null)
                     return Json(GetOperationFailedMessage());
 
@@ -135,7 +136,8 @@ namespace Lumle.Module.AdminConfig.Controllers
 
                 // update in database
                 data.Value = credential.Value.Trim();
-                _credentialService.Update(data);
+
+                await _credentialService.Update(data);
 
                 #region Credential Audit Log
 
@@ -149,12 +151,12 @@ namespace Lumle.Module.AdminConfig.Controllers
                     ComparisonType = ComparisonType.ObjectCompare
                 };
 
-                _auditLogService.Add(auditLogModel);
+                await _auditLogService.Add(auditLogModel);
 
                 #endregion
 
                 //Save
-                _unitOfWork.Save();
+                await _unitOfWork.SaveAsync();
                 return Json(GetOperationSuccessMessage());
             }
             catch (Exception ex)

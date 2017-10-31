@@ -3,9 +3,9 @@ using Lumle.Infrastructure.Constants.LumleLog;
 using Lumle.Module.Blog.Entities;
 using NLog;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Lumle.Module.Blog.Services
 {
@@ -47,7 +47,7 @@ namespace Lumle.Module.Blog.Services
             }
         }
 
-        public IEnumerable<Article> GetAll(Expression<Func<Article, bool>> predicate)
+        public IQueryable<Article> GetAll(Expression<Func<Article, bool>> predicate)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace Lumle.Module.Blog.Services
         {
             try
             {
-                var articles = _articleRepository.GetAll();
+                var articles =  _articleRepository.GetAll();
                 return articles;
             }
             catch (Exception ex)
@@ -75,11 +75,11 @@ namespace Lumle.Module.Blog.Services
             }
         }
 
-        public Article GetSingle(Expression<Func<Article, bool>> predicate)
+        public async Task<Article> GetSingle(Expression<Func<Article, bool>> predicate)
         {
             try
             {
-                var article = _articleRepository.GetSingle(predicate);
+                var article = await _articleRepository.GetSingle(predicate);
                 return article;
             }
             catch (Exception ex)
@@ -89,11 +89,11 @@ namespace Lumle.Module.Blog.Services
             }
         }
 
-        public void Add(Article entity)
+        public async Task Add(Article entity)
         {
             try
             {
-                _articleRepository.Add(entity);
+               await _articleRepository.Add(entity);
             }
             catch (Exception ex)
             {
@@ -102,11 +102,11 @@ namespace Lumle.Module.Blog.Services
             }
         }
 
-        public void Update(Article entity)
+        public async Task Update(Article entity)
         {
             try
             {
-                _articleRepository.Update(entity);
+                await _articleRepository.Update(entity);
             }
             catch (Exception ex)
             {
@@ -115,17 +115,17 @@ namespace Lumle.Module.Blog.Services
             }
         }
 
-        public void DeleteWhere(Expression<Func<Article, bool>> predicate)
+        public async Task DeleteWhere(Expression<Func<Article, bool>> predicate)
         {
             try
             {
-                _articleRepository.DeleteWhere(predicate);
+                await _articleRepository.DeleteWhere(predicate);
             }
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DeleteError);
                 throw;
             }
-        }
+        }    
     }
 }

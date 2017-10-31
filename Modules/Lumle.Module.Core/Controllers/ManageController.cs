@@ -84,6 +84,7 @@ namespace Lumle.Module.Core.Controllers
                 Logins = await _userManager.GetLoginsAsync(user),
                 BrowserRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user)
             };
+
             return View(model);
         }
 
@@ -100,6 +101,7 @@ namespace Lumle.Module.Core.Controllers
             if (!result.Succeeded) return RedirectToAction(nameof(ManageLogins), new {Message = message});
             await _signInManager.SignInAsync(user, isPersistent: false);
             message = ManageMessageId.RemoveLoginSuccess;
+
             return RedirectToAction(nameof(ManageLogins), new { Message = message });
         }
 
@@ -282,8 +284,8 @@ namespace Lumle.Module.Core.Controllers
                     ComparisonType = ComparisonType.StringCompare
                 };
 
-                _auditLogService.Add(auditLogModel);
-                _unitOfWork.Save();
+                await _auditLogService.Add(auditLogModel);
+                await _unitOfWork.SaveAsync();
                 #endregion
 
                 //Logout and redirect to login
@@ -380,6 +382,7 @@ namespace Lumle.Module.Core.Controllers
             }
             var result = await _userManager.AddLoginAsync(user, info);
             var message = result.Succeeded ? ManageMessageId.AddLoginSuccess : ManageMessageId.Error;
+
             return RedirectToAction(nameof(ManageLogins), new { Message = message });
         }
 

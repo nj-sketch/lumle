@@ -7,52 +7,30 @@ namespace Lumle.Data.Data.Abstracts
 {
     public interface IRepository<T> where T : class
     {
-        IQueryable<T> AllIncluding(params Expression<Func<T, object>>[] includeProperties);
-
-        IQueryable<T> GetAllIncluding(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
-
-        IQueryable<T> GetAll();
-
-        IQueryable<T> GetAll(Expression<Func<T, bool>> predicate);
-
         int Count();
 
         int Count(Expression<Func<T, bool>> predicate);
 
-        T GetSingle(int id);
+        IQueryable<T> AllIncluding(params Expression<Func<T, object>>[] includeProperties);
 
-        T GetSingle(Expression<Func<T, bool>> predicate);
+        IQueryable<T> GetAllIncluding(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
 
-        T GetSingle(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
+        IQueryable<T> GetAll(Expression<Func<T, bool>> predicate);
 
-        void Add(T entity);
+        IQueryable<T> GetAll();
 
-        void Update(T entity);
+        Task<T> GetSingle(int id);
 
-        void Delete(T entity);
+        Task<T> GetSingle(Expression<Func<T, bool>> predicate);
 
-        void DeleteWhere(Expression<Func<T, bool>> predicate);
+        Task<T> GetSingle(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
 
-        //Task<IQueryable<T>> AllIncluding(params Expression<Func<T, object>>[] includeProperties);
+        Task Add(T entity);
 
-        //Task<IQueryable<T>> GetAllIncluding(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
+        Task Update(T entity);
 
-        //Task<IQueryable<T>> GetAll();
+        Task Delete(T entity);
 
-        //Task<IQueryable<T>> GetAll(Expression<Func<T, bool>> predicate);
-
-        //Task<T> GetSingle(int id);
-
-        //Task<T> GetSingle(Expression<Func<T, bool>> predicate);
-
-        //Task<T> GetSingle(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
-
-        //Task Add(T entity);
-
-        //Task Update(T entity);
-
-        //Task Delete(T entity);
-
-        //Task DeleteWhere(Expression<Func<T, bool>> predicate);
+        Task DeleteWhere(Expression<Func<T, bool>> predicate);
     }
 }

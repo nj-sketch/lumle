@@ -134,8 +134,8 @@ namespace Lumle.Module.Blog.Controllers
             articleModel.Content = await SaveFilesToDisk(articleModel.Content);
             var articleEntity = Mapper.Map<Article>(articleModel);
 
-            _articleService.Add(articleEntity);
-            _unitOfWork.Save();
+            await _articleService.Add(articleEntity);
+            await _unitOfWork.SaveAsync();
 
             #region AuditLog
             var newArticle = new Article(); // Storage of this null object shows data before creation = nothing!
@@ -148,8 +148,10 @@ namespace Lumle.Module.Blog.Controllers
                 ComparisonType = ComparisonType.ObjectCompare,
                 LoggedUserEmail = loggedUser.Email
             };
-            _auditLogService.Add(auditLogModel);
-            _unitOfWork.Save();
+
+            await _auditLogService.Add(auditLogModel);
+
+            await _unitOfWork.SaveAsync();
             #endregion
 
             TempData["SuccessMsg"] = _localizer[ActionMessageConstants.AddedSuccessfully].Value;
@@ -159,9 +161,9 @@ namespace Lumle.Module.Blog.Controllers
 
         [HttpGet("edit/{articleId:int}")]
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.BlogArticleUpdate)]
-        public IActionResult Edit(int articleId)
+        public async Task<IActionResult> Edit(int articleId)
         {
-            var article = _articleService.GetSingle(x => x.Id == articleId);
+            var article = await _articleService.GetSingle(x => x.Id == articleId);
             var articleVm = Mapper.Map<ArticleVM>(article);
             _imageUrl = !string.IsNullOrEmpty(articleVm.FeaturedImageUrl) ? $"{Request.Scheme}://{Request.Host}{_urlHelper.Content("~/")}uploadedimages/{articleVm.FeaturedImageUrl}"
               : string.Empty;
@@ -186,7 +188,7 @@ namespace Lumle.Module.Blog.Controllers
                 _imageUrl = _fileHandler.UploadImage(model.FeaturedImage, 300, 360);
             }
 
-            var article = _articleService.GetSingle(x => x.Id == model.Id);
+            var article = await _articleService.GetSingle(x => x.Id == model.Id);
             if (article == null) return RedirectToAction("Index");
 
             var loggedUser = await GetCurrentUserAsync();
@@ -206,7 +208,7 @@ namespace Lumle.Module.Blog.Controllers
             article.Content = await SaveFilesToDisk(model.Content);
             article.FeaturedImageUrl = _imageUrl ?? article.FeaturedImageUrl;
 
-            _articleService.Update(article);
+            await _articleService.Update(article);
             // For audit log
             #region AuditLog
             var auditLogModel = new AuditLogModel
@@ -218,8 +220,8 @@ namespace Lumle.Module.Blog.Controllers
                 ComparisonType = ComparisonType.ObjectCompare,
                 LoggedUserEmail = loggedUser.Email
             };
-            _auditLogService.Add(auditLogModel);
-            _unitOfWork.Save();
+            await _auditLogService.Add(auditLogModel);
+            await _unitOfWork.SaveAsync();
             #endregion
 
             TempData["SuccessMsg"] = _localizer[ActionMessageConstants.UpdatedSuccessfully].Value;
@@ -228,17 +230,17 @@ namespace Lumle.Module.Blog.Controllers
 
         [HttpPost("delete/{id}")]
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.BlogArticleDelete)]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
-            var article = _articleService.GetSingle(x => x.Id == id);
+            var article = await _articleService.GetSingle(x => x.Id == id);
             if (article == null) return RedirectToAction("Index");
             {
 
                 // var sampleObject = new Article(); // Storage of this null object shows data after delete = nothing!
-                _articleService.DeleteWhere(x => x.Id == id);
+                await _articleService.DeleteWhere(x => x.Id == id);
                 #region AuditLog
                 // _auditLogService.Add(AuditActionType.Delete, id.ToString(), article, sampleObject);
-                _unitOfWork.Save();
+                await _unitOfWork.SaveAsync();
                 #endregion
             }
             TempData["SuccessMsg"] = _localizer[ActionMessageConstants.DeletedSuccessfully].Value;
@@ -259,6 +261,7 @@ namespace Lumle.Module.Blog.Controllers
                     Author = art.Author,
                     CreatedDate=art.CreatedDate
                 });
+
                 List<ArticleModel> filteredAtricle;
                 int totalArticle;
                 if (!string.IsNullOrEmpty(parameters.Search.Value.Trim())
@@ -292,6 +295,7 @@ namespace Lumle.Module.Blog.Controllers
                     RecordsFiltered = totalArticle,
                     RecordsTotal = totalArticle
                 };
+
                 return Json(article);
             }
             catch (Exception ex)

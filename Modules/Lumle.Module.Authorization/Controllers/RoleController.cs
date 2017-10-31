@@ -35,6 +35,7 @@ namespace Lumle.Module.Authorization.Controllers
     public class RoleController : Controller
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         private readonly RoleManager<Role> _roleManager;
         private readonly UserManager<User> _userManager;
         private readonly IUnitOfWork _unitOfWork;
@@ -164,8 +165,8 @@ namespace Lumle.Module.Authorization.Controllers
                     ComparisonType = ComparisonType.ObjectCompare
                 };
 
-                _auditLogService.Add(auditLogModel);
-                _unitOfWork.Save();
+                await _auditLogService.Add(auditLogModel);
+                await _unitOfWork.SaveAsync();
                 #endregion
 
                 TempData["SuccessMsg"] = _localizer[ActionMessageConstants.AddedSuccessfully].Value;
@@ -252,8 +253,9 @@ namespace Lumle.Module.Authorization.Controllers
                         LoggedUserEmail = loggedUser.Email,
                         ComparisonType = ComparisonType.ObjectCompare
                     };
-                    _auditLogService.Add(auditLogModel);
-                    _unitOfWork.Save();
+
+                    await _auditLogService.Add(auditLogModel);
+                    await _unitOfWork.SaveAsync();
                     #endregion
 
                     TempData["SuccessMsg"] = _localizer[ActionMessageConstants.UpdatedSuccessfully].Value;
@@ -306,10 +308,10 @@ namespace Lumle.Module.Authorization.Controllers
                             LoggedUserEmail = loggedUser.Email,
                             ComparisonType = ComparisonType.ObjectCompare
                         };
-                        _auditLogService.Add(auditLogModel);
+                        await _auditLogService.Add(auditLogModel);
 
                     #endregion
-                    _unitOfWork.Save();
+                    await _unitOfWork.SaveAsync();
 
                     TempData["SuccessMsg"] = _localizer[ActionMessageConstants.DeletedSuccessfully].Value;
                     return RedirectToAction("Index");
@@ -365,25 +367,25 @@ namespace Lumle.Module.Authorization.Controllers
 
                 var loggedUser = await GetCurrentUserAsync(); //Get current logged user
 
-                var roleClaims = _baseRoleClaimService.GetAll(x => x.RoleId == model.RoleId);
+                var roleClaims = _baseRoleClaimService.GetAll(x => x.RoleId == model.RoleId).ToList();
                 var oldClaimsList = new List<string>();
-                var baseRoleClaims = roleClaims as BaseRoleClaim[] ?? roleClaims.ToArray();
-                if (baseRoleClaims.Any())
+              
+                if (roleClaims.Any())
                 {
-                    foreach (var item in baseRoleClaims)
+                    foreach (var item in roleClaims)
                     {
-                        var permission = _permissionService.GetSingle(x => x.Slug == item.ClaimValue);
+                        var permission = await _permissionService.GetSingle(x => x.Slug == item.ClaimValue);
                         oldClaimsList.Add(permission.DisplayName);
                     }
 
-                    _baseRoleClaimService.DeleteWhere(x => x.RoleId == model.RoleId);
-                    _unitOfWork.Save();
+                    await _baseRoleClaimService.DeleteWhere(x => x.RoleId == model.RoleId);
+                    await _unitOfWork.SaveAsync();
                 }
                         
                 var claimsDisplayNameList = new List<string>();
                 foreach (var claim in model.ClaimValues)
                 {
-                    var permission = _permissionService.GetSingle(x => x.Slug == claim);
+                    var permission = await _permissionService.GetSingle(x => x.Slug == claim);
                     claimsDisplayNameList.Add(permission.DisplayName);
                     var newClaim = new BaseRoleClaim
                     {
@@ -394,8 +396,8 @@ namespace Lumle.Module.Authorization.Controllers
                         LastUpdated = DateTime.UtcNow
                     };
 
-                    _baseRoleClaimService.Add(newClaim);
-                    _unitOfWork.Save();
+                    await _baseRoleClaimService.Add(newClaim);
+                    await _unitOfWork.SaveAsync();
                 }
       
                 #region Role Claim Audit Log            
@@ -414,7 +416,7 @@ namespace Lumle.Module.Authorization.Controllers
                         ModuleList = ModuleList.UserRole
                     };
 
-                    _auditLogService.Add(updateAuditLogModel);
+                    await _auditLogService.Add(updateAuditLogModel);
 
                 }
                 else
@@ -432,10 +434,10 @@ namespace Lumle.Module.Authorization.Controllers
                         ModuleList = ModuleList.UserRole
                     };
 
-                    _auditLogService.Add(createAuditLogModel);
+                    await _auditLogService.Add(createAuditLogModel);
                 }
 
-                _unitOfWork.Save();
+                await _unitOfWork.SaveAsync();
 
                 #endregion
 

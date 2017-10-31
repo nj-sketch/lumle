@@ -13,6 +13,7 @@ namespace Lumle.Module.AdminConfig.Services
     public class SystemHealthService : ISystemHealthService
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         private readonly IRepository<SystemHealth> _systemHealthRepository;
         private readonly ICredentialCategoryService _credentialCategoryService;
         private readonly IEmailTemplateService _emailTemplateService;
@@ -37,13 +38,13 @@ namespace Lumle.Module.AdminConfig.Services
             _unitOfWork = unitOfWork;
         }
 
-        public void Add(SystemHealth systemHealth)
+        public async Task Add(SystemHealth systemHealth)
         {
             try
             {
                 if (systemHealth == null) return;
 
-                _systemHealthRepository.Add(systemHealth);
+                await _systemHealthRepository.Add(systemHealth);
             }
             catch (Exception ex)
             {
@@ -52,7 +53,7 @@ namespace Lumle.Module.AdminConfig.Services
             }
         }
 
-        public IEnumerable<SystemHealth> AllIncluding(params Expression<Func<SystemHealth, object>>[] includeProperties)
+        public IQueryable<SystemHealth> AllIncluding(params Expression<Func<SystemHealth, object>>[] includeProperties)
         {
             try
             {
@@ -65,7 +66,7 @@ namespace Lumle.Module.AdminConfig.Services
             }
         }
 
-        public IEnumerable<SystemHealth> GetAll()
+        public IQueryable<SystemHealth> GetAll()
         {
             try
             {
@@ -78,7 +79,7 @@ namespace Lumle.Module.AdminConfig.Services
             }
         }
 
-        public ICollection<ServiceHealth> GetSystemHealthReport(string loggedInUserEmail)
+        public async Task<ICollection<ServiceHealth>> GetSystemHealthReport(string loggedInUserEmail)
         {
             try
             {
@@ -90,15 +91,15 @@ namespace Lumle.Module.AdminConfig.Services
                     LastUpdated = DateTime.UtcNow
                 };
 
-                Add(systemHealth);
+                await Add(systemHealth);
                 _unitOfWork.Save();
 
                 var serviceHealths = GetServiceHealthReport();
                 foreach (var item in serviceHealths)
                 {
                     item.SystemHealth = systemHealth;
-                    _serviceHealthService.Add(item);
-                    _unitOfWork.Save();
+                    await _serviceHealthService.Add(item);
+                    await _unitOfWork.SaveAsync();
                 }
 
                 var data = systemHealth.ServiceHealths;
@@ -153,6 +154,7 @@ namespace Lumle.Module.AdminConfig.Services
                             serviceHealth.Message = "Operational";
                             break;
                     } // end of switch statement
+
                     serviceHealths.Add(serviceHealth);
                 } // end of foreach loop
 

@@ -14,12 +14,14 @@ using Lumle.Data.Models;
 using Lumle.Infrastructure.Constants.LumleLog;
 using NLog;
 using Lumle.Module.Authorization.ViewModels.SideBarViewModels;
+using System.Threading.Tasks;
 
 namespace Lumle.Module.Authorization.Services
 {
     public class PermissionService : IPermissionService
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         private readonly IRepository<Permission> _permissionRepository;
         private readonly IBaseRoleClaimService _baseRoleClaimService;
         private readonly BaseContext _context;
@@ -73,7 +75,7 @@ namespace Lumle.Module.Authorization.Services
             }
         }
 
-        public IEnumerable<Permission> GetAll(Expression<Func<Permission, bool>> predicate)
+        public IQueryable<Permission> GetAll(Expression<Func<Permission, bool>> predicate)
         {
             try
             {
@@ -87,7 +89,7 @@ namespace Lumle.Module.Authorization.Services
             }
         }
 
-        public IEnumerable<Permission> GetAll()
+        public IQueryable<Permission> GetAll()
         {
             try
             {
@@ -101,11 +103,11 @@ namespace Lumle.Module.Authorization.Services
             }
         }
 
-        public Permission GetSingle(Expression<Func<Permission, bool>> predicate)
+        public async Task<Permission> GetSingle(Expression<Func<Permission, bool>> predicate)
         {
             try
             {
-                var permission = _permissionRepository.GetSingle(predicate);
+                var permission = await _permissionRepository.GetSingle(predicate);
                 return permission;
             }
             catch (Exception ex)
@@ -115,11 +117,11 @@ namespace Lumle.Module.Authorization.Services
             }
         }
 
-        public void Add(Permission entity)
+        public async Task Add(Permission entity)
         {
             try
             {
-                _permissionRepository.Add(entity);
+                await _permissionRepository.Add(entity);
             }
             catch (Exception ex)
             {
@@ -128,11 +130,11 @@ namespace Lumle.Module.Authorization.Services
             }
         }
 
-        public void Update(Permission entity)
+        public async Task Update(Permission entity)
         {
             try
             {
-                _permissionRepository.Update(entity);
+                await _permissionRepository.Update(entity);
             }
             catch (Exception ex)
             {
@@ -141,11 +143,11 @@ namespace Lumle.Module.Authorization.Services
             }
         }
 
-        public void DeleteWhere(Expression<Func<Permission, bool>> predicate)
+        public async Task DeleteWhere(Expression<Func<Permission, bool>> predicate)
         {
             try
             {
-                _permissionRepository.DeleteWhere(predicate);
+                await _permissionRepository.DeleteWhere(predicate);
             }
             catch (Exception ex)
             {
@@ -154,9 +156,9 @@ namespace Lumle.Module.Authorization.Services
             }
         }
 
-        public IEnumerable<Models.PermissionModels.Module> GetPermissionsIncludingAssigned(IEnumerable<BaseRoleClaim> roleClaims)
+        public IQueryable<Models.PermissionModels.Module> GetPermissionsIncludingAssigned(IEnumerable<BaseRoleClaim> roleClaims)
         {
-            var rolePermissions = GetAll();
+            var rolePermissions = GetAll().ToList();
 
             // Get default sidebar menu list
             var sideBarVm = new SideBarVM();
@@ -187,7 +189,7 @@ namespace Lumle.Module.Authorization.Services
                         }
                 };
 
-            return modules;
+            return modules.AsQueryable();
         }
 
         public List<User> GetAllUserOfRole(string roleId)

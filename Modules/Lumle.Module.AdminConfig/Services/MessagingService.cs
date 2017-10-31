@@ -45,7 +45,7 @@ namespace Lumle.Module.AdminConfig.Services
             try
             {
 
-                var emailTemplate = _emailTemplateService.GetSingle(x => x.Slug == "emailconfirmation");
+                var emailTemplate = await _emailTemplateService.GetSingle(x => x.Slug == "emailconfirmation");
                 if (emailTemplate == null) throw new Exception();
 
                 var emailServiceCredntials = _credentialService.GetAll(x => x.Slug == "smtpmailserver"
@@ -82,7 +82,7 @@ namespace Lumle.Module.AdminConfig.Services
 
             try
             {
-                var emailTemplate = _emailTemplateService.GetSingle(x => x.Slug == "forgotpassword");
+                var emailTemplate = await _emailTemplateService.GetSingle(x => x.Slug == "forgotpassword");
                 if (emailTemplate == null) return;
 
                 emailTemplate.Body = emailTemplate.Body.Replace("%url%", url).Replace("%username%", username);
@@ -116,7 +116,7 @@ namespace Lumle.Module.AdminConfig.Services
         {
             try
             {
-                var emailTemplate = _emailTemplateService.GetSingle(x => x.Slug == "logincredential");
+                var emailTemplate = await _emailTemplateService.GetSingle(x => x.Slug == "logincredential");
                 if (emailTemplate == null) throw new Exception();
 
                 var emailServiceCredntials = _credentialService.GetAll(x => x.Slug == "smtpmailserver"
@@ -154,7 +154,7 @@ namespace Lumle.Module.AdminConfig.Services
         {
             try
             {
-                var emailTemplate = _emailTemplateService.GetSingle(x => x.Slug == emailTemplateSlug);
+                var emailTemplate = await _emailTemplateService.GetSingle(x => x.Slug == emailTemplateSlug);
                 if (emailTemplate == null) return;
 
 
@@ -218,7 +218,7 @@ namespace Lumle.Module.AdminConfig.Services
         {
             try
             {
-                var emailTemplate = _emailTemplateService.GetSingle(x => x.Slug == "systemhealthreport");
+                var emailTemplate = await _emailTemplateService.GetSingle(x => x.Slug == "systemhealthreport");
                 if (emailTemplate == null) return;
 
                 if (mailBodyDictionary == null) return;

@@ -11,12 +11,14 @@ using Microsoft.Extensions.Caching.Memory;
 using NLog;
 using Lumle.Infrastructure.Constants.Cache;
 using Lumle.Module.Localization.ViewModels;
+using System.Threading.Tasks;
 
 namespace Lumle.Module.Localization.Services
 {
     public class CultureService : ICultureService
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         private readonly IRepository<Culture> _cultureRepository;
         private readonly IMemoryCache _memoryCache;
 
@@ -30,11 +32,11 @@ namespace Lumle.Module.Localization.Services
             _memoryCache = memoryCache;
         }
 
-        public void Add(Culture entity)
+        public async Task Add(Culture entity)
         {
             try
             {
-                _cultureRepository.Add(entity);
+                await _cultureRepository.Add(entity);
             }
             catch (Exception ex)
             {
@@ -43,11 +45,11 @@ namespace Lumle.Module.Localization.Services
             }
         }
 
-        public void DeleteWhere(Expression<Func<Culture, bool>> predicate)
+        public async Task DeleteWhere(Expression<Func<Culture, bool>> predicate)
         {
             try
             {
-                _cultureRepository.DeleteWhere(predicate);
+                await _cultureRepository.DeleteWhere(predicate);
             }
             catch (Exception ex)
             {
@@ -56,7 +58,7 @@ namespace Lumle.Module.Localization.Services
             }
         }
 
-        public IEnumerable<Culture> GetAll()
+        public IQueryable<Culture> GetAll()
         {
             try
             {
@@ -69,7 +71,7 @@ namespace Lumle.Module.Localization.Services
             }
         }
 
-        public IEnumerable<Culture> GetAll(Expression<Func<Culture, bool>> predicate)
+        public IQueryable<Culture> GetAll(Expression<Func<Culture, bool>> predicate)
         {
             try
             {
@@ -135,42 +137,11 @@ namespace Lumle.Module.Localization.Services
             }
         }
 
-
-        //public IEnumerable<SelectListItem> GetAllCultureSelectListItem()
-        //{
-        //    try
-        //    {
-        //        if (_memoryCache.TryGetValue(CacheConstants.LocalizationCultureCache, out List<SelectListItem> cultureList)) return cultureList;
-
-        //        var data = (from e in _cultureRepository.GetAll(x => x.IsEnable && x.IsActive)
-        //                    select new SelectListItem
-        //                    {
-        //                        Value = e.Name,
-        //                        Text = e.DisplayName
-        //                    }).ToList();
-
-        //        var cacheOption = new MemoryCacheEntryOptions()
-        //        {
-        //            AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1),
-        //            Priority = CacheItemPriority.High
-        //        };
-
-        //        _memoryCache.Set(CacheConstants.LocalizationCultureCache, data, cacheOption);
-
-        //        return data;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Logger.Error(ex, ErrorLog.DataFetchError);
-        //        throw;
-        //    }
-        //}
-
-        public Culture GetSingle(Expression<Func<Culture, bool>> predicate)
+        public async Task<Culture> GetSingle(Expression<Func<Culture, bool>> predicate)
         {
             try
             {
-                return _cultureRepository.GetSingle(predicate);
+                return await _cultureRepository.GetSingle(predicate);
             }
             catch (Exception ex)
             {
@@ -179,11 +150,11 @@ namespace Lumle.Module.Localization.Services
             }
         }
 
-        public void Update(Culture entity)
+        public async Task Update(Culture entity)
         {
             try
             {
-                _cultureRepository.Update(entity);
+                await _cultureRepository.Update(entity);
             }
             catch (Exception ex)
             {

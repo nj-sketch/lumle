@@ -30,6 +30,7 @@ namespace Lumle.Module.AdminConfig.Controllers
     public class EmailTemplateController : Controller
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         private readonly IBaseRoleClaimService _baseRoleClaimService;       
         private readonly IEmailTemplateService _emailTemplateService;
         private readonly IUnitOfWork _unitOfWork;
@@ -80,7 +81,7 @@ namespace Lumle.Module.AdminConfig.Controllers
             var actionClaimResult = await _baseRoleClaimService.GetActionPrevilegeAsync(map, User);
             #endregion
 
-            var emailTemplate = _emailTemplateService.GetSingle(x => x.Id == emailTemplateId);
+            var emailTemplate = await _emailTemplateService.GetSingle(x => x.Id == emailTemplateId);
             if (emailTemplate == null)
             {
                 TempData["ErrorMsg"] = _localizer[ActionMessageConstants.ResourceNotFoundErrorMessage].Value;
@@ -123,7 +124,7 @@ namespace Lumle.Module.AdminConfig.Controllers
                     return View("Edit", model);
                 }
 
-                var emailTemplate = _emailTemplateService.GetSingle(x => x.Id == model.Id);
+                var emailTemplate = await _emailTemplateService.GetSingle(x => x.Id == model.Id);
                 if (emailTemplate == null)
                 {
                     TempData["ErrorMsg"] =_localizer[ActionMessageConstants.ResourceNotFoundErrorMessage].Value;
@@ -155,7 +156,7 @@ namespace Lumle.Module.AdminConfig.Controllers
                 emailTemplate.Subject = model.Subject;
                 emailTemplate.Body = model.Body;
 
-                _emailTemplateService.Update(emailTemplate);
+                await _emailTemplateService.Update(emailTemplate);
 
                 #region EmailTemplate Audit Log
 
@@ -169,10 +170,10 @@ namespace Lumle.Module.AdminConfig.Controllers
                         ComparisonType = ComparisonType.ObjectCompare
                     };
 
-                    _auditLogService.Add(auditLogModel);
+                    await _auditLogService.Add(auditLogModel);
                 #endregion
 
-                _unitOfWork.Save();
+                await _unitOfWork.SaveAsync();
 
                 TempData["EmailTemplateUpdated"] = true;
 

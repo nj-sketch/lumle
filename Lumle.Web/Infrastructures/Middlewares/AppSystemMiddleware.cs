@@ -26,7 +26,7 @@ namespace Lumle.Web.Infrastructures.Middlewares
             var user = await GetCurrentUserAsync(httpContext);
             if (user != null)
             {
-                var systemMode = systemSettingService.GetSingle(x => x.Slug == SystemSetting.MaintenanceMode);
+                var systemMode = await systemSettingService.GetSingle(x => x.Slug == SystemSetting.MaintenanceMode);
                 if (systemMode != null && systemMode.Status == SystemSetting.MaintenanceModeOn)
                 {
                     var userRole = await userManager.GetRolesAsync(user);

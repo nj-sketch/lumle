@@ -47,6 +47,7 @@ namespace Lumle.Module.Authorization.Controllers
     public class UserController : Controller
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         private readonly IBaseRoleClaimService _baseRoleClaimService;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;
@@ -187,7 +188,7 @@ namespace Lumle.Module.Authorization.Controllers
                             LoggedUserEmail = loggedUser.Email
                         };
 
-                        _auditLogService.Add(userAuditLogModel);
+                        await _auditLogService.Add(userAuditLogModel);
                         #endregion
 
                         var role = await _roleManager.FindByIdAsync(model.RoleId);
@@ -207,7 +208,7 @@ namespace Lumle.Module.Authorization.Controllers
                                 ComparisonType = ComparisonType.StringCompare
                             };
 
-                            _auditLogService.Add(roleAuditLogModel);
+                            await _auditLogService.Add(roleAuditLogModel);
                             #endregion
 
                             var roleResult = await _userManager.AddToRoleAsync(user, role.Name);
@@ -227,7 +228,7 @@ namespace Lumle.Module.Authorization.Controllers
                                     Country = (int)(model.EnumCountry),
                                     CreatedDate = DateTime.UtcNow
                                 };
-                                _profileService.Add(userProfile);
+                                await _profileService.Add(userProfile);
 
                                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                                 var callbackUrl = Url.Action(TokenType.ConfirmEmail, "Account", new { userId = user.Id, code }, HttpContext.Request.Scheme);
@@ -243,7 +244,7 @@ namespace Lumle.Module.Authorization.Controllers
                                     LastUpdated = DateTime.UtcNow
                                 };
 
-                                _applicationTokenService.Add(appToken);
+                                await _applicationTokenService.Add(appToken);
 
                                 _context.SaveChanges();
                                 transaction.Commit();
@@ -262,8 +263,8 @@ namespace Lumle.Module.Authorization.Controllers
                                     LoggedUserEmail = loggedUser.Email
                                 };
 
-                                _auditLogService.Add(userProfileAuditLogModel);
-                                _unitOfWork.Save();
+                                await _auditLogService.Add(userProfileAuditLogModel);
+                                await _unitOfWork.SaveAsync();
                                 #endregion
 
                                 TempData["SuccessMsg"] = _localizer[ActionMessageConstants.AddedSuccessfully].Value;
@@ -309,7 +310,7 @@ namespace Lumle.Module.Authorization.Controllers
                 return RedirectToAction("Index");
             }
 
-            var requestedUser = _profileService.GetSingle(x => x.UserId == user.Id);
+            var requestedUser = await _profileService.GetSingle(x => x.UserId == user.Id);
             if (requestedUser == null)
             {
                 TempData["ErrorMsg"] = _localizer[ActionMessageConstants.ResourceNotFoundErrorMessage].Value;
@@ -369,7 +370,7 @@ namespace Lumle.Module.Authorization.Controllers
                         return RedirectToAction("Index");
                     }
 
-                    var requestedUser = _profileService.GetSingle(x => x.UserId == model.Id);
+                    var requestedUser = await _profileService.GetSingle(x => x.UserId == model.Id);
                     if (requestedUser == null)
                     {
                         TempData["ErrorMsg"] = _localizer[ActionMessageConstants.ResourceNotFoundErrorMessage].Value;
@@ -437,7 +438,7 @@ namespace Lumle.Module.Authorization.Controllers
                         ComparisonType = ComparisonType.ObjectCompare,
                         LoggedUserEmail = loggedUser.Email
                     };
-                    _auditLogService.Add(userAuditLogModel);
+                    await _auditLogService.Add(userAuditLogModel);
 
                     #endregion
 
@@ -466,7 +467,7 @@ namespace Lumle.Module.Authorization.Controllers
                     requestedUser.StreetAddress = model.StreetAddress;
                     requestedUser.PostalCode = model.PostalCode;
 
-                    _profileService.Update(requestedUser);
+                    await _profileService.Update(requestedUser);
 
                     // For audit log of user identity
                     #region User Profile Audit
@@ -480,7 +481,7 @@ namespace Lumle.Module.Authorization.Controllers
                         LoggedUserEmail = loggedUser.Email
                     };
 
-                    _auditLogService.Add(userProfileAuditLogModel);
+                    await _auditLogService.Add(userProfileAuditLogModel);
                     #endregion
 
                     var currentRole = requestedUserRoles.FirstOrDefault();
@@ -511,7 +512,7 @@ namespace Lumle.Module.Authorization.Controllers
                         ComparisonType = ComparisonType.StringCompare
                     };
 
-                    _auditLogService.Add(roleAuditLogModel);
+                    await _auditLogService.Add(roleAuditLogModel);
                     #endregion
 
                     _context.SaveChanges();
@@ -558,7 +559,7 @@ namespace Lumle.Module.Authorization.Controllers
                     }
 
                     //make latest token valid
-                    var unUsedLastToken = _applicationTokenService.GetSingle(x => x.IsUsed == false &&
+                    var unUsedLastToken = await _applicationTokenService.GetSingle(x => x.IsUsed == false &&
                                                                                 x.UserId == user.Id &&
                                                                                 x.TokenType == TokenType.ConfirmEmail);
                     if (unUsedLastToken != null)
@@ -567,7 +568,7 @@ namespace Lumle.Module.Authorization.Controllers
                         unUsedLastToken.UsedDate = DateTime.UtcNow;
                         unUsedLastToken.LastUpdated = DateTime.UtcNow;
 
-                        _applicationTokenService.Update(unUsedLastToken);
+                        await _applicationTokenService.Update(unUsedLastToken);
                     }
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -584,7 +585,8 @@ namespace Lumle.Module.Authorization.Controllers
                         LastUpdated = DateTime.UtcNow
                     };
 
-                    _applicationTokenService.Add(appToken);
+                    await _applicationTokenService.Add(appToken);
+
                     _context.SaveChanges();
                     transaction.Commit();
 
@@ -642,12 +644,12 @@ namespace Lumle.Module.Authorization.Controllers
                         ComparisonType = ComparisonType.ObjectCompare,
                         LoggedUserEmail = loggedUser.Email
                     };
-                    _auditLogService.Add(auditLogModel);
+                    await _auditLogService.Add(auditLogModel);
                     #endregion
 
                     //Soft Delete
                     //User will removed from AspNet Identity but will remain in "UserProfile" table with flag IsDeleted TRUE.
-                    var requestedDeletedUser = _profileService.GetSingle(x => x.UserId == user.Id);
+                    var requestedDeletedUser = await _profileService.GetSingle(x => x.UserId == user.Id);
 
                     // Set old user profile data to an object for audit
                     var oldrequestedDeletedUser = new UserProfile
@@ -667,7 +669,7 @@ namespace Lumle.Module.Authorization.Controllers
                     requestedDeletedUser.DeletedDate = DateTime.UtcNow;
                     requestedDeletedUser.LastUpdated = DateTime.UtcNow;
 
-                    _profileService.Update(requestedDeletedUser);
+                    await _profileService.Update(requestedDeletedUser);
 
                     #region User Profile Update Audit                  
                     var userProfileAuditModel = new AuditLogModel
@@ -679,7 +681,7 @@ namespace Lumle.Module.Authorization.Controllers
                         ComparisonType = ComparisonType.ObjectCompare,
                         LoggedUserEmail = loggedUser.Email
                     };
-                    _auditLogService.Add(userProfileAuditModel);
+                    await _auditLogService.Add(userProfileAuditModel);
                     #endregion
 
                     _context.SaveChanges();
@@ -708,7 +710,7 @@ namespace Lumle.Module.Authorization.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            var requestedUser = _profileService.GetSingle(x => x.UserId == user.Id);
+            var requestedUser = await _profileService.GetSingle(x => x.UserId == user.Id);
             if(requestedUser == null)
             {
                 return RedirectToAction("Login", "Account");
@@ -767,7 +769,7 @@ namespace Lumle.Module.Authorization.Controllers
                         return RedirectToAction("Index");
                     }
 
-                    var requestedUser = _profileService.GetSingle(x => x.UserId == model.UserId);
+                    var requestedUser = await _profileService.GetSingle(x => x.UserId == model.UserId);
                     if (requestedUser == null)
                     {
                         TempData["ErrorMsg"] = _localizer[ActionMessageConstants.ResourceNotFoundErrorMessage].Value;
@@ -814,7 +816,7 @@ namespace Lumle.Module.Authorization.Controllers
                         ComparisonType = ComparisonType.ObjectCompare,
                         LoggedUserEmail = loggedUser.Email
                     };
-                    _auditLogService.Add(userAuditLogModel);
+                    await _auditLogService.Add(userAuditLogModel);
 
                     #endregion
 
@@ -843,7 +845,7 @@ namespace Lumle.Module.Authorization.Controllers
                     requestedUser.StreetAddress = model.StreetAddress;
                     requestedUser.PostalCode = model.PostalCode;
 
-                    _profileService.Update(requestedUser);
+                    await _profileService.Update(requestedUser);
 
                     // For audit log of user identity
                     #region User Profile Audit
@@ -857,7 +859,7 @@ namespace Lumle.Module.Authorization.Controllers
                         LoggedUserEmail = loggedUser.Email
                     };
 
-                    _auditLogService.Add(userProfileAuditLogModel);
+                    await _auditLogService.Add(userProfileAuditLogModel);
                     #endregion
 
                     _context.SaveChanges();
@@ -891,11 +893,11 @@ namespace Lumle.Module.Authorization.Controllers
                     {
                         var user = await GetCurrentUserAsync();
 
-                        var userProfile = _profileService.GetSingle(x => x.UserId == user.Id);
+                        var userProfile = await _profileService.GetSingle(x => x.UserId == user.Id);
                         userProfile.ProfileImage = imageUrl;
 
-                        _profileService.Update(userProfile);
-                        _unitOfWork.Save();
+                        await _profileService.Update(userProfile);
+                        await _unitOfWork.SaveAsync();
 
                         return Json(new { success = true, imageName = imageUrl, imageUrl = $"{Request.Scheme}://{Request.Host}{_urlHelper.Content("~/")}uploadedimages/{imageUrl}", message = "Image updated successfully" });
                     }

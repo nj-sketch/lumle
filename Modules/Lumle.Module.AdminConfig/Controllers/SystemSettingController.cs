@@ -71,7 +71,7 @@ namespace Lumle.Module.AdminConfig.Controllers
             var actionClaimResult = await _baseRoleClaimService.GetActionPrevilegeAsync(map, User);
             #endregion
 
-            var systemSettingEntity = _systemSettingService.GetSingle(x => x.Slug == SystemSetting.MaintenanceMode);
+            var systemSettingEntity = await _systemSettingService.GetSingle(x => x.Slug == SystemSetting.MaintenanceMode);
             var systemSettingModel = Mapper.Map<SystemSettingVM>(systemSettingEntity);
 
             systemSettingModel.Roles = await GetAllSupportedRolesAsync();
@@ -88,7 +88,7 @@ namespace Lumle.Module.AdminConfig.Controllers
             if (string.IsNullOrEmpty(model.Status) && model.Id <= 0)
                 return Json(new { success = false, messageTitle = _localizer[ActionMessageConstants.UnableToUpdateErrorMessage].Value, message = _localizer[ActionMessageConstants.UnableToUpdateErrorMessage].Value });
 
-            var data = _systemSettingService.GetSingle(x => x.Id == model.Id);
+            var data = await _systemSettingService.GetSingle(x => x.Id == model.Id);
             if (data == null) return Json(new { success = false, messageTitle = _localizer[ActionMessageConstants.ErrorOccured].Value, message = _localizer[ActionMessageConstants.ErrorOccured].Value });
 
             var oldAppSytemRecord = new AppSystem
@@ -147,7 +147,7 @@ namespace Lumle.Module.AdminConfig.Controllers
             data.LastUpdated = DateTime.UtcNow;
             data.LastUpdatedBy = currentUser.Email;
 
-            _systemSettingService.Update(data);
+            await _systemSettingService.Update(data);
 
             #region Maintainance Mode Audit Log
                 var oldBlockedRoleList = oldBlockedRoles.Select(item => item.RoleName).ToList();
@@ -163,11 +163,12 @@ namespace Lumle.Module.AdminConfig.Controllers
                     NewStringList = newblockedRoleList,
                     ComparisonType = ComparisonType.ObjectListCompare,
                 };
-                _auditLogService.Add(auditLogModel);
+
+                await _auditLogService.Add(auditLogModel);
 
             #endregion
 
-            _unitOfWork.Save();
+            await _unitOfWork.SaveAsync();
 
             return Json(new { success = true, messageTitle = _localizer[ActionMessageConstants.UpdatedSuccessfully].Value, message = _localizer[ActionMessageConstants.UpdatedSuccessfully].Value });
 
@@ -207,6 +208,7 @@ namespace Lumle.Module.AdminConfig.Controllers
                                     RoleId = r.Id,
                                     IsBlocked = r.IsBlocked
                                 }).ToList();
+
             return supportedRoles;
         }
         

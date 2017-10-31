@@ -1,28 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 using Lumle.Module.PublicUser.Entities;
 using Lumle.Data.Data.Abstracts;
 using NLog;
 using Lumle.Infrastructure.Constants.LumleLog;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace Lumle.Module.PublicUser.Services
 {
     public class PublicUserService : IPublicUserService
     {
-        
-        private readonly IRepository<CustomUser> _customUserRepository;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        private readonly IRepository<CustomUser> _customUserRepository;
 
         public PublicUserService(IRepository<CustomUser> customUserRepository)
         {
             _customUserRepository = customUserRepository;
         }
-        public void Add(CustomUser entity)
+
+        public async Task Add(CustomUser entity)
         {
             try
             {
-                _customUserRepository.Add(entity);
+                await _customUserRepository.Add(entity);
             }
             catch (Exception ex)
             {
@@ -31,11 +33,11 @@ namespace Lumle.Module.PublicUser.Services
             }
         }
 
-        public void DeleteWhere(Expression<Func<CustomUser, bool>> predicate)
+        public async Task DeleteWhere(Expression<Func<CustomUser, bool>> predicate)
         {
             try
             {
-                _customUserRepository.DeleteWhere(predicate);
+                await _customUserRepository.DeleteWhere(predicate);
             }
             catch (Exception ex)
             {
@@ -44,7 +46,7 @@ namespace Lumle.Module.PublicUser.Services
             }
         }
 
-        public IEnumerable<CustomUser> GetAll()
+        public IQueryable<CustomUser> GetAll()
         {
             try
             {
@@ -58,7 +60,7 @@ namespace Lumle.Module.PublicUser.Services
             }
         }
 
-        public IEnumerable<CustomUser> GetAll(Expression<Func<CustomUser, bool>> predicate)
+        public IQueryable<CustomUser> GetAll(Expression<Func<CustomUser, bool>> predicate)
         {
             try
             {
@@ -72,11 +74,11 @@ namespace Lumle.Module.PublicUser.Services
             }
         }
 
-        public CustomUser GetSingle(Expression<Func<CustomUser, bool>> predicate)
+        public async Task<CustomUser> GetSingle(Expression<Func<CustomUser, bool>> predicate)
         {
             try
             {
-                var customUser = _customUserRepository.GetSingle(predicate);
+                var customUser = await _customUserRepository.GetSingle(predicate);
                 return customUser;
             }
             catch (Exception ex)
@@ -86,11 +88,11 @@ namespace Lumle.Module.PublicUser.Services
             }
         }
 
-        public void Update(CustomUser entity)
+        public async Task Update(CustomUser entity)
         {
             try
             {
-                _customUserRepository.Update(entity);
+                await _customUserRepository.Update(entity);
             }
             catch (Exception ex)
             {

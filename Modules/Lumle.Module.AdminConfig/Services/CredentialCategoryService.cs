@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 using Lumle.Module.AdminConfig.Entities;
 using Lumle.Data.Data.Abstracts;
@@ -8,6 +7,7 @@ using System.Linq;
 using Lumle.Infrastructure.Constants.LumleLog;
 using NLog;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Lumle.Module.AdminConfig.Services
 {
@@ -21,7 +21,7 @@ namespace Lumle.Module.AdminConfig.Services
             _credentialCategoryRepository = credentialCategoryRepository;
         }
 
-        public IEnumerable<CredentialCategory> GetAll()
+        public IQueryable<CredentialCategory> GetAll()
         {
             try
             {
@@ -34,7 +34,7 @@ namespace Lumle.Module.AdminConfig.Services
             }
         }
 
-        public IEnumerable<CredentialCategory> GetAll(Expression<Func<CredentialCategory, bool>> predicate)
+        public IQueryable<CredentialCategory> GetAll(Expression<Func<CredentialCategory, bool>> predicate)
         {
             try
             {
@@ -47,7 +47,7 @@ namespace Lumle.Module.AdminConfig.Services
             }
         }
 
-        public IEnumerable<CredentialCategoryModel> GetAllCredentialCategory()
+        public IQueryable<CredentialCategoryModel> GetAllCredentialCategory()
         {
             try
             {
@@ -60,7 +60,7 @@ namespace Lumle.Module.AdminConfig.Services
                                 NameIdentifier = Regex.Replace(e.Name, @"\s+", "")
                             }).ToList();
 
-                return data.Select(x => { x.Sn = ++i; return x; }).ToList();
+                return data.Select(x => { x.Sn = ++i; return x; }).AsQueryable();
             }
             catch (Exception ex)
             {
@@ -69,11 +69,11 @@ namespace Lumle.Module.AdminConfig.Services
             }
         }
 
-        public CredentialCategory GetSingle(Expression<Func<CredentialCategory, bool>> predicate)
+        public async Task<CredentialCategory> GetSingle(Expression<Func<CredentialCategory, bool>> predicate)
         {
             try
             {
-                return _credentialCategoryRepository.GetSingle(predicate);
+                return await _credentialCategoryRepository.GetSingle(predicate);
             }
             catch (Exception ex)
             {

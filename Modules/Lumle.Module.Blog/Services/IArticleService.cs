@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using Lumle.Module.Blog.Entities;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Lumle.Module.Blog.Services
 {
@@ -10,11 +11,11 @@ namespace Lumle.Module.Blog.Services
     {
         int Count();
         int Count(Expression<Func<Article, bool>> predicate);
-        IEnumerable<Article> GetAll(Expression<Func<Article, bool>> predicate);
+        IQueryable<Article> GetAll(Expression<Func<Article, bool>> predicate);
         IQueryable<Article> GetAll();
-        Article GetSingle(Expression<Func<Article, bool>> predicate);
-        void Add(Article entity);
-        void Update(Article entity);
-        void DeleteWhere(Expression<Func<Article, bool>> predicate);
+        Task<Article> GetSingle(Expression<Func<Article, bool>> predicate);
+        Task Add(Article entity);
+        Task Update(Article entity);
+        Task DeleteWhere(Expression<Func<Article, bool>> predicate);
     }
 }

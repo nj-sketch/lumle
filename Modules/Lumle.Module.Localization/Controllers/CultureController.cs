@@ -175,7 +175,7 @@ namespace Lumle.Module.Localization.Controllers
             {
                 var loggedUser = await GetCurrentUserAsync(); //Get current logged in user
 
-                var entity = _resourceService.GetSingle(x => x.CultureId == resource.CultureId && x.ResourceCategoryId == resource.ResourceCategoryId && x.Key.Trim() == resource.Key.Trim());
+                var entity = await _resourceService.GetSingle(x => x.CultureId == resource.CultureId && x.ResourceCategoryId == resource.ResourceCategoryId && x.Key.Trim() == resource.Key.Trim());
 
                 if (entity != null)
                 {
@@ -193,7 +193,7 @@ namespace Lumle.Module.Localization.Controllers
 
                     // update in the database
                     entity.Value = resource.Value.Trim();
-                    _resourceService.Update(entity);
+                    await _resourceService.Update(entity);
 
                     #region Resource Audit Log
 
@@ -206,10 +206,10 @@ namespace Lumle.Module.Localization.Controllers
                         LoggedUserEmail = loggedUser.Email,
                         ComparisonType = ComparisonType.ObjectCompare
                     };
-                    _auditLogService.Add(auditLogModel);
+                    await _auditLogService.Add(auditLogModel);
 
                     #endregion
-                    _unitOfWork.Save();
+                    await _unitOfWork.SaveAsync();
 
                     ReloadLocalizationResourceCache(loggedUser.Culture);
 
@@ -227,7 +227,7 @@ namespace Lumle.Module.Localization.Controllers
                         CreatedDate = DateTime.UtcNow,
                         LastUpdated = DateTime.UtcNow
                     };
-                    _resourceService.Add(newResource);
+                    await _resourceService.Add(newResource);
 
                     #region Resource Create AuditLog
                     var oldResource = new Resource(); // dummy resource
@@ -240,8 +240,8 @@ namespace Lumle.Module.Localization.Controllers
                         LoggedUserEmail = loggedUser.Email,
                         ComparisonType = ComparisonType.ObjectCompare
                     };
-                    _auditLogService.Add(resourceAuditLogModel);
-                    _unitOfWork.Save();
+                    await _auditLogService.Add(resourceAuditLogModel);
+                    await _unitOfWork.SaveAsync();
                 }
                 #endregion
 
@@ -270,7 +270,7 @@ namespace Lumle.Module.Localization.Controllers
                     TempData["ErrorMsg"] = _localizer[ActionMessageConstants.SelectValidItemErrorMessage].Value;
                     return RedirectToAction("Index");
                 }
-                var culture = _cultureService.GetSingle(x => x.Name == selectedCulture.Trim() && !x.IsEnable);
+                var culture = await _cultureService.GetSingle(x => x.Name == selectedCulture.Trim() && !x.IsEnable);
 
                 if (culture == null)
                 {
@@ -281,7 +281,7 @@ namespace Lumle.Module.Localization.Controllers
                 culture.IsEnable = true;
                 culture.IsActive = false;
 
-                _cultureService.Update(culture);
+                await _cultureService.Update(culture);
 
                 #region Culture Audit Log
                 var oldCulture = new Culture(); // Storage of this null object shows data before creation = nothing!
@@ -295,10 +295,10 @@ namespace Lumle.Module.Localization.Controllers
                     ComparisonType = ComparisonType.ObjectCompare
                 };
 
-                _auditLogService.Add(auditLogModel);
+                await _auditLogService.Add(auditLogModel);
 
                 #endregion
-                _unitOfWork.Save();
+                await _unitOfWork.SaveAsync();
 
                 _memoryCache.Remove(CacheConstants.LocalizationCultureCache);
                 TempData["SuccessMsg"] = _localizer[ActionMessageConstants.AddedSuccessfully].Value;
@@ -319,7 +319,7 @@ namespace Lumle.Module.Localization.Controllers
             {
                 if (cultureViewModel.Name == DefaultCultureConstants.DefaultCultureName) return Json(new { success = false, messageTitle = _localizer[ActionMessageConstants.ErrorOccured].Value, message = _localizer[ActionMessageConstants.InternalServerErrorMessage].Value });
 
-                var culture = _cultureService.GetSingle(x => x.IsEnable && x.Name == cultureViewModel.Name.Trim());
+                var culture = await _cultureService.GetSingle(x => x.IsEnable && x.Name == cultureViewModel.Name.Trim());
                 if (culture == null)
                 {
                     return Json(new { success = false, messageTitle = _localizer[ActionMessageConstants.ErrorOccured].Value, message = _localizer[ActionMessageConstants.ResourceNotFoundErrorMessage].Value });
@@ -327,8 +327,8 @@ namespace Lumle.Module.Localization.Controllers
                 _memoryCache.Remove(CacheConstants.LocalizationCultureCache);
 
                 culture.IsActive = cultureViewModel.IsActive;
-                _cultureService.Update(culture);
-                _unitOfWork.Save();
+                await _cultureService.Update(culture);
+                await _unitOfWork.SaveAsync();
 
                 var loggedUser = await _userManager.GetUserAsync(User);
                 if (loggedUser.Culture != cultureViewModel.Name.Trim() || cultureViewModel.IsActive)
@@ -418,6 +418,7 @@ namespace Lumle.Module.Localization.Controllers
                     RecordsFiltered = totalResource,
                     RecordsTotal = totalResource
                 };
+
                 return Json(resource);
             }
             catch (Exception ex)
@@ -462,7 +463,7 @@ namespace Lumle.Module.Localization.Controllers
                 {
                     foreach (var data in excelDataModel)
                     {
-                        var entity = _resourceService.GetSingle(x => x.CultureId == culture.Id && x.ResourceCategoryId == model.ResourceCategoryId && x.Key.Trim() == data.Key.Trim());
+                        var entity = await _resourceService.GetSingle(x => x.CultureId == culture.Id && x.ResourceCategoryId == model.ResourceCategoryId && x.Key.Trim() == data.Key.Trim());
                         if (entity != null)
                         {
                             // Get old entity data
@@ -476,7 +477,7 @@ namespace Lumle.Module.Localization.Controllers
 
                             // update in the database
                             entity.Value = data.Value.Trim();
-                            _resourceService.Update(entity);
+                            await _resourceService.Update(entity);
                             count++;
 
                             #region Resource Audit Log
@@ -490,8 +491,9 @@ namespace Lumle.Module.Localization.Controllers
                                 LoggedUserEmail = loggedUser.Email,
                                 ComparisonType = ComparisonType.ObjectCompare
                             };
-                            _auditLogService.Add(auditLogModel);
-                            _unitOfWork.Save();
+
+                            await _auditLogService.Add(auditLogModel);
+                            await _unitOfWork.SaveAsync();
                             #endregion 
                         }
                         else
@@ -508,8 +510,8 @@ namespace Lumle.Module.Localization.Controllers
                                     CreatedDate = DateTime.UtcNow,
                                     LastUpdated = DateTime.UtcNow
                                 };
-                                _resourceService.Add(newResource);
-                                _unitOfWork.Save();
+                                await _resourceService.Add(newResource);
+                                await _unitOfWork.SaveAsync();
                                 count++;
                            
 
@@ -524,8 +526,8 @@ namespace Lumle.Module.Localization.Controllers
                                 LoggedUserEmail = loggedUser.Email,
                                 ComparisonType = ComparisonType.ObjectCompare
                             };
-                            _auditLogService.Add(resourceAuditLogModel);
-                            _unitOfWork.Save();
+                            await _auditLogService.Add(resourceAuditLogModel);
+                            await _unitOfWork.SaveAsync();
 
                                 #endregion
                             }
