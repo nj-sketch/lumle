@@ -1,4 +1,4 @@
-﻿var loggedUser = "";
+var loggedUser = "";
 var loggedUserRolePriority = "";
 $(function () {
     var table;

@@ -1,4 +1,4 @@
-﻿$('#credentialCategoryDataTable').DataTable({
+$('#credentialCategoryDataTable').DataTable({
     "language": {
         "url": languageFileUrl
     },

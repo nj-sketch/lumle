@@ -1,4 +1,4 @@
-﻿$(document).ready(function () {
+$(document).ready(function () {
     var url = rootDir + "adminconfig/systemhealth/status";
     $.getJSON(url, function (data) {
         for (var i = 0; i < data.length; i++) {

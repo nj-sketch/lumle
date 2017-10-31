@@ -1,4 +1,4 @@
-﻿$(function () {
+$(function () {
     var readConstant = "read";
     var deleteConstant = "delete";
     $("#info").html("");

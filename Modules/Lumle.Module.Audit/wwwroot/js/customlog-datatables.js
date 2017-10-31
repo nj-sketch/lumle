@@ -1,4 +1,4 @@
-﻿var startDate = $("#dp1").val();
+var startDate = $("#dp1").val();
 var endDate = $("#dp2").val();
 var username = $('#UsernameSearch').val();
 var logLevel = $('#LogLevelSearch').val();

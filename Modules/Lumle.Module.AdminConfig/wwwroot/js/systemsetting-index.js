@@ -1,4 +1,4 @@
-﻿
+
 $(function () {
     if (hasPermissionForUpdate === false) {
         $("#systemMaintananceModeclass").prop("disabled", true);
