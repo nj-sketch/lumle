@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
 
     $('#mainForm').on('submit', function () {
         var form = $(this);

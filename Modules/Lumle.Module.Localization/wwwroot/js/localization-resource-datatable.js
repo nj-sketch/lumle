@@ -1,4 +1,4 @@
-﻿var resourceFilterBy = 0;
+var resourceFilterBy = 0;
 var table;
 
 $(function () {

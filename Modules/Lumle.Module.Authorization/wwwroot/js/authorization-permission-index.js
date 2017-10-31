@@ -1,4 +1,4 @@
-﻿$(function () {
+$(function () {
 
     //$(".btnDelete").on("click", function (e) {
     //    e.preventDefault();

@@ -104,7 +104,7 @@ namespace Lumle.Web
             }
             else
             {
-                app.UseExceptionHandler("/Error");
+                app.UseExceptionHandler("/Home/Error");
             }
 
             app.UseAuthentication();
@@ -120,7 +120,7 @@ namespace Lumle.Web
             // Use only while using scheduler
             // app.UseSchedularMiddleware();
 
-            app.UseStatusCodePagesWithRedirects("~/{0}");
+            app.UseStatusCodePagesWithReExecute("/Home/ErrorWithCode/{0}");
             // For HTMl minifier
             app.UseWebMarkupMin();
             app.UseMvc(routes =>
