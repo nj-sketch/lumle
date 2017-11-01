@@ -1,18 +1,20 @@
-﻿@using System.Threading.Tasks
-@using Microsoft.AspNetCore.Localization
+﻿@using Microsoft.AspNetCore.Localization
 @using Lumle.Module.Localization.ViewModels
-@inject IViewLocalizer Localizer
+@using Lumle.Module.Localization.Services;
 
-@model List<EnabledCultureListVM>
+@inject ICultureService CultureService
+@inject IViewLocalizer Localizer
 
 @{
     var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+    var data = CultureService.GetAll(x => x.IsEnable && x.IsActive)
+                      .Select(c => new EnabledCultureListVM
+                      {
+                          Name = c.Name,
+                          DisplayName = c.DisplayName
+                      }).ToList();
 }
 
-
-<style type="text/css">
-  
-</style>
 
 <li class="dropdown language-dropdown">
     <a href="#" class="ropdown-toggle " data-toggle="dropdown">
@@ -20,7 +22,7 @@
         <span class="caret"></span>
     </a>
     <ul class="dropdown-menu lang-selector">
-        @foreach (var lang in Model)
+        @foreach (var lang in data)
         {
             if (lang.Name == requestCulture.RequestCulture.UICulture.Name)
             {
