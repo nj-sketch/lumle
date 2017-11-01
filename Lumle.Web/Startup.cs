@@ -92,22 +92,20 @@ namespace Lumle.Web
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, BaseContext context)
         {
-            env.ConfigureNLog("nlog.config");
-            loggerFactory.AddNLog();
-            app.AddNLogWeb();
+            //env.ConfigureNLog("nlog.config");
+            //loggerFactory.AddNLog();
+            //app.AddNLogWeb();
 
-            //if (env.IsDevelopment())
-            //{
-            //    app.UseDeveloperExceptionPage();
-            //    app.UseDatabaseErrorPage();
-            //    app.UseBrowserLink();
-            //}
-            //else
-            //{
-            //    app.UseExceptionHandler("/Home/Error");
-            //}
-
-            app.UseExceptionHandler("/Home/Error");
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
+                app.UseBrowserLink();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+            }
 
             app.UseAuthentication();
             app.SeedData(context);
@@ -115,7 +113,7 @@ namespace Lumle.Web
             app.UseWebOptimizer();
             app.UseStaticFiles();
             // Checking System maintenance mode 
-            app.UseAppSystemMiddleware();
+            //app.UseAppSystemMiddleware();
 
             // Use only while using scheduler
             // app.UseSchedularMiddleware();

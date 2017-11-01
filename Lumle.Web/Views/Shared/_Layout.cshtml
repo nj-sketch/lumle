@@ -46,7 +46,7 @@
                 </div><!-- #header-nav-left -->
 
                 <div id="header-nav-right">
-                    <vc:select-language></vc:select-language>
+                    @await Html.PartialAsync("_SelectLanguagePartial")
                 </div>
 
             </div>
