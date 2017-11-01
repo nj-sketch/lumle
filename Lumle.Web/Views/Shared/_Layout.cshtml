@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Lumle.Infrastructure.Models
+@inject IOptionsSnapshot<LumleSettings> settings
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
 
@@ -57,7 +60,19 @@
                 <div id="page-content">                
                         @RenderBody()
                 </div>
+
+                <footer id="page-content">
+                    <div class="footer-section">
+                        <p>&copy; @settings.Value.Copyright</p>
+                    </div>
+
+                    <div class="footer-design">
+                        <p>Developed By:</p>
+                        <a href="@settings.Value.DeveloperSite">@settings.Value.Developer</a>
+                    </div>
+                </footer>
             </div>
+
         </div>
         
 
