@@ -80,12 +80,12 @@ namespace Lumle.Web
                  options.MinificationSettings.WhitespaceMinificationMode = WhitespaceMinificationMode.Safe;
              });
 
-            //services.AddWebOptimizer(pipeline =>
-            //{
-            //    pipeline.MinifyJsFiles();
-            //    pipeline.MinifyCssFiles()
-            //            .InlineImages(1);
-            //});
+            services.AddWebOptimizer(pipeline =>
+            {
+                pipeline.MinifyJsFiles();
+                pipeline.MinifyCssFiles()
+                        .InlineImages(1);
+            });
 
             return services.Build(Configuration, _hostingEnvironment);
         }
@@ -109,11 +109,9 @@ namespace Lumle.Web
 
             app.UseAuthentication();
             app.SeedData(context);
-
             app.UseCustomizedRequestLocalization();
-            //app.UseWebOptimizer();
-            app.UseCustomizedStaticFiles(Modules);
-
+            app.UseWebOptimizer();
+            app.UseStaticFiles();
             // Checking System maintenance mode 
             app.UseAppSystemMiddleware();
 
@@ -123,6 +121,7 @@ namespace Lumle.Web
             app.UseStatusCodePagesWithReExecute("/Home/ErrorWithCode/{0}");
             // For HTMl minifier
             app.UseWebMarkupMin();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

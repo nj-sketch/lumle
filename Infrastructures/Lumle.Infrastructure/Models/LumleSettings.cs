@@ -8,5 +8,6 @@
         public string DeveloperSite { get; set; }
         public string ContactInfo { get; set; }
         public string Version { get; set; }
+        public string Copyright { get; set; }
     }
 }

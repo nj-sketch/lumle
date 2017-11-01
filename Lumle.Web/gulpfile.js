@@ -7,8 +7,12 @@ var gulp = require("gulp"),
 
 var paths = {
     devModules: "../Modules/",
-    hostModules: "./Modules/"
+    hostModules: "./Modules/",
+    webroot: "./wwwroot/"
 };
+
+paths.css = paths.webroot + "css/";
+paths.js = paths.webroot + "js/";
 
 var modules = [
     "Lumle.Module.CMS",
@@ -30,8 +34,14 @@ gulp.task("clean-module", function () {
 
 gulp.task("copy-modules", ["clean-module"], function () {
     modules.forEach(function (module) {
-        gulp.src([paths.devModules + module + "/Views/**/*.*", paths.devModules + module + "/wwwroot/**/*.*"], { base: module })
+        gulp.src([paths.devModules + module + "/Views/**/*.*"], { base: module })
             .pipe(gulp.dest(paths.hostModules + module));
+
+        gulp.src(paths.devModules + module + "/wwwroot/css/*.*")
+            .pipe(gulp.dest(paths.css));
+
+        gulp.src(paths.devModules + module + "/wwwroot/js/*.*")
+            .pipe(gulp.dest(paths.js));
 
         gulp.src(paths.devModules + module + "/bin/Debug/netcoreapp2.0/**/*.*")
             .pipe(gulp.dest(paths.hostModules + module + "/bin"));
