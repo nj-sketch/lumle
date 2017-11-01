@@ -14,7 +14,7 @@
     top: 75px;
 }
 .scroller-icon h6 {
-    font-size: 24px;
+    font-size: 26px;
     margin-left: 0;
     color: rgba(255,255,255,.7);
 }
@@ -24,11 +24,15 @@
     text-align: left;
 }
 .scroller-icon ul li a {
-    color: #fff;
+    color: rgba(255,255,255,0.7);
 }
 
+.scroller-icon ul li a:hover{
+    color:#fff;
+}       
 .scroller-icon ul li {
     list-style: none;
+    color: rgba(255,255,255,0.7);
 }
 
 .socailnetwork ul li {
@@ -41,6 +45,8 @@
 
 .socailnetwork p {
     text-align: center;
+    margin-top: 6%;
+    color: rgba(255,255,255,0.7);
 }
 
 .scroller-icon i {
@@ -50,8 +56,18 @@
 
 .socailnetwork ul li i {
     font-size: 24px !important;
+    color: rgba(255, 255, 255, 0.6);
 }
 
 .socailnetwork ul li i:hover {
-    color: #eee;
+    color: #fff;
 }
+
+.hero-box {
+    padding: 0em 0 14em 0;
+}
+
+.alert-danger{
+    margin:0 15px 0 15px;
+}
+

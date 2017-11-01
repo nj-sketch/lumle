@@ -96,16 +96,18 @@ namespace Lumle.Web
             loggerFactory.AddNLog();
             app.AddNLogWeb();
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
-                app.UseBrowserLink();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-            }
+            //if (env.IsDevelopment())
+            //{
+            //    app.UseDeveloperExceptionPage();
+            //    app.UseDatabaseErrorPage();
+            //    app.UseBrowserLink();
+            //}
+            //else
+            //{
+            //    app.UseExceptionHandler("/Home/Error");
+            //}
+
+            app.UseExceptionHandler("/Home/Error");
 
             app.UseAuthentication();
             app.SeedData(context);

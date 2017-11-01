@@ -53,12 +53,6 @@ namespace Lumle.Module.Authorization.DbSeed
                new Permission {Slug="audit.auditlog.read", DisplayName= "View Audit Log", Menu="audit", SubMenu="auditlog", CreatedDate=DateTime.UtcNow, LastUpdated=DateTime.UtcNow},
                new Permission {Slug="audit.customlog.read", DisplayName= "View Custom Log", Menu="audit", SubMenu="customlog", CreatedDate=DateTime.UtcNow, LastUpdated=DateTime.UtcNow},
 
-               //Calendar
-               new Permission {Slug="calendar.calendar.create", DisplayName= "Add Calendar", Menu="calendar", SubMenu="", CreatedDate=DateTime.UtcNow, LastUpdated=DateTime.UtcNow},
-               new Permission {Slug="calendar.calendar.read", DisplayName= "View Calendar", Menu="calendar", SubMenu="", CreatedDate=DateTime.UtcNow, LastUpdated=DateTime.UtcNow},
-               new Permission {Slug="calendar.calendar.update", DisplayName= "Edit Calendar", Menu="calendar", SubMenu="", CreatedDate=DateTime.UtcNow, LastUpdated=DateTime.UtcNow},
-               new Permission {Slug="calendar.calendar.delete", DisplayName= "Delete Calendar", Menu="calendar", SubMenu="", CreatedDate=DateTime.UtcNow, LastUpdated=DateTime.UtcNow},
-
                //AdminConfig >> EmailTemplate
                new Permission {Slug="adminconfig.emailtemplate.read", DisplayName= "View Email Template", Menu="adminconfig", SubMenu="emailtemplate", CreatedDate=DateTime.UtcNow, LastUpdated=DateTime.UtcNow},
                new Permission {Slug="adminconfig.emailtemplate.update", DisplayName= "Edit Email Template", Menu="adminconfig", SubMenu="emailtemplate", CreatedDate=DateTime.UtcNow, LastUpdated=DateTime.UtcNow},

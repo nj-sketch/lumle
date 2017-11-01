@@ -101,9 +101,34 @@
     float: left;
     line-height: 25px;
 }
+footer {
+    padding: 35px 20px !important;
+    text-align: center;
+}
 
-@media (max-width:1200px){
-    .dataTable .col-sm-12 {
+.footer-section p {
+    color: #434348;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.footer-design p {
+    color: #aeaeae;
+    display: block;
+    font-size: 14px;
+    margin: 15px 0 10px 0;
+}
+
+.footer-design a {
+    color: #434348;
+    font-size: 16px;   
+}
+
+.footer-design a:hover {
+    color: #1a9fdc;
+}
+    @media (max-width:1200px) {
+        .dataTable .col-sm-12 {
         overflow-x: scroll;
     }
 }

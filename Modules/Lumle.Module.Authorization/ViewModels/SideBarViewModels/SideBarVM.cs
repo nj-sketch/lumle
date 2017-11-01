@@ -55,18 +55,10 @@ namespace Lumle.Module.Authorization.ViewModels.SideBarViewModels
             new SideBarItemVM { Name = "customlog", DisplayName = "Custom Log", Icon = "", Sequence = 2, MenuLevel = 1 },
             new SideBarItemVM
             {
-                Name = "calendar",
-                DisplayName = "Calendar",
-                Icon = "glyph-icon icon-calendar",
-                Sequence = 6,
-                MenuLevel = 0
-            },
-            new SideBarItemVM
-            {
                 Name = "adminconfig",
                 DisplayName = "Configuration",
                 Icon = "glyph-icon icon-gear",
-                Sequence = 7,
+                Sequence = 6,
                 MenuLevel = 0
             },
             new SideBarItemVM{ Name = "emailtemplate", DisplayName = "Email Template", Icon = "", Sequence = 1, MenuLevel = 1 },
@@ -78,7 +70,7 @@ namespace Lumle.Module.Authorization.ViewModels.SideBarViewModels
                 Name = "publicuser",
                 DisplayName = "Public User",
                 Icon = "glyph-icon icon-group",
-                Sequence = 8,
+                Sequence = 7,
                 MenuLevel = 0
             }
         };
