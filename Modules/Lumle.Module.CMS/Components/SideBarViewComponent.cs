@@ -38,18 +38,19 @@ namespace Lumle.Module.CMS.Components
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
+            var orderedMenuList = new List<SideBarMenuVM>();
             var user = await GetCurrentUserAsync();
 
-            if (user == null) return null;
+            if (user == null) return View("Sidebar", orderedMenuList);
 
             var role = await _userManager.GetRolesAsync(user);
 
-            if (!role.Any()) return null;
+            if (!role.Any()) return View("Sidebar", orderedMenuList);
 
             // Get role associated with the user
             var roleModel = await _roleManager.FindByNameAsync(role.FirstOrDefault());
 
-            if (_memoryCache.TryGetValue(CacheConstants.AuthorizationSidebarMenuCache + roleModel, out List<SideBarMenuVM> orderedMenuList)) return View(orderedMenuList);
+            if (_memoryCache.TryGetValue(CacheConstants.AuthorizationSidebarMenuCache + roleModel, out orderedMenuList)) return View("Sidebar",orderedMenuList);
 
             var roleClaims = _baseRoleClaimService.GetAll(x => x.RoleId == roleModel.Id).ToList();
 
@@ -74,7 +75,7 @@ namespace Lumle.Module.CMS.Components
             // Get default sidebar list
             var sideBar = new SideBarVM();
             var defaultMenuList = sideBar.SideBarItems;
-            orderedMenuList = new List<SideBarMenuVM>();
+
             var menuList = new List<SideBarMenuVM>();
 
             foreach (var filteredMenu in filteredPermissions)
@@ -113,7 +114,7 @@ namespace Lumle.Module.CMS.Components
 
             _memoryCache.Set(CacheConstants.AuthorizationSidebarMenuCache + roleModel, orderedMenuList, cacheOption);
 
-            return View(orderedMenuList);
+            return View("Sidebar",orderedMenuList);
         }
 
         private async Task<User> GetCurrentUserAsync()

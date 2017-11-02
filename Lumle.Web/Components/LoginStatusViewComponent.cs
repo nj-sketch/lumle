@@ -1,6 +1,7 @@
 ﻿using Lumle.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace Lumle.Web.Components
@@ -18,15 +19,23 @@ namespace Lumle.Web.Components
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            if (_signInManager.IsSignedIn(HttpContext.User))
+            try
             {
-                var user = await _userManager.GetUserAsync(HttpContext.User);
-                return View("LoggedIn", user);
+                if (_signInManager.IsSignedIn(HttpContext.User))
+                {
+                    var user = await _userManager.GetUserAsync(HttpContext.User);
+                    return View("LoggedIn", user);
+                }
+                else
+                {
+                    return View();
+                }
             }
-            else
+            catch(Exception ex)
             {
-                return View();
+                return Content(ex.Message);
             }
+         
         }
     }
 }
