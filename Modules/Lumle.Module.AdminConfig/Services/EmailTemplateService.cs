@@ -7,6 +7,7 @@ using Lumle.Infrastructure.Constants.LumleLog;
 using Lumle.Module.AdminConfig.Models;
 using NLog;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace Lumle.Module.AdminConfig.Services
 {
@@ -59,7 +60,7 @@ namespace Lumle.Module.AdminConfig.Services
             }
         }
 
-        public IQueryable<EmailTemplateModel> GetAllEmailTemplate()
+        public IEnumerable<EmailTemplateModel> GetAllEmailTemplate()
         {
             try
             {
@@ -73,7 +74,7 @@ namespace Lumle.Module.AdminConfig.Services
                                Subject=e.Subject
                             }).ToList();
 
-                return data.Select(x => { x.Sn = ++i; return x; }).AsQueryable();
+                return data.Select(x => { x.Sn = ++i; return x; });
             }
             catch (Exception ex)
             {

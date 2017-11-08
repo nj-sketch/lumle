@@ -92,9 +92,9 @@ namespace Lumle.Web
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, BaseContext context)
         {
-            //env.ConfigureNLog("nlog.config");
-            //loggerFactory.AddNLog();
-            //app.AddNLogWeb();
+            env.ConfigureNLog("nlog.config");
+            loggerFactory.AddNLog();
+            app.AddNLogWeb();
 
             if (env.IsDevelopment())
             {
