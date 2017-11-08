@@ -37,13 +37,14 @@ namespace Lumle.Web.Infrastructures.Middlewares
                         if (role.IsBlocked)
                         {
                            await signManager.SignOutAsync();
-                            httpContext.Response.Redirect("./maintenancemode", true);
-                            return;
+                           httpContext.Response.Redirect("./maintenancemode", true);
+                           return;
                         }
                     }
                 }
-            }  
-                await _next.Invoke(httpContext);
+            }
+
+            await _next.Invoke(httpContext);
         }
 
         #region Helpers

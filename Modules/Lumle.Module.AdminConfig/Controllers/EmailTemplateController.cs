@@ -22,6 +22,7 @@ using Lumle.Core.Services.Abstracts;
 using System.Security.Claims;
 using System.Collections.Generic;
 using Lumle.Infrastructure.Constants.ActionConstants;
+using System.Linq;
 
 namespace Lumle.Module.AdminConfig.Controllers
 {
@@ -59,7 +60,7 @@ namespace Lumle.Module.AdminConfig.Controllers
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.AdminConfigEmailTemplateView)]
         public IActionResult Index()
         {
-            var emailTemplates = _emailTemplateService.GetAllEmailTemplate();
+            var emailTemplates = _emailTemplateService.GetAllEmailTemplate().ToList();
 
             ViewBag.EmailTemplateUpdated = TempData["EmailTemplateUpdated"]; // for email template edit case
             return View(emailTemplates);

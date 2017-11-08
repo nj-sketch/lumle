@@ -1,6 +1,7 @@
 ﻿using Lumle.Module.AdminConfig.Entities;
 using Lumle.Module.AdminConfig.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -14,6 +15,6 @@ namespace Lumle.Module.AdminConfig.Services
         Task<EmailTemplate> GetSingle(Expression<Func<EmailTemplate, bool>> predicate);
         Task Add(EmailTemplate entity);
         Task Update(EmailTemplate entity);
-        IQueryable<EmailTemplateModel> GetAllEmailTemplate();
+        IEnumerable<EmailTemplateModel> GetAllEmailTemplate();
     }
 }

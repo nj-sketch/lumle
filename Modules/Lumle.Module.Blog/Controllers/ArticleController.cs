@@ -130,8 +130,14 @@ namespace Lumle.Module.Blog.Controllers
             articleModel.LastUpdated = DateTime.UtcNow;
             articleModel.Slug = "Test slug";
             articleModel.FeaturedImageUrl = _imageUrl;
-            // Convert Base64 image to image format
-            articleModel.Content = await SaveFilesToDisk(articleModel.Content);
+
+            // Check if the content field is null
+            if (!String.IsNullOrEmpty(articleModel.Content))
+            {
+                // Convert Base64 image to image format
+                articleModel.Content = await SaveFilesToDisk(articleModel.Content);
+            }
+
             var articleEntity = Mapper.Map<Article>(articleModel);
 
             await _articleService.Add(articleEntity);
@@ -205,7 +211,13 @@ namespace Lumle.Module.Blog.Controllers
 
             // update in database
             article.Title = model.Title;
-            article.Content = await SaveFilesToDisk(model.Content);
+
+            // Check if content field is null or empty
+            if (!String.IsNullOrEmpty(model.Content))
+            {
+                article.Content = await SaveFilesToDisk(model.Content);
+            }
+
             article.FeaturedImageUrl = _imageUrl ?? article.FeaturedImageUrl;
 
             await _articleService.Update(article);
