@@ -24,30 +24,13 @@
 
     <div class="bg-color">
         <div class="profile-avatar">
-            @if (!string.IsNullOrEmpty(Model.ProfileImageUrl))
-            {
-                <img src="@Model.ProfileImageUrl" id="profileImage" class="image" alt="Featured Image" />
-
-                <div class="overlay">
-                    <div class="edit-avatar">
-                        <input type="file" name="myProfileImage" id="myProfileImageInput" accept="image/png,image/jpg,image/jpeg">
-                        <i class="glyph-icon icon-camera"></i>
-                    </div>
+            <img src="@Model.ProfileImageUrl" id="profileImage" class="image profile-img" alt="" />
+            <div class="overlay">
+                <div class="edit-avatar">
+                    <input type="file" name="myProfileImage" id="myProfileImageInput" accept="image/png,image/jpg,image/jpeg">
+                    <i class="glyph-icon icon-camera"></i>
                 </div>
-            }
-            else
-            {
-                <div class="avatar">
-                    <button class="btn custom-btn">Lumle</button>
-                </div>
-
-                <div class="overlay">
-                    <div class="edit-avatar">
-                        <input type="file" name="myProfileImage" id="myProfileImageInput" accept="image/png,image/jpg,image/jpeg">
-                        <i class="glyph-icon icon-camera"></i>
-                    </div>
-                </div>
-            }
+            </div>
         </div>
     </div>
     <div class="panel-body">
