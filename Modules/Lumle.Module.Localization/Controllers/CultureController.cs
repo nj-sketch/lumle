@@ -364,7 +364,7 @@ namespace Lumle.Module.Localization.Controllers
         /// <returns></returns>
         [HttpPost("DataHandler")]
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.LocalizationCultureView)]
-        public JsonResult DataHandler([FromBody] CultureDTParameters parameters)
+        public async Task<JsonResult> DataHandler([FromBody] CultureDTParameters parameters)
         {
             try
             {
@@ -372,13 +372,13 @@ namespace Lumle.Module.Localization.Controllers
                 switch (parameters.ResourceCategoryId)
                 {
                     case 1:// Get only label
-                        resources = _resourceService.GetAllResource(1, parameters.Culture.Trim());
+                        resources =  await _resourceService.GetAllResource(1, parameters.Culture.Trim());
                         break;
                     case 2:// get only message
-                        resources = _resourceService.GetAllResource(2, parameters.Culture.Trim());
+                        resources =   await _resourceService.GetAllResource(2, parameters.Culture.Trim());
                         break;
                     default:
-                        resources = _resourceService.GetAllResource(parameters.Culture.Trim());
+                        resources = await _resourceService.GetAllResource(parameters.Culture.Trim());
                         break;
                 }
                 List<ResourceModel> filteredResource;
