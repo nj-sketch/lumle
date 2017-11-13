@@ -34,7 +34,7 @@
             }
         }
     </ul>
-    <form asp-controller="Localization" asp-action="SetLanguage" asp-route-returnUrl="@Context.Request.Path"
+    <form asp-controller="Culture" asp-action="SetLanguage" asp-route-returnUrl="@Context.Request.Path"
           method="post" id="lang-form" role="form">
         <input type="hidden" name="culture" value="@requestCulture.RequestCulture.UICulture.Name" />
     </form>
