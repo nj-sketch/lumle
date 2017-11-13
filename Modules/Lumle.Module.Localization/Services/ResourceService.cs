@@ -80,11 +80,11 @@ namespace Lumle.Module.Localization.Services
             }
         }
 
-        public IEnumerable<ResourceModel> GetAllResource(string culture)
+        public async Task<IEnumerable<ResourceModel>> GetAllResource(string culture)
         {
             try
             {
-                var cultureEntity = _cultureRespository.GetSingle(x => x.Name == culture.Trim());
+                var cultureEntity = await _cultureRespository.GetSingle(x => x.Name == culture.Trim());
                 if (cultureEntity == null) return null;
 
                 var resource = (from e in _resourceRepository.GetAll()
@@ -106,11 +106,11 @@ namespace Lumle.Module.Localization.Services
             }
         }
 
-        public IEnumerable<ResourceModel> GetAllResource(int resourceCategoryId, string culture)
+        public async Task<IEnumerable<ResourceModel>> GetAllResource(int resourceCategoryId, string culture)
         {
             try
             {
-                var cultureEntity = _cultureRespository.GetSingle(x => x.Name == culture.Trim());
+                var cultureEntity = await _cultureRespository.GetSingle(x => x.Name == culture.Trim());
                 if (cultureEntity == null) return null;
 
                 var resource = (from e in _resourceRepository.GetAll()

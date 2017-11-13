@@ -16,9 +16,8 @@ namespace Lumle.Module.Localization.Services
         Task Add(Resource entity);
         Task Update(Resource entity);
         Task DeleteWhere(Expression<Func<Resource, bool>> predicate);
-        IEnumerable<ResourceModel> GetAllResource(string culture);
-        IEnumerable<ResourceModel> GetAllResource(int resourceCategoryId, string culture);
-
-        bool IsCultureContainKey(string culture, int resourceCategoryId, string key);
+        Task<IEnumerable<ResourceModel>> GetAllResource(string culture);
+        Task<IEnumerable<ResourceModel>> GetAllResource(int resourceCategoryId, string culture);
+        Boolean IsCultureContainKey(string culture, int resourceCategoryId, string key);
     }
 }
