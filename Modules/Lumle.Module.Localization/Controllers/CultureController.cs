@@ -228,6 +228,7 @@ namespace Lumle.Module.Localization.Controllers
                         LastUpdated = DateTime.UtcNow
                     };
                     await _resourceService.Add(newResource);
+                    await _unitOfWork.SaveAsync();
 
                     #region Resource Create AuditLog
                     var oldResource = new Resource(); // dummy resource
