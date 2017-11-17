@@ -1,4 +1,5 @@
-﻿using Lumle.Module.AdminConfig.Entities;
+﻿using Lumle.Data.Models;
+using Lumle.Module.AdminConfig.Entities;
 using Lumle.Module.AdminConfig.Models;
 using System;
 using System.Linq;
@@ -9,10 +10,7 @@ namespace Lumle.Module.AdminConfig.Services
 {
     public interface ICredentialService
     {
-        IQueryable<Credential> GetAll(Expression<Func<Credential, bool>> predicate);
-        IQueryable<Credential> GetAll();
-        Task<Credential> GetSingle(Expression<Func<Credential, bool>> predicate);
-        Task Update(Credential entity);
+        Task<Credential> Update(CredentialModel model, User loggedUser);
         IQueryable<CredentialModel> GetAllCredential(Expression<Func<Credential, bool>> predicate);
     }
 }

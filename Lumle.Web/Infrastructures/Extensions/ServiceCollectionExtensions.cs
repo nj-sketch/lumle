@@ -26,7 +26,6 @@ using Microsoft.Extensions.Localization;
 using Lumle.Data.Models;
 using Lumle.Data.Data;
 using Lumle.Data.Extensions;
-using Lumle.Module.Schedular.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -178,23 +177,17 @@ namespace Lumle.Web.Infrastructures.Extensions
             });
 
             services.AddScoped<ISystemSettingService, SystemSettingService>();
-            services.AddScoped<IApplicationTokenService, ApplicationTokenService>();
             services.AddSingleton<ITempDataProvider, CookieTempDataProvider>();
             services.AddSingleton<IStringLocalizerFactory, EFStringLocalizerFactory>();
-
             services.TryAddSingleton<IDateTimeZoneProvider>(new DateTimeZoneCache(TzdbDateTimeZoneSource.Default));
             services.TryAddScoped<ITimeZoneHelper, TimeZoneHelper>();
             services.TryAddScoped<IFileHandler, FileHandler>();
-
             services.AddTransient<IUtilities, Utilities>();
             services.AddSingleton<IEmailService, EmailService>();
-            services.AddTransient<ITwilioSmsService, SmsService>();
             services.AddTransient<IProfileService, ProfileService>();
-            services.AddScoped<IBaseRoleClaimService, BaseRoleClaimService>();
-            
+            services.AddScoped<IBaseRoleClaimService, BaseRoleClaimService>();         
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            //services.AddTransient<ISendSystemHealthReportViaEmailService, SendSystemHealthReportViaEmailService>();
 
             return services;
         }
@@ -203,10 +196,9 @@ namespace Lumle.Web.Infrastructures.Extensions
             IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
             var builder = new ContainerBuilder();
-            builder.RegisterType<SendSystemHealthReportViaEmailService>().AsSelf().As<ISendSystemHealthReportViaEmailService>();
             builder.RegisterGeneric(typeof(Repository<>)).As(typeof(IRepository<>));
 
-            builder.RegisterAssemblyTypes(typeof(IMediator).GetTypeInfo().Assembly).AsImplementedInterfaces();
+            //builder.RegisterAssemblyTypes(typeof(IMediator).GetTypeInfo().Assembly).AsImplementedInterfaces();
             builder.Register<SingleInstanceFactory>(ctx =>
             {
                 var c = ctx.Resolve<IComponentContext>();

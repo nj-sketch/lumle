@@ -1,7 +1,6 @@
 ﻿using System;
 using AutoMapper;
 using Lumle.Module.Authorization.Entities;
-using Lumle.Module.Authorization.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using Lumle.Core.Attributes;
@@ -21,19 +20,16 @@ namespace Lumle.Module.Authorization.Controllers
     [Authorize]
     public class PermissionController : Controller
     {
+        private IRepository<Permission> _permissionRepository;
         private readonly IBaseRoleClaimService _baseRoleClaimService;
-        private readonly IPermissionService _permissionService;
-        private readonly IUnitOfWork _unitOfWork;
 
         public PermissionController(
-            IBaseRoleClaimService baseRoleClaimService,
-            IPermissionService permissionService,
-            IUnitOfWork unitOfWork
+            IRepository<Permission> permissionRepository,
+            IBaseRoleClaimService baseRoleClaimService
         )
         {
+            _permissionRepository = permissionRepository;
             _baseRoleClaimService = baseRoleClaimService;
-            _permissionService = permissionService;
-            _unitOfWork = unitOfWork;
         }
 
         [HttpGet]
@@ -51,7 +47,7 @@ namespace Lumle.Module.Authorization.Controllers
             var actionClaimResult = await _baseRoleClaimService.GetActionPrevilegeAsync(map, User);
             #endregion
 
-            var permissionEntities = _permissionService.GetAll();
+            var permissionEntities = _permissionRepository.GetAll();
             var permissions = Mapper.Map<IList<PermissionVM>>(permissionEntities);
 
             // Send permission edit previlege in view
@@ -82,7 +78,7 @@ namespace Lumle.Module.Authorization.Controllers
                 }
 
                 var isSlugExist =
-                   await _permissionService.GetSingle(
+                   await _permissionRepository.GetSingleAsync(
                         x => string.Equals(x.Slug, model.Slug.Trim(), StringComparison.CurrentCultureIgnoreCase));
 
                 if (isSlugExist != null)
@@ -94,8 +90,7 @@ namespace Lumle.Module.Authorization.Controllers
                 var permissionModel = SplitSlug(model);
                 var permissionEntity = Mapper.Map<Permission>(permissionModel);
 
-                await _permissionService.Add(permissionEntity);
-                await _unitOfWork.SaveAsync();
+                await _permissionRepository.AddAsync(permissionEntity);
 
                 TempData["SuccessMsg"] = "Permission added successfully.";
                 return RedirectToAction("Index");
@@ -117,7 +112,7 @@ namespace Lumle.Module.Authorization.Controllers
                 return RedirectToAction("Index");
             }
 
-            var permissionEntity = await _permissionService.GetSingle(x => x.Id == id);
+            var permissionEntity = await _permissionRepository.GetSingleAsync(x => x.Id == id);
             if (permissionEntity == null)
             {
                 TempData["ErrorMsg"] = "Permission not found.";
@@ -142,7 +137,7 @@ namespace Lumle.Module.Authorization.Controllers
                     return View(model);
                 }
 
-                var permission = await _permissionService.GetSingle(x => x.Id == model.Id);
+                var permission = await _permissionRepository.GetSingleAsync(x => x.Id == model.Id);
                 if (permission == null)
                 {
                     TempData["ErrorMsg"] = "Permission does not exist.";
@@ -153,8 +148,7 @@ namespace Lumle.Module.Authorization.Controllers
                 var permissionEntity = Mapper.Map<Permission>(permissionModel);
                 permissionEntity.Id = model.Id;
 
-                await _permissionService.Update(permissionEntity);
-                await _unitOfWork.SaveAsync();
+                await _permissionRepository.UpdateAsync(permissionEntity, permissionEntity.Id);
 
                 TempData["SuccessMsg"] = "Permission updated successfully.";
                 return RedirectToAction("Index");
@@ -180,15 +174,14 @@ namespace Lumle.Module.Authorization.Controllers
                     return RedirectToAction("Index");
                 }
 
-                var permission = await _permissionService.GetSingle(x => x.Id == id);
+                var permission = await _permissionRepository.GetSingleAsync(x => x.Id == id);
                 if (permission == null)
                 {
                     TempData["ErrorMsg"] = "Permission not found.";
                     return RedirectToAction("Index");
                 }
 
-                await _permissionService.DeleteWhere(x => x.Id == id);
-                await _unitOfWork.SaveAsync();
+                _permissionRepository.DeleteWhere(x => x.Id == id);
 
                 TempData["SuccessMsg"] = "Permission deleted successfully.";
                 return RedirectToAction("Index");

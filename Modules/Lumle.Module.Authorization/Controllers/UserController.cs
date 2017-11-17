@@ -17,7 +17,6 @@ using Lumle.Module.AdminConfig.Services;
 using Lumle.Module.Audit.Enums;
 using Lumle.Module.Audit.Services;
 using NLog;
-using Lumle.Data.Data;
 using static Lumle.Infrastructure.Helpers.DataTableHelper;
 using System.Linq.Expressions;
 using Lumle.Module.Authorization.Helpers;
@@ -48,31 +47,27 @@ namespace Lumle.Module.Authorization.Controllers
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
+        private readonly IRepository<UserProfile> _profileRepository;
+        private readonly IRepository<ApplicationToken> _applicationTokenRepository;
         private readonly IBaseRoleClaimService _baseRoleClaimService;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;
-        private readonly IProfileService _profileService;
-        private readonly IUnitOfWork _unitOfWork;
         private readonly IMessagingService _messagingService;
         private readonly IAuditLogService _auditLogService;
-        private readonly BaseContext _context;
-        private readonly IApplicationTokenService _applicationTokenService;
         private readonly IStringLocalizer<ResourceString> _localizer;
         private readonly ITimeZoneHelper _timeZoneHelper;
         private readonly IFileHandler _fileHandler;
         private readonly IUrlHelper _urlHelper;
 
         public UserController(
+            IRepository<UserProfile> profileRepository,
+            IRepository<ApplicationToken> applicationTokenRepository,
             IBaseRoleClaimService baseRoleClaimService,
             UserManager<User> userManager,
-            RoleManager<Role> roleManager,
-            IProfileService profileService,
-            IUnitOfWork unitOfWork,
+            RoleManager<Role> roleManager,        
             IMessagingService messagingService,
             ICredentialService credentialService,
             IAuditLogService auditLogService,
-            BaseContext context,
-            IApplicationTokenService applicationTokenService,
             IStringLocalizer<ResourceString> localizer,
             IHostingEnvironment env,
             ITimeZoneHelper timeZoneHelper,
@@ -80,15 +75,13 @@ namespace Lumle.Module.Authorization.Controllers
             IUrlHelper urlHelper
         )
         {
+            _profileRepository = profileRepository;
+            _applicationTokenRepository = applicationTokenRepository;
             _baseRoleClaimService = baseRoleClaimService;
             _userManager = userManager;
-            _roleManager = roleManager;
-            _profileService = profileService;
-            _unitOfWork = unitOfWork;
+            _roleManager = roleManager;        
             _messagingService = messagingService;
             _auditLogService = auditLogService;
-            _context = context;
-            _applicationTokenService = applicationTokenService;
             _localizer = localizer;
             _timeZoneHelper = timeZoneHelper;
             _fileHandler = fileHandler;
@@ -148,7 +141,7 @@ namespace Lumle.Module.Authorization.Controllers
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.AuthorizationUserCreate)]
         public async Task<IActionResult> AddUser(UserVM model)
         {
-            using (var transaction = _context.Database.BeginTransaction())
+            using (var transaction = _profileRepository.BeginTransaction())
             {
                 try
                 {
@@ -188,7 +181,7 @@ namespace Lumle.Module.Authorization.Controllers
                             LoggedUserEmail = loggedUser.Email
                         };
 
-                        await _auditLogService.Add(userAuditLogModel);
+                        await _auditLogService.Create(userAuditLogModel);
                         #endregion
 
                         var role = await _roleManager.FindByIdAsync(model.RoleId);
@@ -208,7 +201,7 @@ namespace Lumle.Module.Authorization.Controllers
                                 ComparisonType = ComparisonType.StringCompare
                             };
 
-                            await _auditLogService.Add(roleAuditLogModel);
+                            await _auditLogService.Create(roleAuditLogModel);
                             #endregion
 
                             var roleResult = await _userManager.AddToRoleAsync(user, role.Name);
@@ -228,12 +221,11 @@ namespace Lumle.Module.Authorization.Controllers
                                     Country = (int)(model.EnumCountry),
                                     CreatedDate = DateTime.UtcNow
                                 };
-                                await _profileService.Add(userProfile);
+                                await _profileRepository.AddAsync(userProfile);
 
                                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                                 var callbackUrl = Url.Action(TokenType.ConfirmEmail, "Account", new { userId = user.Id, code }, HttpContext.Request.Scheme);
                                 await _messagingService.SendEmailConfirmationMailAsync(model.Email, model.UserName.Trim(), callbackUrl);
-
                                 var appToken = new ApplicationToken
                                 {
                                     TokenType = TokenType.ConfirmEmail,
@@ -243,10 +235,7 @@ namespace Lumle.Module.Authorization.Controllers
                                     CreatedDate = DateTime.UtcNow,
                                     LastUpdated = DateTime.UtcNow
                                 };
-
-                                await _applicationTokenService.Add(appToken);
-
-                                _context.SaveChanges();
+                                await _applicationTokenRepository.AddAsync(appToken);
                                 transaction.Commit();
 
                                 #region User Profile Audit
@@ -263,8 +252,7 @@ namespace Lumle.Module.Authorization.Controllers
                                     LoggedUserEmail = loggedUser.Email
                                 };
 
-                                await _auditLogService.Add(userProfileAuditLogModel);
-                                await _unitOfWork.SaveAsync();
+                                await _auditLogService.Create(userProfileAuditLogModel);
                                 #endregion
 
                                 TempData["SuccessMsg"] = _localizer[ActionMessageConstants.AddedSuccessfully].Value;
@@ -310,7 +298,7 @@ namespace Lumle.Module.Authorization.Controllers
                 return RedirectToAction("Index");
             }
 
-            var requestedUser = await _profileService.GetSingle(x => x.UserId == user.Id);
+            var requestedUser = await _profileRepository.GetSingleAsync(x => x.UserId == user.Id);
             if (requestedUser == null)
             {
                 TempData["ErrorMsg"] = _localizer[ActionMessageConstants.ResourceNotFoundErrorMessage].Value;
@@ -320,7 +308,6 @@ namespace Lumle.Module.Authorization.Controllers
             #endregion
 
             var requestedUserRoles = await _userManager.GetRolesAsync(user);
-
             var model = new UserVM
             {
                 UserName = user.UserName,
@@ -351,7 +338,7 @@ namespace Lumle.Module.Authorization.Controllers
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.AuthorizationUserUpdate)]
         public async Task<IActionResult> EditUser(UserVM model)
         {
-            using (var transaction = _context.Database.BeginTransaction())
+            using (var transaction = _profileRepository.BeginTransaction())
             {
                 try
                 {
@@ -370,7 +357,7 @@ namespace Lumle.Module.Authorization.Controllers
                         return RedirectToAction("Index");
                     }
 
-                    var requestedUser = await _profileService.GetSingle(x => x.UserId == model.Id);
+                    var requestedUser = await _profileRepository.GetSingleAsync(x => x.UserId == model.Id);
                     if (requestedUser == null)
                     {
                         TempData["ErrorMsg"] = _localizer[ActionMessageConstants.ResourceNotFoundErrorMessage].Value;
@@ -438,7 +425,7 @@ namespace Lumle.Module.Authorization.Controllers
                         ComparisonType = ComparisonType.ObjectCompare,
                         LoggedUserEmail = loggedUser.Email
                     };
-                    await _auditLogService.Add(userAuditLogModel);
+                    await _auditLogService.Create(userAuditLogModel);
 
                     #endregion
 
@@ -467,7 +454,7 @@ namespace Lumle.Module.Authorization.Controllers
                     requestedUser.StreetAddress = model.StreetAddress;
                     requestedUser.PostalCode = model.PostalCode;
 
-                    await _profileService.Update(requestedUser);
+                    await _profileRepository.UpdateAsync(requestedUser, requestedUser.Id);
 
                     // For audit log of user identity
                     #region User Profile Audit
@@ -481,7 +468,7 @@ namespace Lumle.Module.Authorization.Controllers
                         LoggedUserEmail = loggedUser.Email
                     };
 
-                    await _auditLogService.Add(userProfileAuditLogModel);
+                    await _auditLogService.Create(userProfileAuditLogModel);
                     #endregion
 
                     var currentRole = requestedUserRoles.FirstOrDefault();
@@ -512,10 +499,9 @@ namespace Lumle.Module.Authorization.Controllers
                         ComparisonType = ComparisonType.StringCompare
                     };
 
-                    await _auditLogService.Add(roleAuditLogModel);
+                    await _auditLogService.Create(roleAuditLogModel);
                     #endregion
 
-                    _context.SaveChanges();
                     transaction.Commit();
 
                     TempData["SuccessMsg"] = _localizer[ActionMessageConstants.UpdatedSuccessfully].Value;
@@ -542,7 +528,7 @@ namespace Lumle.Module.Authorization.Controllers
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.AuthorizationUserCreate)]
         public async Task<IActionResult> ResendActivationEmail([FromBody] string userId)
         {
-            using (var transaction = _context.Database.BeginTransaction())
+            using (var transaction = _applicationTokenRepository.BeginTransaction())
             {
                 try
                 {
@@ -559,7 +545,7 @@ namespace Lumle.Module.Authorization.Controllers
                     }
 
                     //make latest token valid
-                    var unUsedLastToken = await _applicationTokenService.GetSingle(x => x.IsUsed == false &&
+                    var unUsedLastToken = await _applicationTokenRepository.GetSingleAsync(x => x.IsUsed == false &&
                                                                                 x.UserId == user.Id &&
                                                                                 x.TokenType == TokenType.ConfirmEmail);
                     if (unUsedLastToken != null)
@@ -568,7 +554,7 @@ namespace Lumle.Module.Authorization.Controllers
                         unUsedLastToken.UsedDate = DateTime.UtcNow;
                         unUsedLastToken.LastUpdated = DateTime.UtcNow;
 
-                        await _applicationTokenService.Update(unUsedLastToken);
+                        await _applicationTokenRepository.UpdateAsync(unUsedLastToken, unUsedLastToken.Id);
                     }
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -585,9 +571,8 @@ namespace Lumle.Module.Authorization.Controllers
                         LastUpdated = DateTime.UtcNow
                     };
 
-                    await _applicationTokenService.Add(appToken);
+                    await _applicationTokenRepository.AddAsync(appToken);
 
-                    _context.SaveChanges();
                     transaction.Commit();
 
                     return Json(new { success = true, messageTitle = _localizer[ActionMessageConstants.Success].Value, message = _localizer[ActionMessageConstants.EmailSentSuccessfully].Value });
@@ -605,7 +590,7 @@ namespace Lumle.Module.Authorization.Controllers
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.AuthorizationUserDelete)]
         public async Task<IActionResult> DeleteUser(string id)
         {
-            using (var transaction = _context.Database.BeginTransaction())
+            using (var transaction = _profileRepository.BeginTransaction())
             {
                 try
                 {
@@ -644,12 +629,12 @@ namespace Lumle.Module.Authorization.Controllers
                         ComparisonType = ComparisonType.ObjectCompare,
                         LoggedUserEmail = loggedUser.Email
                     };
-                    await _auditLogService.Add(auditLogModel);
+                    await _auditLogService.Create(auditLogModel);
                     #endregion
 
                     //Soft Delete
                     //User will removed from AspNet Identity but will remain in "UserProfile" table with flag IsDeleted TRUE.
-                    var requestedDeletedUser = await _profileService.GetSingle(x => x.UserId == user.Id);
+                    var requestedDeletedUser = await _profileRepository.GetSingleAsync(x => x.UserId == user.Id);
 
                     // Set old user profile data to an object for audit
                     var oldrequestedDeletedUser = new UserProfile
@@ -669,7 +654,7 @@ namespace Lumle.Module.Authorization.Controllers
                     requestedDeletedUser.DeletedDate = DateTime.UtcNow;
                     requestedDeletedUser.LastUpdated = DateTime.UtcNow;
 
-                    await _profileService.Update(requestedDeletedUser);
+                    await _profileRepository.UpdateAsync(requestedDeletedUser, requestedDeletedUser.Id);
 
                     #region User Profile Update Audit                  
                     var userProfileAuditModel = new AuditLogModel
@@ -681,15 +666,12 @@ namespace Lumle.Module.Authorization.Controllers
                         ComparisonType = ComparisonType.ObjectCompare,
                         LoggedUserEmail = loggedUser.Email
                     };
-                    await _auditLogService.Add(userProfileAuditModel);
+                    await _auditLogService.Create(userProfileAuditModel);
                     #endregion
-
-                    _context.SaveChanges();
                     transaction.Commit();
 
                     TempData["SuccessMsg"] = _localizer[ActionMessageConstants.DeletedSuccessfully].Value;
                     return RedirectToAction("Index");
-
                 }
                 catch (Exception ex)
                 {
@@ -709,13 +691,11 @@ namespace Lumle.Module.Authorization.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
-
-            var requestedUser = await _profileService.GetSingle(x => x.UserId == user.Id);
+            var requestedUser = await _profileRepository.GetSingleAsync(x => x.UserId == user.Id);
             if(requestedUser == null)
             {
                 return RedirectToAction("Login", "Account");
             }
-
             var requestedUserRoles = await _userManager.GetRolesAsync(user);
             var _imageUrl = !string.IsNullOrEmpty(requestedUser.ProfileImage) ? $"{Request.Scheme}://{Request.Host}{_urlHelper.Content("~/")}uploadedimages/{requestedUser.ProfileImage}"
                             : string.Empty;
@@ -750,7 +730,7 @@ namespace Lumle.Module.Authorization.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditProfile(ProfileVM model)
         {
-            using (var transaction = _context.Database.BeginTransaction())
+            using (var transaction = _profileRepository.BeginTransaction())
             {
                 try
                 {
@@ -769,7 +749,7 @@ namespace Lumle.Module.Authorization.Controllers
                         return RedirectToAction("Index");
                     }
 
-                    var requestedUser = await _profileService.GetSingle(x => x.UserId == model.UserId);
+                    var requestedUser = await _profileRepository.GetSingleAsync(x => x.UserId == model.UserId);
                     if (requestedUser == null)
                     {
                         TempData["ErrorMsg"] = _localizer[ActionMessageConstants.ResourceNotFoundErrorMessage].Value;
@@ -816,7 +796,7 @@ namespace Lumle.Module.Authorization.Controllers
                         ComparisonType = ComparisonType.ObjectCompare,
                         LoggedUserEmail = loggedUser.Email
                     };
-                    await _auditLogService.Add(userAuditLogModel);
+                    await _auditLogService.Create(userAuditLogModel);
 
                     #endregion
 
@@ -845,7 +825,7 @@ namespace Lumle.Module.Authorization.Controllers
                     requestedUser.StreetAddress = model.StreetAddress;
                     requestedUser.PostalCode = model.PostalCode;
 
-                    await _profileService.Update(requestedUser);
+                    await _profileRepository.UpdateAsync(requestedUser, requestedUser.Id);
 
                     // For audit log of user identity
                     #region User Profile Audit
@@ -859,10 +839,9 @@ namespace Lumle.Module.Authorization.Controllers
                         LoggedUserEmail = loggedUser.Email
                     };
 
-                    await _auditLogService.Add(userProfileAuditLogModel);
+                    await _auditLogService.Create(userProfileAuditLogModel);
                     #endregion
 
-                    _context.SaveChanges();
                     transaction.Commit();
 
                     TempData["SuccessMsg"] = _localizer[ActionMessageConstants.UpdatedSuccessfully].Value;
@@ -893,11 +872,10 @@ namespace Lumle.Module.Authorization.Controllers
                     {
                         var user = await GetCurrentUserAsync();
 
-                        var userProfile = await _profileService.GetSingle(x => x.UserId == user.Id);
+                        var userProfile = await _profileRepository.GetSingleAsync(x => x.UserId == user.Id);
                         userProfile.ProfileImage = imageUrl;
 
-                        await _profileService.Update(userProfile);
-                        await _unitOfWork.SaveAsync();
+                        await _profileRepository.UpdateAsync(userProfile, userProfile.Id);
 
                         return Json(new { success = true, imageName = imageUrl, imageUrl = $"{Request.Scheme}://{Request.Host}{_urlHelper.Content("~/")}uploadedimages/{imageUrl}", message = "Image updated successfully" });
                     }

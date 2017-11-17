@@ -12,6 +12,10 @@ using NLog;
 using Lumle.Infrastructure.Constants.Cache;
 using Lumle.Module.Localization.ViewModels;
 using System.Threading.Tasks;
+using Lumle.Data.Models;
+using Lumle.Module.Audit.Services;
+using Lumle.Module.Audit.Models;
+using Lumle.Module.Audit.Enums;
 
 namespace Lumle.Module.Localization.Services
 {
@@ -21,52 +25,46 @@ namespace Lumle.Module.Localization.Services
 
         private readonly IRepository<Culture> _cultureRepository;
         private readonly IMemoryCache _memoryCache;
+        private readonly IAuditLogService _auditLogService;
 
         public CultureService
         (
             IRepository<Culture> cultureRepository,
-            IMemoryCache memoryCache
+            IMemoryCache memoryCache,
+            IAuditLogService auditLogService
         )
         {
             _cultureRepository = cultureRepository;
             _memoryCache = memoryCache;
+            _auditLogService = auditLogService;
         }
 
-        public async Task Add(Culture entity)
+        public async Task CreateResource(User loggedUser, Culture selectedCulture)
         {
             try
             {
-                await _cultureRepository.Add(entity);
+                selectedCulture.IsEnable = true;
+                selectedCulture.IsActive = false;
+
+                await _cultureRepository.UpdateAsync(selectedCulture, selectedCulture.Id);
+
+                #region Culture Audit Log
+                var oldCulture = new Culture(); // Storage of this null object shows data before creation = nothing!
+                var auditLogModel = new AuditLogModel
+                {
+                    AuditActionType = AuditActionType.Create,
+                    KeyField = selectedCulture.Id.ToString(),
+                    OldObject = oldCulture,
+                    NewObject = selectedCulture,
+                    LoggedUserEmail = loggedUser.Email,
+                    ComparisonType = ComparisonType.ObjectCompare
+                };
+                #endregion
+                await _auditLogService.Create(auditLogModel);
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 Logger.Error(ex, ErrorLog.SaveError);
-                throw;
-            }
-        }
-
-        public async Task DeleteWhere(Expression<Func<Culture, bool>> predicate)
-        {
-            try
-            {
-                await _cultureRepository.DeleteWhere(predicate);
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex, ErrorLog.DeleteError);
-                throw;
-            }
-        }
-
-        public IQueryable<Culture> GetAll()
-        {
-            try
-            {
-                return _cultureRepository.GetAll();
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex, ErrorLog.DataFetchError);
                 throw;
             }
         }
@@ -141,7 +139,7 @@ namespace Lumle.Module.Localization.Services
         {
             try
             {
-                return await _cultureRepository.GetSingle(predicate);
+                return await _cultureRepository.GetSingleAsync(predicate);
             }
             catch (Exception ex)
             {
@@ -154,7 +152,7 @@ namespace Lumle.Module.Localization.Services
         {
             try
             {
-                await _cultureRepository.Update(entity);
+                await _cultureRepository.UpdateAsync(entity, entity.Id);
             }
             catch (Exception ex)
             {

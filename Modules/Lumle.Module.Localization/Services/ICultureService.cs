@@ -6,18 +6,17 @@ using Lumle.Core.Models;
 using Lumle.Module.Localization.ViewModels;
 using System.Linq;
 using System.Threading.Tasks;
+using Lumle.Data.Models;
 
 namespace Lumle.Module.Localization.Services
 {
     public interface ICultureService
     {
         IQueryable<Culture> GetAll(Expression<Func<Culture, bool>> predicate);
-        IQueryable<Culture> GetAll();
         Task<Culture> GetSingle(Expression<Func<Culture, bool>> predicate);
-        Task Add(Culture entity);
-        Task Update(Culture entity);
-        Task DeleteWhere(Expression<Func<Culture, bool>> predicate);
         IEnumerable<CultureModel> GetAllCulture();
         CultureSelectListVM GetAllActiveCultures();
+        Task Update(Culture entity);
+        Task CreateResource(User loggedUser, Culture selectedCulture);
     }
 }

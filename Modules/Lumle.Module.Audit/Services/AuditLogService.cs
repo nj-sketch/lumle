@@ -13,6 +13,11 @@ using Newtonsoft.Json;
 using NLog;
 using Lumle.Infrastructure.Utilities.Abstracts;
 using System.Threading.Tasks;
+using Lumle.Data.Models;
+using Lumle.Infrastructure.Helpers;
+using Lumle.Module.Audit.Helpers;
+using Lumle.Module.Audit.ViewModels;
+using AutoMapper;
 
 namespace Lumle.Module.Audit.Services
 {
@@ -39,19 +44,6 @@ namespace Lumle.Module.Audit.Services
             _userAgent = accessor.ActionContext.HttpContext.Request.Headers["User-Agent"].ToString();
             _timeZoneHelper = timeZoneHelper;
             Initialize();
-        }
-
-        public async Task Add(AuditLog entity)
-        {
-            try
-            {
-               await _auditLogRepository.Add(entity);
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex, ErrorLog.SaveError);
-                throw;
-            }
         }
 
         private async Task AddObjectAuditRecord(AuditLogModel auditLogModel)
@@ -107,24 +99,12 @@ namespace Lumle.Module.Audit.Services
                     AuditSummary = auditSummary
                 };
 
-                await Add(audit);
+                await _auditLogRepository.AddAsync(audit);
+                await _auditLogRepository.SaveChangesAsync();
             }
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.AuditLogError);
-                throw;
-            }
-        }
-
-        public IQueryable<AuditLog> GetAll()
-        {
-            try
-            {
-                return  _auditLogRepository.GetAll();
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex, ErrorLog.DataFetchError);
                 throw;
             }
         }
@@ -220,7 +200,8 @@ namespace Lumle.Module.Audit.Services
                     NewValue = newAuditRecord
                 };
 
-                await Add(audit);
+                await _auditLogRepository.AddAsync(audit);
+                await _auditLogRepository.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -296,7 +277,8 @@ namespace Lumle.Module.Audit.Services
                     ModuleInfo = auditLogModel.AdditionalInfo
                 };
 
-                await Add(audit);
+                await _auditLogRepository.AddAsync(audit);
+                await _auditLogRepository.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -391,7 +373,8 @@ namespace Lumle.Module.Audit.Services
                     AuditSummary = "An exisiting record has been updated in " + modelName + " module by " + auditLogModel.LoggedUserEmail
                 };
 
-                await Add(audit);
+                await _auditLogRepository.AddAsync(audit);
+                await _auditLogRepository.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -400,7 +383,7 @@ namespace Lumle.Module.Audit.Services
             }
         }
 
-        public async Task Add(AuditLogModel auditLogModel)
+        public async Task Create(AuditLogModel auditLogModel)
         {
             try
             {
@@ -429,5 +412,149 @@ namespace Lumle.Module.Audit.Services
             }
         }
 
+        public IQueryable<AuditLog> GetAll()
+        {
+            try
+            {
+                return _auditLogRepository.GetAll();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, ErrorLog.DataFetchError);
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public DataTableHelper.DTResult<AuditLogVM> GetDataTableResult(User loggedUser, AuditLogDTParameter parameters)
+        {
+            try
+            {
+                // Filter the records
+                var auditLogs = GetFilteredRecords(parameters.ModuleName, parameters.ActionName, parameters.StartDate, parameters.EndDate, loggedUser.UserName, parameters.FieldName);
+                int totalAuditRecord;
+                if (!string.IsNullOrEmpty(parameters.Search.Value.Trim())
+                   && !string.IsNullOrWhiteSpace(parameters.Search.Value.Trim()))
+                {
+                    Expression<Func<AuditLog, bool>> search =
+                        x => (x.AuditType ?? "").ToString().ToLower().Contains(parameters.Search.Value.ToLower()) ||
+                             (x.TableName ?? "").ToString().ToLower().Contains(parameters.Search.Value.ToLower()) ||
+                             (x.UserId ?? "").ToString().ToLower().Contains(parameters.Search.Value.ToLower());
+
+                    totalAuditRecord = auditLogs.Count(search);
+                    auditLogs = auditLogs.Where(search);
+                    auditLogs = SortByColumnWithOrder(parameters.Order[0].Column, parameters.Order[0].Dir.ToString(), auditLogs);
+                    auditLogs = auditLogs.Skip(parameters.Start).Take(parameters.Length);
+                }
+                else
+                {
+                    totalAuditRecord = auditLogs.Count();
+                    auditLogs = SortByColumnWithOrder(parameters.Order[0].Column, parameters.Order[0].Dir.ToString(), auditLogs);
+                    auditLogs = auditLogs.Skip(parameters.Start).Take(parameters.Length);
+                }
+                var i = parameters.Start + 1;
+                var auditLogVms = Mapper.Map<List<AuditLogVM>>(auditLogs);
+                auditLogVms = auditLogVms.Select(x =>
+                {
+                    x.Sn = i++;
+                    x.ConvertedCreatedDate = _timeZoneHelper.ConvertToLocalTime(x.CreatedDate, loggedUser.TimeZone).ToString("g");
+                    return x;
+                }).ToList();
+
+                var datatableResult = new DataTableHelper.DTResult<AuditLogVM>
+                {
+                    Draw = parameters.Draw,
+                    Data = auditLogVms,
+                    RecordsFiltered = totalAuditRecord,
+                    RecordsTotal = totalAuditRecord
+                };
+
+                return datatableResult;
+            }
+            catch(Exception ex)
+            {
+                Logger.Error(ex, ErrorLog.DataFetchError);
+                throw new Exception(ex.Message);
+            }
+        }
+
+        #region Helpers
+        /// <summary>
+        /// Serverside dataTable Sorting
+        /// </summary>
+        /// <param name="order"></param>
+        /// <param name="orderDirection"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        private static IQueryable<AuditLog> SortByColumnWithOrder(int order, string orderDirection, IQueryable<AuditLog> data)
+        {
+            try
+            {
+                switch (order)
+                {
+                    case 2:
+                        return orderDirection.Equals("DESC", StringComparison.CurrentCultureIgnoreCase) ? data.OrderByDescending(p => p.TableName) : data.OrderBy(p => p.TableName);
+                    case 3:
+                        return orderDirection.Equals("DESC", StringComparison.CurrentCultureIgnoreCase) ? data.OrderByDescending(p => p.UserId) : data.OrderBy(p => p.UserId);
+                    case 4:
+                        return orderDirection.Equals("DESC", StringComparison.CurrentCultureIgnoreCase) ? data.OrderByDescending(p => p.CreatedDate) : data.OrderBy(p => p.CreatedDate);
+                    default:
+                        return data.OrderByDescending(p => p.CreatedDate);
+                }
+            }
+            catch (Exception)
+            {
+                return data;
+            }
+        }
+
+        private IQueryable<AuditLog> GetFilteredRecords(string modelSearch, string actionSearch, string startDate, string endDate, string userSearch, string fieldSearch)
+        {
+
+            var auditEntites = _auditLogRepository.GetAll()
+                .Select(auditLog => new AuditLog
+                {
+                    Id = auditLog.Id,
+                    AuditType = auditLog.AuditType,
+                    AuditSummary = auditLog.AuditSummary,
+                    CreatedDate = auditLog.CreatedDate,
+                    TableName = auditLog.TableName,
+                    ModuleInfo = auditLog.ModuleInfo,
+                    Changes = auditLog.Changes,
+                    UserId = auditLog.UserId,
+                    KeyField = auditLog.KeyField
+                });
+            if (!string.IsNullOrEmpty(modelSearch))
+            {
+                auditEntites = auditEntites.Where(model => model.TableName.Contains(modelSearch.ToLower()));
+            }
+
+            if (!string.IsNullOrEmpty(actionSearch))
+            {
+                auditEntites = auditEntites.Where(action => action.AuditType.Contains(actionSearch.ToLower()));
+            }
+
+            if (!string.IsNullOrEmpty(userSearch))
+            {
+                auditEntites = auditEntites.Where(user => user.UserId.Contains(userSearch.ToLower()));
+            }
+
+            if (!string.IsNullOrEmpty(startDate))
+            {
+                auditEntites = auditEntites.Where(sD => sD.CreatedDate >= DateTime.Parse(startDate));
+            }
+
+            if (!string.IsNullOrEmpty(endDate))
+            {
+                auditEntites = auditEntites.Where(eD => eD.CreatedDate <= DateTime.Parse(endDate).AddDays(1));
+            }
+
+            if (!string.IsNullOrEmpty(fieldSearch))
+            {
+                auditEntites = auditEntites.Where(fS => fS.Changes.Contains("\"FieldName\":") && fS.Changes.ToLower().Contains(fieldSearch.ToLower()));
+            }
+
+            return auditEntites;
+        }
+        #endregion
     }
 }

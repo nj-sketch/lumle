@@ -2,12 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System.Linq;
 using Lumle.Core.Localizer;
-using Lumle.Data.Data.Abstracts;
-using Lumle.Infrastructure;
-using Lumle.Infrastructure.Constants.Messenging;
 using Lumle.Infrastructure.Utilities.Abstracts;
 using Lumle.Module.Core.ViewModels.ManageViewModels;
 using Lumle.Data.Models;
@@ -17,20 +13,19 @@ using Lumle.Module.Audit.Models;
 using Lumle.Module.Audit.Services;
 using Lumle.Infrastructure.Constants.Localization;
 using Microsoft.Extensions.Localization;
+using NLog;
 
 namespace Lumle.Module.Core.Controllers
 {
     [Authorize]
     public class ManageController : Controller
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IEmailService _emailService;
-        private readonly ITwilioSmsService _twilioSmsService;
-        private readonly ILogger _logger;
-        private readonly TwilioSmsCredentials _twilioSmsCredentials;
         private readonly IAuditLogService _auditLogService;
-        private readonly IUnitOfWork _unitOfWork;
         private readonly IStringLocalizer<ResourceString> _localizer;
 
         public ManageController(
@@ -38,22 +33,13 @@ namespace Lumle.Module.Core.Controllers
             SignInManager<User> signInManager,
             IEmailService emailService,
             IAuditLogService auditLogService,
-            IUnitOfWork unitOfWork,
-            ILoggerFactory loggerFactory,
             IStringLocalizer<ResourceString> localizer
         )
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailService = emailService;
-            _twilioSmsService = new SmsService();
             _auditLogService = auditLogService;
-            _unitOfWork = unitOfWork;
-            _logger = loggerFactory.CreateLogger<ManageController>();
-            _twilioSmsCredentials = new TwilioSmsCredentials {
-                AccountSid = Twilio.AccountSid,
-                Token = Twilio.AuthToken,
-                From = Twilio.FromNumber };
             _localizer = localizer;
         }
 
@@ -129,7 +115,6 @@ namespace Lumle.Module.Core.Controllers
                 return View("Error");
             }
             var code = await _userManager.GenerateChangePhoneNumberTokenAsync(user, model.PhoneNumber);
-            await _twilioSmsService.SendMessageAsync(_twilioSmsCredentials, model.PhoneNumber, _localizer[ActionMessageConstants.SecurityCode].Value + code);
             return RedirectToAction(nameof(VerifyPhoneNumber), new { PhoneNumber = model.PhoneNumber });
         }
 
@@ -143,7 +128,7 @@ namespace Lumle.Module.Core.Controllers
             if (user == null) return RedirectToAction(nameof(Index), "Manage");
             await _userManager.SetTwoFactorEnabledAsync(user, true);
             await _signInManager.SignInAsync(user, isPersistent: false);
-            _logger.LogInformation(1, "User enabled two-factor authentication.");
+            Logger.Info("User enabled two-factor authentication.");
             return RedirectToAction(nameof(Index), "Manage");
         }
 
@@ -157,7 +142,7 @@ namespace Lumle.Module.Core.Controllers
             if (user == null) return RedirectToAction(nameof(Index), "Manage");
             await _userManager.SetTwoFactorEnabledAsync(user, false);
             await _signInManager.SignInAsync(user, isPersistent: false);
-            _logger.LogInformation(2, "User disabled two-factor authentication.");
+            Logger.Info("User disabled two-factor authentication.");
             return RedirectToAction(nameof(Index), "Manage");
         }
 
@@ -215,42 +200,6 @@ namespace Lumle.Module.Core.Controllers
             return RedirectToAction(nameof(Index), new { Message = ManageMessageId.RemovePhoneSuccess });
         }
 
-        ////
-        //// GET: /Manage/ChangePassword
-        //[HttpGet]
-        //public IActionResult ChangePassword()
-        //{
-        //    return View();
-        //}
-
-        ////
-        //// POST: /Manage/ChangePassword
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View(model);
-        //    }
-        //    var user = await GetCurrentUserAsync();
-        //    if (user != null)
-        //    {
-        //        var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
-        //        if (result.Succeeded)
-        //        {
-        //            await _signInManager.SignInAsync(user, isPersistent: false);
-        //            _logger.LogInformation(3, "User changed their password successfully.");
-        //            return RedirectToAction(nameof(Index), new { Message = ManageMessageId.ChangePasswordSuccess });
-        //        }
-        //        AddErrors(result);
-        //        return View(model);
-        //    }
-        //    return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
-        //}
-
-
-
         // GET: /Account/ChangePassword
         [HttpGet("changepassword")]
         public IActionResult ChangePassword()
@@ -284,13 +233,12 @@ namespace Lumle.Module.Core.Controllers
                     ComparisonType = ComparisonType.StringCompare
                 };
 
-                await _auditLogService.Add(auditLogModel);
-                await _unitOfWork.SaveAsync();
+                await _auditLogService.Create(auditLogModel);
                 #endregion
 
                 //Logout and redirect to login
                 await _signInManager.SignOutAsync();
-                _logger.LogInformation(4, "User logged out.");
+                Logger.Info("User logged out.");
                 return RedirectToAction(nameof(AccountController.Index), "Account");
             }
 

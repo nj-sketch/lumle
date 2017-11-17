@@ -29,19 +29,6 @@ namespace Lumle.Core.Services
             _userManager = userManager;
         }
 
-        public int Count(Expression<Func<BaseRoleClaim, bool>> predicate)
-        {
-            try
-            {
-                var claims = _baseRoleClaimRepository.Count(predicate);
-                return claims;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
         public IQueryable<BaseRoleClaim> GetAll(Expression<Func<BaseRoleClaim, bool>> predicate)
         {
             try
@@ -55,61 +42,11 @@ namespace Lumle.Core.Services
             }
         }
 
-        public IQueryable<BaseRoleClaim> GetAll()
+        public void DeleteWhere(Expression<Func<BaseRoleClaim, bool>> predicate)
         {
             try
             {
-                var claims = _baseRoleClaimRepository.GetAll();
-                return claims;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        public async Task<BaseRoleClaim> GetSingle(Expression<Func<BaseRoleClaim, bool>> predicate)
-        {
-            try
-            {
-                var claim = await _baseRoleClaimRepository.GetSingle(predicate);
-                return claim;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        public async Task Add(BaseRoleClaim entity)
-        {
-            try
-            {
-                await _baseRoleClaimRepository.Add(entity);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        public async Task Update(BaseRoleClaim entity)
-        {
-            try
-            {
-                await _baseRoleClaimRepository.Update(entity);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        public async Task DeleteWhere(Expression<Func<BaseRoleClaim, bool>> predicate)
-        {
-            try
-            {
-                await _baseRoleClaimRepository.DeleteWhere(predicate);
+                 _baseRoleClaimRepository.DeleteWhere(predicate);
             }
             catch (Exception)
             {
@@ -180,6 +117,18 @@ namespace Lumle.Core.Services
             }
 
             return flag;
+        }
+
+        public async Task<BaseRoleClaim> AddAsync(BaseRoleClaim entity)
+        {
+            try
+            {
+                return await _baseRoleClaimRepository.AddAsync(entity);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

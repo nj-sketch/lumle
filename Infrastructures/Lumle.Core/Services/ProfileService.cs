@@ -19,55 +19,68 @@ namespace Lumle.Core.Services
             _profileRepository = profileRepository;
         }
 
-        public async Task<UserProfile> GetSingle(Expression<Func<UserProfile, bool>> predicate)
-        {
-            try
-            {
-                var userProfile = await _profileRepository.GetSingle(predicate);
-                return userProfile;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex, ErrorLog.DataFetchError);
-                throw;
-            }
-        }
+        //public async Task<UserProfile> GetSingle(Expression<Func<UserProfile, bool>> predicate)
+        //{
+        //    try
+        //    {
+        //        var userProfile = await _profileRepository.GetSingle(predicate);
+        //        return userProfile;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Logger.Error(ex, ErrorLog.DataFetchError);
+        //        throw;
+        //    }
+        //}
 
-        public async Task Add(UserProfile entity)
-        {
-            try
-            {
-                await _profileRepository.Add(entity);
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex, ErrorLog.SaveError);
-                throw;
-            }
-        }
+        //public async Task Add(UserProfile entity)
+        //{
+        //    try
+        //    {
+        //        await _profileRepository.Add(entity);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Logger.Error(ex, ErrorLog.SaveError);
+        //        throw;
+        //    }
+        //}
 
-        public async Task Update(UserProfile entity)
-        {
-            try
-            {
-                await _profileRepository.Update(entity);
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex, ErrorLog.UpdateError);
-                throw;
-            }
-        }
+        //public async Task Update(UserProfile entity)
+        //{
+        //    try
+        //    {
+        //        await _profileRepository.Update(entity);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Logger.Error(ex, ErrorLog.UpdateError);
+        //        throw;
+        //    }
+        //}
 
-        public async Task DeleteWhere(Expression<Func<UserProfile, bool>> predicate)
+        //public async Task DeleteWhere(Expression<Func<UserProfile, bool>> predicate)
+        //{
+        //    try
+        //    {
+        //        await _profileRepository.DeleteWhere(predicate);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Logger.Error(ex, ErrorLog.DeleteError);
+        //        throw;
+        //    }
+        //}
+
+        public async Task<UserProfile> Create(UserProfile entity)
         {
             try
             {
-                await _profileRepository.DeleteWhere(predicate);
+                return await _profileRepository.AddAsync(entity);
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
-                Logger.Error(ex, ErrorLog.DeleteError);
+                Logger.Error(ex, ErrorLog.AddUpdateError);
                 throw;
             }
         }

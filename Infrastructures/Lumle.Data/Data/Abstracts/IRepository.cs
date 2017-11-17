@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -19,18 +20,32 @@ namespace Lumle.Data.Data.Abstracts
 
         IQueryable<T> GetAll();
 
-        Task<T> GetSingle(int id);
+        T GetSingle(int id);
 
-        Task<T> GetSingle(Expression<Func<T, bool>> predicate);
+        Task<T> GetSingleAsync(int id);
 
-        Task<T> GetSingle(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
+        T GetSingle(Expression<Func<T, bool>> predicate);
 
-        Task Add(T entity);
+        Task<T> GetSingleAsync(Expression<Func<T, bool>> predicate);
 
-        Task Update(T entity);
+        Task<T> GetSingleAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
 
-        Task Delete(T entity);
+        T Add(T entity);
 
-        Task DeleteWhere(Expression<Func<T, bool>> predicate);
+        Task<T> AddAsync(T entity);
+
+        T Update(T entity, object key);
+
+        Task<T> UpdateAsync(T entity, object key);
+
+        void Delete(T entity);
+
+        void DeleteWhere(Expression<Func<T, bool>> predicate);
+
+        void SaveChanges();
+
+        Task SaveChangesAsync();
+
+        IDbContextTransaction BeginTransaction();
     }
 }

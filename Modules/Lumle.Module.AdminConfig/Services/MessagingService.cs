@@ -8,29 +8,29 @@ using NLog;
 using System.Threading.Tasks;
 using MimeKit;
 using MailKit.Net.Smtp;
+using Lumle.Data.Data.Abstracts;
+using Lumle.Module.AdminConfig.Entities;
 
 namespace Lumle.Module.AdminConfig.Services
 {
     public class MessagingService : IMessagingService
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly ICredentialService _credentialService;
+
+        private readonly IRepository<EmailTemplate> _emailTemplateRepository;
+        private readonly IRepository<Credential> _credentialRepository;
         private readonly IEmailService _emailService;
-        private readonly IEmailTemplateService _emailTemplateService;
-        private readonly ITwilioSmsService _twilioSmsService;
 
         public MessagingService
         (
-            IEmailTemplateService emailTemplateService,
-            ICredentialService credentialService,
-            IEmailService emailService,
-            ITwilioSmsService twilioSmsService
+            IRepository<EmailTemplate> emailTemplateRepository,
+            IRepository<Credential> credentialRepository,
+            IEmailService emailService
         )
         {
-            _emailTemplateService = emailTemplateService;
-            _credentialService = credentialService;
+            _emailTemplateRepository = emailTemplateRepository;
+            _credentialRepository = credentialRepository;
             _emailService = emailService;
-            _twilioSmsService = twilioSmsService;
         }
 
 
@@ -44,11 +44,10 @@ namespace Lumle.Module.AdminConfig.Services
         {
             try
             {
-
-                var emailTemplate = await _emailTemplateService.GetSingle(x => x.Slug == "emailconfirmation");
+                var emailTemplate = await _emailTemplateRepository.GetSingleAsync(x => x.Slug == "emailconfirmation");
                 if (emailTemplate == null) throw new Exception();
 
-                var emailServiceCredntials = _credentialService.GetAll(x => x.Slug == "smtpmailserver"
+                var emailServiceCredntials = _credentialRepository.GetAll(x => x.Slug == "smtpmailserver"
                                                                           || x.Slug == "smtpusername"
                                                                           || x.Slug == "smtpnoreplyemail"
                                                                           || x.Slug == "smtpuserpassword"
@@ -82,12 +81,12 @@ namespace Lumle.Module.AdminConfig.Services
 
             try
             {
-                var emailTemplate = await _emailTemplateService.GetSingle(x => x.Slug == "forgotpassword");
+                var emailTemplate = await _emailTemplateRepository.GetSingleAsync(x => x.Slug == "forgotpassword");
                 if (emailTemplate == null) return;
 
                 emailTemplate.Body = emailTemplate.Body.Replace("%url%", url).Replace("%username%", username);
 
-                var emailServiceCredentials = _credentialService.GetAll(x => x.Slug == "smtpmailserver"
+                var emailServiceCredentials = _credentialRepository.GetAll(x => x.Slug == "smtpmailserver"
                                                                             || x.Slug == "smtpusername"
                                                                             || x.Slug == "smtpnoreplyemail"
                                                                             || x.Slug == "smtpuserpassword"
@@ -116,10 +115,10 @@ namespace Lumle.Module.AdminConfig.Services
         {
             try
             {
-                var emailTemplate = await _emailTemplateService.GetSingle(x => x.Slug == "logincredential");
+                var emailTemplate = await _emailTemplateRepository.GetSingleAsync(x => x.Slug == "logincredential");
                 if (emailTemplate == null) throw new Exception();
 
-                var emailServiceCredntials = _credentialService.GetAll(x => x.Slug == "smtpmailserver"
+                var emailServiceCredntials = _credentialRepository.GetAll(x => x.Slug == "smtpmailserver"
                                                                           || x.Slug == "smtpusername"
                                                                           || x.Slug == "smtpnoreplyemail"
                                                                           || x.Slug == "smtpuserpassword"
@@ -154,11 +153,11 @@ namespace Lumle.Module.AdminConfig.Services
         {
             try
             {
-                var emailTemplate = await _emailTemplateService.GetSingle(x => x.Slug == emailTemplateSlug);
+                var emailTemplate = await _emailTemplateRepository.GetSingleAsync(x => x.Slug == emailTemplateSlug);
                 if (emailTemplate == null) return;
 
 
-                var emailServiceCredntials = _credentialService.GetAll(x => x.Slug == "smtpmailserver"
+                var emailServiceCredntials = _credentialRepository.GetAll(x => x.Slug == "smtpmailserver"
                                                                             || x.Slug == "smtpusername"
                                                                             || x.Slug == "smtpnoreplyemail"
                                                                             || x.Slug == "smtpuserpassword"
@@ -184,41 +183,11 @@ namespace Lumle.Module.AdminConfig.Services
 
         }
 
-        public async Task SendSmsAsync(string to, string message)
-        {
-            try
-            {
-                var twilioSmsCredntials = _credentialService.GetAll(x => x.Slug == "twiliobaseuri"
-                                                                       || x.Slug == "twiliorequesturi"
-                                                                       || x.Slug == "twilioaccountsid"
-                                                                       || x.Slug == "twilioauthtoken"
-                                                                       || x.Slug == "twiliofrom"
-                                                                       ).ToList();
-                var credentials = new TwilioSmsCredentials()
-                {
-                    BaseUri = twilioSmsCredntials.FirstOrDefault(x => x.Slug == "twiliobaseuri")?.Value,
-                    RequestUri = twilioSmsCredntials.FirstOrDefault(x => x.Slug == "twiliorequesturi")?.Value,
-                    AccountSid = twilioSmsCredntials.FirstOrDefault(x => x.Slug == "twilioaccountsid")?.Value,
-                    Token = twilioSmsCredntials.FirstOrDefault(x => x.Slug == "twilioauthtoken")?.Value,
-                    From = twilioSmsCredntials.FirstOrDefault(x => x.Slug == "twiliofrom")?.Value
-                };
-
-                if (twilioSmsCredntials == null) throw new Exception();
-
-                await _twilioSmsService.SendMessageAsync(credentials, to, message);
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex, ErrorLog.TwilioSms);
-                throw;
-            }
-        }
-
         public async Task SendEmailWithBody(Dictionary<string, string> emailReceiverList, Dictionary<string, string> mailBodyDictionary)
         {
             try
             {
-                var emailTemplate = await _emailTemplateService.GetSingle(x => x.Slug == "systemhealthreport");
+                var emailTemplate = await _emailTemplateRepository.GetSingleAsync(x => x.Slug == "systemhealthreport");
                 if (emailTemplate == null) return;
 
                 if (mailBodyDictionary == null) return;
@@ -232,7 +201,7 @@ namespace Lumle.Module.AdminConfig.Services
                     count++;
                 }
 
-                var emailServiceCredentials = _credentialService.GetAll(x => x.Slug == "smtpmailserver"
+                var emailServiceCredentials = _credentialRepository.GetAll(x => x.Slug == "smtpmailserver"
                                                                              || x.Slug == "smtpusername"
                                                                              || x.Slug == "smtpnoreplyemail"
                                                                              || x.Slug == "smtpuserpassword"
@@ -265,7 +234,7 @@ namespace Lumle.Module.AdminConfig.Services
         public void VerifySMTPStatus()
         {
             // Get Credentials from the email template
-            var emailServiceCredntials = _credentialService.GetAll(
+            var emailServiceCredntials = _credentialRepository.GetAll(
                                             x => x.Slug == "smtpmailserver" || x.Slug == "smtpusername" || x.Slug == "smtpnoreplyemail" || x.Slug == "smtpuserpassword").ToList();
 
             var smtpOption = new SmtpOptions()

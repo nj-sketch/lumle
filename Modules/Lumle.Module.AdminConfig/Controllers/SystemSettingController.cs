@@ -31,7 +31,6 @@ namespace Lumle.Module.AdminConfig.Controllers
     {
         private readonly IBaseRoleClaimService _baseRoleClaimService;
         private readonly ISystemSettingService _systemSettingService;
-        private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<User> _userManager;
         private readonly IAuditLogService _auditLogService;
         private readonly RoleManager<Role> _roleManager;
@@ -40,7 +39,6 @@ namespace Lumle.Module.AdminConfig.Controllers
         public SystemSettingController(
             IBaseRoleClaimService baseRoleClaimService,
             ISystemSettingService systemSettingService,
-            IUnitOfWork unitOfWork,
             UserManager<User> userManager,
             IAuditLogService auditLogService,
             RoleManager<Role> roleManager,
@@ -49,7 +47,6 @@ namespace Lumle.Module.AdminConfig.Controllers
         {
             _baseRoleClaimService = baseRoleClaimService;
             _systemSettingService = systemSettingService;
-            _unitOfWork = unitOfWork;
             _userManager = userManager;
             _auditLogService = auditLogService;
             _roleManager = roleManager;
@@ -71,7 +68,7 @@ namespace Lumle.Module.AdminConfig.Controllers
             var actionClaimResult = await _baseRoleClaimService.GetActionPrevilegeAsync(map, User);
             #endregion
 
-            var systemSettingEntity = await _systemSettingService.GetSingle(x => x.Slug == SystemSetting.MaintenanceMode);
+            var systemSettingEntity = await _systemSettingService.GetSingleAsync(x => x.Slug == SystemSetting.MaintenanceMode);
             var systemSettingModel = Mapper.Map<SystemSettingVM>(systemSettingEntity);
 
             systemSettingModel.Roles = await GetAllSupportedRolesAsync();
@@ -88,7 +85,7 @@ namespace Lumle.Module.AdminConfig.Controllers
             if (string.IsNullOrEmpty(model.Status) && model.Id <= 0)
                 return Json(new { success = false, messageTitle = _localizer[ActionMessageConstants.UnableToUpdateErrorMessage].Value, message = _localizer[ActionMessageConstants.UnableToUpdateErrorMessage].Value });
 
-            var data = await _systemSettingService.GetSingle(x => x.Id == model.Id);
+            var data = await _systemSettingService.GetSingleAsync(x => x.Id == model.Id);
             if (data == null) return Json(new { success = false, messageTitle = _localizer[ActionMessageConstants.ErrorOccured].Value, message = _localizer[ActionMessageConstants.ErrorOccured].Value });
 
             var oldAppSytemRecord = new AppSystem
@@ -164,11 +161,9 @@ namespace Lumle.Module.AdminConfig.Controllers
                     ComparisonType = ComparisonType.ObjectListCompare,
                 };
 
-                await _auditLogService.Add(auditLogModel);
+            await _auditLogService.Create(auditLogModel);
 
             #endregion
-
-            await _unitOfWork.SaveAsync();
 
             return Json(new { success = true, messageTitle = _localizer[ActionMessageConstants.UpdatedSuccessfully].Value, message = _localizer[ActionMessageConstants.UpdatedSuccessfully].Value });
 
