@@ -5,7 +5,6 @@ using NLog;
 using Lumle.Infrastructure.Constants.LumleLog;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Lumle.Module.AdminConfig.Services
@@ -15,55 +14,25 @@ namespace Lumle.Module.AdminConfig.Services
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private readonly IRepository<SystemHealth> _systemHealthRepository;
+        private readonly IRepository<ServiceHealth> _serviceHealthRepository;
         private readonly ICredentialCategoryService _credentialCategoryService;
         private readonly IEmailTemplateService _emailTemplateService;
         private readonly IMessagingService _messagingService;
-        private readonly IServiceHealthService _serviceHealthService;
-        private readonly IUnitOfWork _unitOfWork;
 
         public SystemHealthService(
             IRepository<SystemHealth> systemHealthRepository,
+            IRepository<ServiceHealth> serviceHealthRepository,
             ICredentialCategoryService credentialCategoryService,
             IEmailTemplateService emailTemplateService,
-            IMessagingService messagingService,
-            IServiceHealthService serviceHealthService,
-            IUnitOfWork unitOfWork
+            IMessagingService messagingService
         )
         {
             _systemHealthRepository = systemHealthRepository;
             _credentialCategoryService = credentialCategoryService;
             _emailTemplateService = emailTemplateService;
             _messagingService = messagingService;
-            _serviceHealthService = serviceHealthService;
-            _unitOfWork = unitOfWork;
-        }
+            _serviceHealthRepository = serviceHealthRepository;
 
-        public async Task Add(SystemHealth systemHealth)
-        {
-            try
-            {
-                if (systemHealth == null) return;
-
-                await _systemHealthRepository.Add(systemHealth);
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex, ErrorLog.SaveError);
-                throw;
-            }
-        }
-
-        public IQueryable<SystemHealth> AllIncluding(params Expression<Func<SystemHealth, object>>[] includeProperties)
-        {
-            try
-            {
-                return _systemHealthRepository.AllIncluding(includeProperties);
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex, ErrorLog.DataFetchError);
-                throw;
-            }
         }
 
         public IQueryable<SystemHealth> GetAll()
@@ -72,7 +41,7 @@ namespace Lumle.Module.AdminConfig.Services
             {
                 return _systemHealthRepository.GetAll();
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
                 throw;
@@ -91,15 +60,15 @@ namespace Lumle.Module.AdminConfig.Services
                     LastUpdated = DateTime.UtcNow
                 };
 
-                await Add(systemHealth);
-                _unitOfWork.Save();
+                await _systemHealthRepository.AddAsync(systemHealth);
+                await _systemHealthRepository.SaveChangesAsync();
 
                 var serviceHealths = GetServiceHealthReport();
                 foreach (var item in serviceHealths)
                 {
                     item.SystemHealth = systemHealth;
-                    await _serviceHealthService.Add(item);
-                    await _unitOfWork.SaveAsync();
+                    await _serviceHealthRepository.AddAsync(item);
+                    await _serviceHealthRepository.SaveChangesAsync();
                 }
 
                 var data = systemHealth.ServiceHealths;
@@ -166,5 +135,6 @@ namespace Lumle.Module.AdminConfig.Services
                 throw;
             }
         }
+
     }
 }

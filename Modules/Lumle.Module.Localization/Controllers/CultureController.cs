@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Lumle.Core.Attributes;
 using Lumle.Core.Localizer;
@@ -23,7 +22,6 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using NLog;
-using static Lumle.Infrastructure.Helpers.DataTableHelper;
 using Microsoft.Extensions.Localization;
 using Lumle.Module.Localization.ViewModels;
 using Lumle.Infrastructure.Constants.Localization;
@@ -45,7 +43,6 @@ namespace Lumle.Module.Localization.Controllers
         private readonly IBaseRoleClaimService _baseRoleClaimService;
         private readonly ICultureService _cultureService;
         private readonly IResourceService _resourceService;
-        private readonly IUnitOfWork _unitOfWork;
         private readonly IMemoryCache _memoryCache;
         private readonly IAuditLogService _auditLogService;
         private readonly UserManager<User> _userManager;
@@ -57,7 +54,6 @@ namespace Lumle.Module.Localization.Controllers
             IBaseRoleClaimService baseRoleClaimService,
             ICultureService cultureService,
             IResourceService resourceService,
-            IUnitOfWork unitOfWork,
             IMemoryCache memoryCache,
             IAuditLogService auditLogService,
             UserManager<User> userManager,
@@ -69,7 +65,6 @@ namespace Lumle.Module.Localization.Controllers
             _userManager = userManager;
             _cultureService = cultureService;
             _resourceService = resourceService;
-            _unitOfWork = unitOfWork;
             _memoryCache = memoryCache;
             _auditLogService = auditLogService;
             _localizer = localizer;
@@ -175,80 +170,11 @@ namespace Lumle.Module.Localization.Controllers
             {
                 var loggedUser = await GetCurrentUserAsync(); //Get current logged in user
 
-                var entity = await _resourceService.GetSingle(x => x.CultureId == resource.CultureId && x.ResourceCategoryId == resource.ResourceCategoryId && x.Key.Trim() == resource.Key.Trim());
-
-                if (entity != null)
-                {
-                    if (entity.Value.Trim() == resource.Value.Trim())
-                        return Json(new { success = true, messageTitle = _localizer[ActionMessageConstants.UpdatedSuccessfully].Value, message = _localizer[ActionMessageConstants.UpdatedSuccessfully].Value });
-
-                    // Get old entity data
-                    var oldRecord = new Resource
-                    {
-                        Id = entity.Id,
-                        CultureId = entity.CultureId,
-                        Key = entity.Key,
-                        Value = entity.Value
-                    };
-
-                    // update in the database
-                    entity.Value = resource.Value.Trim();
-                    await _resourceService.Update(entity);
-
-                    #region Resource Audit Log
-
-                    var auditLogModel = new AuditLogModel
-                    {
-                        AuditActionType = AuditActionType.Update,
-                        KeyField = oldRecord.Id.ToString(),
-                        OldObject = oldRecord,
-                        NewObject = entity,
-                        LoggedUserEmail = loggedUser.Email,
-                        ComparisonType = ComparisonType.ObjectCompare
-                    };
-                    await _auditLogService.Add(auditLogModel);
-
-                    #endregion
-                    await _unitOfWork.SaveAsync();
-
-                    ReloadLocalizationResourceCache(loggedUser.Culture);
-
-                    return Json(new { success = true, messageTitle = _localizer[ActionMessageConstants.UpdatedSuccessfully].Value, message = _localizer[ActionMessageConstants.UpdatedSuccessfully].Value });
-                }
-                var isCultureContainKey = _resourceService.IsCultureContainKey(DefaultCultureConstants.DefaultCultureName, resource.ResourceCategoryId, resource.Key);
-                if (isCultureContainKey)
-                {
-                    var newResource = new Resource
-                    {
-                        CultureId = resource.CultureId,
-                        ResourceCategoryId = resource.ResourceCategoryId,
-                        Key = resource.Key.Trim(),
-                        Value = resource.Value.Trim(),
-                        CreatedDate = DateTime.UtcNow,
-                        LastUpdated = DateTime.UtcNow
-                    };
-                    await _resourceService.Add(newResource);
-                    await _unitOfWork.SaveAsync();
-
-                    #region Resource Create AuditLog
-                    var oldResource = new Resource(); // dummy resource
-                    var resourceAuditLogModel = new AuditLogModel
-                    {
-                        AuditActionType = AuditActionType.Create,
-                        KeyField = newResource.Id.ToString(),
-                        OldObject = oldResource,
-                        NewObject = newResource,
-                        LoggedUserEmail = loggedUser.Email,
-                        ComparisonType = ComparisonType.ObjectCompare
-                    };
-                    await _auditLogService.Add(resourceAuditLogModel);
-                    await _unitOfWork.SaveAsync();
-                }
-                #endregion
+                await _resourceService.CreateResource(resource, loggedUser);
 
                 ReloadLocalizationResourceCache(loggedUser.Culture);
-
                 return Json(new { success = true, messageTitle = _localizer[ActionMessageConstants.UpdatedSuccessfully].Value, message = _localizer[ActionMessageConstants.UpdatedSuccessfully].Value });
+
             }
             catch (Exception ex)
             {
@@ -279,27 +205,7 @@ namespace Lumle.Module.Localization.Controllers
                     return RedirectToAction("Index");
                 }
 
-                culture.IsEnable = true;
-                culture.IsActive = false;
-
-                await _cultureService.Update(culture);
-
-                #region Culture Audit Log
-                var oldCulture = new Culture(); // Storage of this null object shows data before creation = nothing!
-                var auditLogModel = new AuditLogModel
-                {
-                    AuditActionType = AuditActionType.Create,
-                    KeyField = culture.Id.ToString(),
-                    OldObject = oldCulture,
-                    NewObject = culture,
-                    LoggedUserEmail = loggedUser.Email,
-                    ComparisonType = ComparisonType.ObjectCompare
-                };
-
-                await _auditLogService.Add(auditLogModel);
-
-                #endregion
-                await _unitOfWork.SaveAsync();
+                await _cultureService.CreateResource(loggedUser, culture);
 
                 _memoryCache.Remove(CacheConstants.LocalizationCultureCache);
                 TempData["SuccessMsg"] = _localizer[ActionMessageConstants.AddedSuccessfully].Value;
@@ -329,7 +235,6 @@ namespace Lumle.Module.Localization.Controllers
 
                 culture.IsActive = cultureViewModel.IsActive;
                 await _cultureService.Update(culture);
-                await _unitOfWork.SaveAsync();
 
                 var loggedUser = await _userManager.GetUserAsync(User);
                 if (loggedUser.Culture != cultureViewModel.Name.Trim() || cultureViewModel.IsActive)
@@ -357,7 +262,6 @@ namespace Lumle.Module.Localization.Controllers
 
         }
 
-
         /// <summary>
         /// Server Side DataTable Handler for resource
         /// </summary>
@@ -365,62 +269,13 @@ namespace Lumle.Module.Localization.Controllers
         /// <returns></returns>
         [HttpPost("DataHandler")]
         [ClaimRequirement(CustomClaimtypes.Permission, Permissions.LocalizationCultureView)]
-        public async Task<JsonResult> DataHandler([FromBody] CultureDTParameters parameters)
+        public JsonResult DataHandler([FromBody] CultureDTParameters parameters)
         {
             try
             {
-                IEnumerable<ResourceModel> resources;
-                switch (parameters.ResourceCategoryId)
-                {
-                    case 1:// Get only label
-                        resources =  await _resourceService.GetAllResource(1, parameters.Culture.Trim());
-                        break;
-                    case 2:// get only message
-                        resources =   await _resourceService.GetAllResource(2, parameters.Culture.Trim());
-                        break;
-                    default:
-                        resources = await _resourceService.GetAllResource(parameters.Culture.Trim());
-                        break;
-                }
-                List<ResourceModel> filteredResource;
+                var result = _resourceService.GetDataTableResult(parameters);
 
-                int totalResource;
-
-                var enumerable = resources as ResourceModel[] ?? resources.ToArray();
-                var resourceModels = resources as ResourceModel[] ?? enumerable.ToArray();
-                if (!string.IsNullOrEmpty(parameters.Search.Value)
-                   && !string.IsNullOrWhiteSpace(parameters.Search.Value))
-
-                {
-                    Expression<Func<ResourceModel, bool>> search =
-                        x => (x.Key ?? "").ToString().ToLower().Contains(parameters.Search.Value.ToLower()) ||
-                             (x.Value ?? "").ToString().ToLower().Contains(parameters.Search.Value.ToLower());
-
-                    totalResource = enumerable.AsQueryable().Count(search);
-                    resources = resourceModels.AsQueryable().Where(search);
-                    resources = SortByColumnWithOrder(parameters.Order[0].Column, parameters.Order[0].Dir.ToString(), resources);
-                    filteredResource = resources.Skip(parameters.Start).Take(parameters.Length).ToList();
-
-                }
-                else
-                {
-                    totalResource = resourceModels.Count();
-                    resources = SortByColumnWithOrder(parameters.Order[0].Column, parameters.Order[0].Dir.ToString(), resourceModels);
-                    filteredResource = resources.Skip(parameters.Start).Take(parameters.Length).ToList();
-                }
-
-                var i = parameters.Start + 1;
-                var models = filteredResource.Select(x => { x.SN = i++; return x; }).ToList();
-
-                var resource = new DTResult<ResourceModel>
-                {
-                    Draw = parameters.Draw,
-                    Data = models,
-                    RecordsFiltered = totalResource,
-                    RecordsTotal = totalResource
-                };
-
-                return Json(resource);
+                return Json(result);
             }
             catch (Exception ex)
             {
@@ -478,7 +333,7 @@ namespace Lumle.Module.Localization.Controllers
 
                             // update in the database
                             entity.Value = data.Value.Trim();
-                            await _resourceService.Update(entity);
+                            await _resourceService.UpdateAsync(entity);
                             count++;
 
                             #region Resource Audit Log
@@ -493,8 +348,7 @@ namespace Lumle.Module.Localization.Controllers
                                 ComparisonType = ComparisonType.ObjectCompare
                             };
 
-                            await _auditLogService.Add(auditLogModel);
-                            await _unitOfWork.SaveAsync();
+                            await _auditLogService.Create(auditLogModel);
                             #endregion 
                         }
                         else
@@ -511,8 +365,7 @@ namespace Lumle.Module.Localization.Controllers
                                     CreatedDate = DateTime.UtcNow,
                                     LastUpdated = DateTime.UtcNow
                                 };
-                                await _resourceService.Add(newResource);
-                                await _unitOfWork.SaveAsync();
+                                await _resourceService.AddAsync(newResource);
                                 count++;
                            
 
@@ -527,8 +380,7 @@ namespace Lumle.Module.Localization.Controllers
                                 LoggedUserEmail = loggedUser.Email,
                                 ComparisonType = ComparisonType.ObjectCompare
                             };
-                            await _auditLogService.Add(resourceAuditLogModel);
-                            await _unitOfWork.SaveAsync();
+                            await _auditLogService.Create(resourceAuditLogModel);
 
                                 #endregion
                             }
@@ -604,36 +456,6 @@ namespace Lumle.Module.Localization.Controllers
         {
             public string Key { get; set; }
             public string Value { get; set; }
-        }
-
-        /// <summary>
-        /// Serverside dataTable Sorting
-        /// </summary>
-        /// <param name="order"></param>
-        /// <param name="orderDirection"></param>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        private static IEnumerable<ResourceModel> SortByColumnWithOrder(int order, string orderDirection, IEnumerable<ResourceModel> data)
-        {
-            var sortByColumnWithOrder = data as ResourceModel[] ?? data.ToArray();
-            try
-            {
-                switch (order)
-                {
-                    case 2:
-                        return orderDirection.Equals("DESC", StringComparison.CurrentCultureIgnoreCase) ? sortByColumnWithOrder.OrderByDescending(p => p.Key) : sortByColumnWithOrder.OrderBy(p => p.Key);
-
-                    case 3:
-                        return orderDirection.Equals("DESC", StringComparison.CurrentCultureIgnoreCase) ? sortByColumnWithOrder.OrderByDescending(p => p.Value) : sortByColumnWithOrder.OrderBy(p => p.Value);
-
-                    default:
-                        return orderDirection.Equals("DESC", StringComparison.CurrentCultureIgnoreCase) ? sortByColumnWithOrder.OrderByDescending(p => p.Key) : sortByColumnWithOrder.OrderBy(p => p.Key);
-                }
-            }
-            catch (Exception)
-            {
-                return sortByColumnWithOrder;
-            }
         }
 
         private Task<User> GetCurrentUserAsync()

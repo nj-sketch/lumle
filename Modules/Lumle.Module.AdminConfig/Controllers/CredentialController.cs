@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Lumle.Data.Data.Abstracts;
 using Lumle.Data.Models;
 using Lumle.Infrastructure.Constants.AuthorizeRules;
 using Lumle.Infrastructure.Constants.LumleLog;
-using Lumle.Module.AdminConfig.Entities;
 using Lumle.Module.AdminConfig.Models;
 using Lumle.Module.AdminConfig.Services;
-using Lumle.Module.Audit.Enums;
-using Lumle.Module.Audit.Models;
-using Lumle.Module.Audit.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -37,17 +32,13 @@ namespace Lumle.Module.AdminConfig.Controllers
         private readonly ICredentialCategoryService _credentialCategoryService;
         private readonly ICredentialService _credentialService;
         private readonly UserManager<User> _userManager;
-        private readonly IAuditLogService _auditLogService;
-        private readonly IUnitOfWork _unitOfWork;
         private readonly IStringLocalizer<ResourceString> _localizer;
 
         public CredentialController(
             IBaseRoleClaimService baseRoleClaimService,
             ICredentialCategoryService credentialCategoryService,
             ICredentialService credentialService,
-            UserManager<User> userManager,
-            IAuditLogService auditLogService,         
-            IUnitOfWork unitOfWork,           
+            UserManager<User> userManager,          
             IStringLocalizer<ResourceString> localizer
         )
         {
@@ -55,8 +46,6 @@ namespace Lumle.Module.AdminConfig.Controllers
             _credentialCategoryService = credentialCategoryService;
             _credentialService = credentialService;
             _userManager = userManager;           
-            _auditLogService = auditLogService;
-            _unitOfWork = unitOfWork;
             _localizer = localizer;
         }
 
@@ -107,7 +96,6 @@ namespace Lumle.Module.AdminConfig.Controllers
                 TempData["ErrorMsg"] = _localizer[ActionMessageConstants.InternalServerErrorMessage].Value;
                 return RedirectToAction("Index");
             }
-
         }
 
         [HttpPost("edit")]
@@ -117,46 +105,8 @@ namespace Lumle.Module.AdminConfig.Controllers
         {
             try
             {
-                var data = await _credentialService.GetSingle(x => x.Id == credential.Id);
-                if (data == null)
-                    return Json(GetOperationFailedMessage());
-
-                if (data.Value == credential.Value.Trim()) return Json(GetOperationSuccessMessage());
-
                 var loggedUser = await GetCurrentUserAsync(); // Get current logged user
-                // Add previous data in old record object for comparison
-                var oldRecord = new Credential
-                {
-                    Id = data.Id,
-                    CredentialCategoryId = data.CredentialCategoryId,
-                    Slug = data.Slug,
-                    DisplayName = data.DisplayName,
-                    Value = data.Value
-                };
-
-                // update in database
-                data.Value = credential.Value.Trim();
-
-                await _credentialService.Update(data);
-
-                #region Credential Audit Log
-
-                var auditLogModel = new AuditLogModel
-                {
-                    AuditActionType = AuditActionType.Update,
-                    KeyField = oldRecord.Id.ToString(),
-                    OldObject = oldRecord,
-                    NewObject = data,
-                    LoggedUserEmail = loggedUser.Email,
-                    ComparisonType = ComparisonType.ObjectCompare
-                };
-
-                await _auditLogService.Add(auditLogModel);
-
-                #endregion
-
-                //Save
-                await _unitOfWork.SaveAsync();
+                await _credentialService.Update(credential, loggedUser);
                 return Json(GetOperationSuccessMessage());
             }
             catch (Exception ex)

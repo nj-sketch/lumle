@@ -7,9 +7,8 @@ namespace Lumle.Core.Services.Abstracts
 {
     public interface IProfileService
     {
-        Task<UserProfile> GetSingle(Expression<Func<UserProfile, bool>> predicate);
-        Task Add(UserProfile entity);
-        Task Update(UserProfile entity);
-        Task DeleteWhere(Expression<Func<UserProfile, bool>> predicate);
+        //Task<UserProfile> GetSingle(Expression<Func<UserProfile, bool>> predicate);
+        //Task DeleteWhere(Expression<Func<UserProfile, bool>> predicate);
+        Task<UserProfile> Create(UserProfile entity);
     }
 }

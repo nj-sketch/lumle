@@ -40,11 +40,11 @@ namespace Lumle.Core.Services
             }
         }
 
-        public async Task<AppSystem> GetSingle(Expression<Func<AppSystem, bool>> predicate)
+        public async Task<AppSystem> GetSingleAsync(Expression<Func<AppSystem, bool>> predicate)
         {
             try
             {
-                return await _appSystemRepository.GetSingle(predicate);
+                return await _appSystemRepository.GetSingleAsync(predicate);
             }
             catch (Exception)
             {
@@ -56,7 +56,7 @@ namespace Lumle.Core.Services
         {
             try
             {
-                await _appSystemRepository.Update(entity);
+                await _appSystemRepository.UpdateAsync(entity, entity.Id);
             }
             catch (Exception)
             {

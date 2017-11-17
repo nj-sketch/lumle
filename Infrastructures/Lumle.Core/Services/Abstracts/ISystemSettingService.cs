@@ -10,7 +10,7 @@ namespace Lumle.Core.Services.Abstracts
     {
         IQueryable<AppSystem> GetAll(Expression<Func<AppSystem, bool>> predicate);
         IQueryable<AppSystem> GetAll();
-        Task<AppSystem> GetSingle(Expression<Func<AppSystem, bool>> predicate);
+        Task<AppSystem> GetSingleAsync(Expression<Func<AppSystem, bool>> predicate);
         Task Update(AppSystem entity);
     }
 }

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Lumle.Module.AdminConfig.Services;
 using Lumle.Module.AdminConfig.ViewModels;
-using Lumle.Data.Data.Abstracts;
 using System.Threading.Tasks;
 using Lumle.Core.Attributes;
 using Lumle.Core.Localizer;
@@ -10,14 +9,10 @@ using Lumle.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Lumle.Infrastructure.Constants.AuthorizeRules;
 using Lumle.Infrastructure.Constants.LumleLog;
-using Lumle.Module.AdminConfig.Entities;
 using Microsoft.AspNetCore.Identity;
 using NLog;
 using Microsoft.Extensions.Localization;
 using Lumle.Infrastructure.Constants.Localization;
-using Lumle.Module.Audit.Enums;
-using Lumle.Module.Audit.Models;
-using Lumle.Module.Audit.Services;
 using Lumle.Core.Services.Abstracts;
 using System.Security.Claims;
 using System.Collections.Generic;
@@ -34,25 +29,19 @@ namespace Lumle.Module.AdminConfig.Controllers
 
         private readonly IBaseRoleClaimService _baseRoleClaimService;       
         private readonly IEmailTemplateService _emailTemplateService;
-        private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<User> _userManager;
-        private readonly IAuditLogService _auditLogService;
         private readonly IStringLocalizer<ResourceString> _localizer;
 
         public EmailTemplateController(
             IBaseRoleClaimService baseRoleClaimService,
             IEmailTemplateService emailTemplateService,
-            IUnitOfWork unitOfWork,
-            UserManager<User> userManager,
-            IAuditLogService auditLogService,           
+            UserManager<User> userManager,          
             IStringLocalizer<ResourceString> localizer
         )
         {
             _baseRoleClaimService = baseRoleClaimService;
             _emailTemplateService = emailTemplateService;
-            _unitOfWork = unitOfWork;
-            _userManager = userManager;
-            _auditLogService = auditLogService;           
+            _userManager = userManager;         
             _localizer = localizer;
         }
 
@@ -82,7 +71,7 @@ namespace Lumle.Module.AdminConfig.Controllers
             var actionClaimResult = await _baseRoleClaimService.GetActionPrevilegeAsync(map, User);
             #endregion
 
-            var emailTemplate = await _emailTemplateService.GetSingle(x => x.Id == emailTemplateId);
+            var emailTemplate = await _emailTemplateService.GetSingleAsync(x => x.Id == emailTemplateId);
             if (emailTemplate == null)
             {
                 TempData["ErrorMsg"] = _localizer[ActionMessageConstants.ResourceNotFoundErrorMessage].Value;
@@ -125,57 +114,10 @@ namespace Lumle.Module.AdminConfig.Controllers
                     return View("Edit", model);
                 }
 
-                var emailTemplate = await _emailTemplateService.GetSingle(x => x.Id == model.Id);
-                if (emailTemplate == null)
-                {
-                    TempData["ErrorMsg"] =_localizer[ActionMessageConstants.ResourceNotFoundErrorMessage].Value;
-                    return RedirectToAction("Index");
-                }
-
                 var loggedUser = await GetCurrentUserAsync(); //Get current logged in user
-                // Add previous data in old record object for comparison
-                var oldRecord = new EmailTemplate
-                {
-                    Id = emailTemplate.Id,
-                    Slug = emailTemplate.Slug,
-                    SlugDisplayName = emailTemplate.SlugDisplayName,
-                    Subject = emailTemplate.Subject,
-                    Body = emailTemplate.Body,
-                    DefaultBody = emailTemplate.DefaultBody,
-                    DefaultSubject = emailTemplate.DefaultSubject,
-                    LastSlugDisplayName=emailTemplate.LastSlugDisplayName,
-                    LastSubject=emailTemplate.LastSubject,
-                    LastBody=emailTemplate.LastBody
-                };
 
-                // update in database
-                emailTemplate.LastSlugDisplayName = emailTemplate.LastSlugDisplayName;
-                emailTemplate.LastSubject = emailTemplate.Subject;
-                emailTemplate.LastBody = emailTemplate.Body;
-
-                emailTemplate.SlugDisplayName = model.SlugDisplayName;
-                emailTemplate.Subject = model.Subject;
-                emailTemplate.Body = model.Body;
-
-                await _emailTemplateService.Update(emailTemplate);
-
-                #region EmailTemplate Audit Log
-
-                    var auditLogModel = new AuditLogModel
-                    {
-                        AuditActionType = AuditActionType.Update,
-                        KeyField = oldRecord.Id.ToString(),
-                        OldObject = oldRecord,
-                        NewObject = emailTemplate,
-                        LoggedUserEmail = loggedUser.Email,
-                        ComparisonType = ComparisonType.ObjectCompare
-                    };
-
-                    await _auditLogService.Add(auditLogModel);
-                #endregion
-
-                await _unitOfWork.SaveAsync();
-
+                await _emailTemplateService.Update(model, loggedUser);
+               
                 TempData["EmailTemplateUpdated"] = true;
 
                 TempData["SuccessMsg"] =_localizer[ActionMessageConstants.UpdatedSuccessfully].Value;

@@ -1,13 +1,12 @@
-﻿using System;
-using System.Linq.Expressions;
-using Lumle.Module.Audit.Entities;
-using System.Linq;
+﻿using Lumle.Data.Models;
+using Lumle.Module.Audit.Helpers;
+using Lumle.Module.Audit.ViewModels;
+using static Lumle.Infrastructure.Helpers.DataTableHelper;
 
 namespace Lumle.Module.Audit.Services
 {
     public interface ICustomLogService
     {
-        IQueryable<CustomLog> GetAll(Expression<Func<CustomLog, bool>> predicate);
-        IQueryable<CustomLog> GetAll();
+        DTResult<CustomLogVM> GetDataTableResult(User loggedUser, CustomLogDTParameter parameters);
     }
 }

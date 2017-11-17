@@ -41,66 +41,63 @@ namespace Lumle.Module.Core.Controllers
         #region Class Variables
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
+        private readonly IRepository<Resource> _resourceRepository;
+        private readonly IRepository<Culture> _cultureRepository;
+        private readonly IRepository<ApplicationToken> _applicationTokenRepository;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;
         private readonly LumleSignInManager<User> _signInManager;
         private readonly IProfileService _profileService;
         private readonly IEmailService _emailService;
-        private readonly IMemoryCache _memoryCache;
-        private readonly BaseContext _context;
         private readonly IMessagingService _messagingService;
-        private readonly IApplicationTokenService _applicationTokenService;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IHttpContextAccessor _contextAccessor;
         private readonly ISystemSettingService _systemSettingService;
-        private readonly IRepository<Resource> _resourceRepository;
-        private readonly IRepository<Culture> _cultureRepository;
+        private readonly IMemoryCache _memoryCache;
+        private readonly IHttpContextAccessor _contextAccessor;
         private readonly IStringLocalizer<ResourceString> _localizer;
+        private IList<ResourceString> _resourceStrings;
         private readonly IdentityOptions _options;
+        private readonly BaseContext _context;
         private readonly string _ipAddress;
         private readonly string _browserName;
-        private IList<ResourceString> _resourceStrings;
         #endregion
 
         public AccountController(
+            IRepository<Resource> resourceRepository,
+            IRepository<Culture> cultureRepository,
+            IRepository<ApplicationToken> applicationTokenRepository,
             UserManager<User> userManager,
             RoleManager<Role> roleManager,
             LumleSignInManager<User> signInManager,
             IProfileService profileService,
             IEmailService emailService,
-            IMemoryCache memoryCache,
-            BaseContext context,
             IMessagingService messagingService,
-            IApplicationTokenService applicationTokenService,
-            IUnitOfWork unitOfWork,
+            ISystemSettingService systemSettingService,
+            IMemoryCache memoryCache,
             IActionContextAccessor accessor,
             IHttpContextAccessor contextAccessor,
-            ISystemSettingService systemSettingService,
-            IUtilities utilities,
-            IRepository<Resource> resourceRepository,
-            IRepository<Culture> cultureRepository,
+            IUtilities utilities,         
             IStringLocalizer<ResourceString> localizer,
-            IOptions<IdentityOptions> optionsAccessor
+            IOptions<IdentityOptions> optionsAccessor,
+            BaseContext baseContext
         )
         {
+            _resourceRepository = resourceRepository;
+            _cultureRepository = cultureRepository;
+            _applicationTokenRepository = applicationTokenRepository;
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
             _profileService = profileService;
             _emailService = emailService;
-            _memoryCache = memoryCache;
-            _context = context;
             _messagingService = messagingService;
-            _applicationTokenService = applicationTokenService;
-            _unitOfWork = unitOfWork;
-            _contextAccessor = contextAccessor;
             _systemSettingService = systemSettingService;
+            _memoryCache = memoryCache;
+            _contextAccessor = contextAccessor;
             _ipAddress = utilities.GetClientInformation().Ip;
-            _browserName = utilities.GetClientInformation().Browser;
-            _resourceRepository = resourceRepository;
-            _cultureRepository = cultureRepository;
+            _browserName = utilities.GetClientInformation().Browser;           
             _localizer = localizer;
             _options = optionsAccessor?.Value ?? new IdentityOptions();
+            _context = baseContext;
         }
 
         [HttpGet]
@@ -159,7 +156,7 @@ namespace Lumle.Module.Core.Controllers
                 return View();
             }
 
-            var systemMode = await _systemSettingService.GetSingle(x => x.Slug == SystemSetting.MaintenanceMode);
+            var systemMode = await _systemSettingService.GetSingleAsync(x => x.Slug == SystemSetting.MaintenanceMode);
             if (systemMode != null && systemMode.Status == SystemSetting.MaintenanceModeOn)
             {
                 var userRole = await _userManager.GetRolesAsync(user);
@@ -182,7 +179,6 @@ namespace Lumle.Module.Core.Controllers
             }
             if (!user.EmailConfirmed)
             {
-
                 Logger.Error(CustomLogIdentifier.CustomLog + model.Email + CustomLogIdentifier.InactiveUserLoginMessage);
                 GlobalDiagnosticsContext.Clear();
                 TempData["ErrorMsg"] = _localizer[ActionMessageConstants.InvalidLoginAttemptErrorMessage].Value;
@@ -306,7 +302,7 @@ namespace Lumle.Module.Core.Controllers
                                     LastName = model.LastName,
                                     CreatedDate = DateTime.UtcNow
                                 };
-                                await _profileService.Add(userProfile);
+                                await _profileService.Create(userProfile);
 
                                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                                 var callbackUrl = Url.Action(TokenType.ConfirmEmail, "Account",
@@ -326,7 +322,7 @@ namespace Lumle.Module.Core.Controllers
                                     LastUpdated = DateTime.UtcNow
                                 };
 
-                                await _applicationTokenService.Add(appToken);
+                                await _applicationTokenRepository.AddAsync(appToken);
 
                                 _context.SaveChanges();
                                 transaction.Commit();
@@ -538,7 +534,7 @@ namespace Lumle.Module.Core.Controllers
                                     };
 
 
-                                    await _profileService.Add(userProfile);
+                                    await _profileService.Create(userProfile);
                                     _context.SaveChanges();
                                     transaction.Commit();
 
@@ -593,7 +589,7 @@ namespace Lumle.Module.Core.Controllers
                 return RedirectToAction("Login");
             }
 
-            var appToken = await _applicationTokenService.GetSingle(x => x.UserId == userId && x.Token == code && x.TokenType == TokenType.ConfirmEmail);
+            var appToken = await _applicationTokenRepository.GetSingleAsync(x => x.UserId == userId && x.Token == code && x.TokenType == TokenType.ConfirmEmail);
 
             if (appToken == null)
             {
@@ -610,21 +606,20 @@ namespace Lumle.Module.Core.Controllers
                     appToken.UsedDate = DateTime.UtcNow;
                     appToken.LastUpdated = DateTime.UtcNow;
 
-                    await _applicationTokenService.Update(appToken);
-                    await _unitOfWork.SaveAsync();
+                    await _applicationTokenRepository.UpdateAsync(appToken, appToken.Id);
+                    await _applicationTokenRepository.SaveChangesAsync();
 
                     await _signInManager.SignOutAsync();
                     //redirects user to reset password after email confirmation
                     //make latest token valid
-                    var unUsedCode = await _applicationTokenService.GetSingle(x => x.IsUsed == false && x.UserId == user.Id && x.TokenType == TokenType.ResetPassword);
+                    var unUsedCode = await _applicationTokenRepository.GetSingleAsync(x => x.IsUsed == false && x.UserId == user.Id && x.TokenType == TokenType.ResetPassword);
                     if (unUsedCode != null)
                     {
                         unUsedCode.IsUsed = true;
                         unUsedCode.UsedDate = DateTime.UtcNow;
                         unUsedCode.LastUpdated = DateTime.UtcNow;
 
-                        await _applicationTokenService.Update(unUsedCode);
-                        await _unitOfWork.SaveAsync();
+                        await _applicationTokenRepository.UpdateAsync(unUsedCode, unUsedCode.Id);
                     }
 
                     //Referal means where does this confirmation come from.
@@ -643,8 +638,7 @@ namespace Lumle.Module.Core.Controllers
                             LastUpdated = DateTime.UtcNow
                         };
 
-                        await _applicationTokenService.Add(appResetToken);
-                        await _unitOfWork.SaveAsync();
+                        await _applicationTokenRepository.AddAsync(appResetToken);
 
                         return RedirectToAction("ResetPassword", new { userId = user.Id, code = resetCode });
                     }
@@ -691,15 +685,14 @@ namespace Lumle.Module.Core.Controllers
             // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
             // Send an email with this link
             //make latest token valid
-            var unUsedCode = await _applicationTokenService.GetSingle(x => x.IsUsed == false && x.UserId == user.Id && x.TokenType == TokenType.ResetPassword);
+            var unUsedCode = await _applicationTokenRepository.GetSingleAsync(x => x.IsUsed == false && x.UserId == user.Id && x.TokenType == TokenType.ResetPassword);
             if (unUsedCode != null)
             {
                 unUsedCode.IsUsed = true;
                 unUsedCode.UsedDate = DateTime.UtcNow;
                 unUsedCode.LastUpdated = DateTime.UtcNow;
 
-                await _applicationTokenService.Update(unUsedCode);
-                await _unitOfWork.SaveAsync();
+                await _applicationTokenRepository.UpdateAsync(unUsedCode, unUsedCode.Id);
             }
             var code = await _userManager.GeneratePasswordResetTokenAsync(user);
 
@@ -716,8 +709,7 @@ namespace Lumle.Module.Core.Controllers
                 CreatedDate = DateTime.UtcNow,
                 LastUpdated = DateTime.UtcNow
             };
-            await _applicationTokenService.Add(appToken);
-            await _unitOfWork.SaveAsync();
+            await _applicationTokenRepository.AddAsync(appToken);
 
             Logger.Info(CustomLogIdentifier.CustomLog + model.Email + CustomLogIdentifier.ForgotPasswordAttemptAndEmailSent);
             GlobalDiagnosticsContext.Clear();
@@ -752,7 +744,7 @@ namespace Lumle.Module.Core.Controllers
                 return RedirectToAction(nameof(ResetPasswordConfirmation), "Account");
             }
             InitializeGlobalLoggers(user.Email);
-            var appToken = await _applicationTokenService.GetSingle(x => x.UserId == user.Id && x.Token == code && x.TokenType == TokenType.ResetPassword);
+            var appToken = await _applicationTokenRepository.GetSingleAsync(x => x.UserId == user.Id && x.Token == code && x.TokenType == TokenType.ResetPassword);
             if (appToken == null)
             {
                 TempData["ErrorMsg"] = _localizer[ActionMessageConstants.InvalidLinkErrorMessage].Value;
@@ -798,7 +790,7 @@ namespace Lumle.Module.Core.Controllers
                 return RedirectToAction(nameof(ResetPasswordConfirmation), "Account");
             }
             InitializeGlobalLoggers(user.Email);
-            var appToken = await _applicationTokenService.GetSingle(x => x.UserId == user.Id && x.Token == model.Code && x.TokenType == TokenType.ResetPassword);
+            var appToken = await _applicationTokenRepository.GetSingleAsync(x => x.UserId == user.Id && x.Token == model.Code && x.TokenType == TokenType.ResetPassword);
             if (appToken == null)
             {
                 TempData["ErrorMsg"] = _localizer[ActionMessageConstants.InvalidLinkErrorMessage].Value;
@@ -815,8 +807,7 @@ namespace Lumle.Module.Core.Controllers
                     appToken.UsedDate = DateTime.UtcNow;
                     appToken.LastUpdated = DateTime.UtcNow;
 
-                    await _applicationTokenService.Update(appToken);
-                    await _unitOfWork.SaveAsync();
+                    await _applicationTokenRepository.UpdateAsync(appToken, appToken.Id);
 
                     TempData["SuccessMsg"] = _localizer[ActionMessageConstants.PasswordResetSuccessfully].Value;
                     Logger.Info(CustomLogIdentifier.CustomLog + user.Email + CustomLogIdentifier.PasswordResetSuccessfully);
@@ -860,48 +851,6 @@ namespace Lumle.Module.Core.Controllers
             return View(new SendCodeVM { Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe });
         }
 
-        //
-        // POST: /Account/SendCode
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> SendCode(SendCodeVM model)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View();
-        //    }
-
-        //    var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
-        //    if (user == null)
-        //    {
-        //        return View("Error");
-        //    }
-
-        //    // Generate the token and send it
-        //    var code = await _userManager.GenerateTwoFactorTokenAsync(user, model.SelectedProvider);
-        //    if (string.IsNullOrWhiteSpace(code))
-        //    {
-        //        return View("Error");
-        //    }
-
-        //    var message = _localizer[ActionMessageConstants.SecurityCode].Value + code;
-        //    switch (model.SelectedProvider)
-        //    {
-        //        case "Email":
-        //            return RedirectToAction(nameof(VerifyCode),
-        //                new { Provider = model.SelectedProvider, model.ReturnUrl, model.RememberMe });
-        //        case "Phone":
-        //            await _twilioSmsService.SendMessageAsync(_twilioSmsCredentials,
-        //                await _userManager.GetPhoneNumberAsync(user), message);
-        //            break;
-        //    }
-
-        //    return RedirectToAction(nameof(VerifyCode), new { Provider = model.SelectedProvider, model.ReturnUrl, model.RememberMe });
-        //}
-
-        //
-        // GET: /Account/VerifyCode
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> VerifyCode(string provider, bool rememberMe, string returnUrl = null)

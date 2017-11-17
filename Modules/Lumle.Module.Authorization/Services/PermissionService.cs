@@ -46,35 +46,6 @@ namespace Lumle.Module.Authorization.Services
             _memoryCache = memoryCache;
         }
 
-        public int Count()
-        {
-            try
-            {
-                var permissionCount = _permissionRepository.Count();
-
-                return permissionCount;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex, ErrorLog.DataFetchError);
-                throw;
-            }
-        }
-
-        public int Count(Expression<Func<Permission, bool>> predicate)
-        {
-            try
-            {
-                var permissionCount = _permissionRepository.Count(predicate);
-                return permissionCount;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex, ErrorLog.DataFetchError);
-                throw;
-            }
-        }
-
         public IQueryable<Permission> GetAll(Expression<Func<Permission, bool>> predicate)
         {
             try
@@ -99,59 +70,6 @@ namespace Lumle.Module.Authorization.Services
             catch (Exception ex)
             {
                 Logger.Error(ex, ErrorLog.DataFetchError);
-                throw;
-            }
-        }
-
-        public async Task<Permission> GetSingle(Expression<Func<Permission, bool>> predicate)
-        {
-            try
-            {
-                var permission = await _permissionRepository.GetSingle(predicate);
-                return permission;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex, ErrorLog.DataFetchError);
-                throw;
-            }
-        }
-
-        public async Task Add(Permission entity)
-        {
-            try
-            {
-                await _permissionRepository.Add(entity);
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex, ErrorLog.SaveError);
-                throw;
-            }
-        }
-
-        public async Task Update(Permission entity)
-        {
-            try
-            {
-                await _permissionRepository.Update(entity);
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex, ErrorLog.UpdateError);
-                throw;
-            }
-        }
-
-        public async Task DeleteWhere(Expression<Func<Permission, bool>> predicate)
-        {
-            try
-            {
-                await _permissionRepository.DeleteWhere(predicate);
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex, ErrorLog.DeleteError);
                 throw;
             }
         }
@@ -198,6 +116,18 @@ namespace Lumle.Module.Authorization.Services
             {
                 var users = _context.UserRoles.Where(x => x.RoleId == roleId).Select(x => x.User).ToList();
                 return users;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<Permission> GetSingleAsync(Expression<Func<Permission, bool>> predicate)
+        {
+            try
+            {
+                return await _permissionRepository.GetSingleAsync(predicate);
             }
             catch (Exception)
             {
