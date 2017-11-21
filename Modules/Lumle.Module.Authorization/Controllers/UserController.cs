@@ -268,6 +268,11 @@ namespace Lumle.Module.Authorization.Controllers
                     }
                     transaction.Rollback();
                     TempData["ErrorMsg"] = $"{_localizer[ActionMessageConstants.ErrorOccured].Value}. {result.Errors.FirstOrDefault()?.Description}";
+
+                    // Associate roles and timezones data
+                    model.RoleList = await GetAllSupportedRolesAsync();
+                    model.TimeZoneList = GetAllSupportedTimeZones();
+
                     return View("Add", model);
                 }
                 catch (Exception ex)

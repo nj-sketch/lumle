@@ -33,7 +33,6 @@ $(function () {
 
         $(this).hide();
         tr.find("img").show();
-        var token = $("input[type=hidden][name=__RequestVerificationToken]").val();
         $.ajax({
             type: "POST",
             url: rootDir + "authorization/User/ResendActivationEmail",
@@ -184,6 +183,7 @@ var deleteModalSection = function (modalId, userId, userName) {
     var modal = '<div id="' + modalId + '"class="modal fade in"><div class="modal-dialog" style="width:40% !important; margin-top:10% !important;">' +
                 '<div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>' +
                 '<h3 class="modal-title">Delete User</h3></div><form action="' + rootDir + 'authorization/User/delete/' + userId + '" role="form" method="post">' +
+                '<input name="__RequestVerificationToken" type="hidden" value="' + token + '">' +
                 '<div class="modal-body">Are you sure you want to delete this record ?</div>' +
                 '<div class="modal-footer"><button data-dismiss="modal" class="btn btn-default" type="button">' + cancelButtonDisplayName + '</button>' +
                 '<button class="btn btn-success" type="submit">' + deleteButtonDisplayName + '</button></div></form></div></div></div>';
